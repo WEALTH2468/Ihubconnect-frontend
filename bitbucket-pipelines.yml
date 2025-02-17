@@ -1,0 +1,20 @@
+image: node:16
+
+pipelines:
+  branches:
+    main:
+      - step:
+          name: Build and Deploy
+          caches:
+            - node
+          script:
+            - echo "Updating package lists..."
+            - apt-get update && apt-get install -y sshpass
+            - echo "Building the React app..."
+            - npm install
+            - npm run build
+            - echo "Compressing build files..."
+            - tar -czf build.tar.gz ./build
+            - echo "Deploying to VPS..."
+            - sshpass -p "@LoveChristMore2024" scp -o StrictHostKeyChecking=no build.tar.gz root@191.101.14.177:/var/www/ihub-beta
+            - sshpass -p "@LoveChristMore2024" ssh root@191.101.14.177 "cd /var/www/ihub-qa && rm -rf build && tar --strip-components=1 -xzf build.tar.gz &&  rm -rf ihub-connect-frontend/* &&   mv build ihub-connect-frontend/ && rm -rf build build.tar.gz"   

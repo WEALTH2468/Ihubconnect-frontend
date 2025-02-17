@@ -1,0 +1,10 @@
+idesk
+ Idesk should show latest and upcoming event 
+ with a required action to acknoweledge participation or decline
+ a notification will show until the user invited has indicated participation
+
+ Will also show latest team update requiring reaction: Like, acknoweledge, dislike, comment
+
+
+staging
+ -When saved is click disable button and show loading until process completes or fails.

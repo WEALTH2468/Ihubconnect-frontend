@@ -1,0 +1,406 @@
+[33m8435e97[m[33m ([m[1;36mHEAD -> [m[1;32mfeatures/chat[m[33m, [m[1;31morigin/features/chat[m[33m)[m completed create message functionality and status color picker
+[33m697678d[m added emoji for chat ui
+[33mb807fb0[m completed ui duplication for chat app
+[33m9d41ec1[m[33m ([m[1;31morigin/new-issues[m[33m, [m[1;32mnew-issues[m[33m)[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into new-issues
+[33m0391ce7[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into WIP
+[33m27427df[m fix update user
+[33m481784a[m[33m ([m[1;31morigin/issues[m[33m, [m[1;32missues[m[33m)[m Merge branch 'issues' of https://github.com/iZone5/ihub-connect-mvp into issues
+[33mc7997b1[m complete logo rendering dynamically
+[33mffda779[m Merge pull request #64 from iZone5/improvements/profile-edit-update
+[33m2843085[m[33m ([m[1;31morigin/improvements/profile-edit-update[m[33m)[m Merge branch 'WIP' into improvements/profile-edit-update
+[33m3072305[m ..
+[33ma46605e[m fix admin update user
+[33md281b5c[m new pull
+[33m5f170e7[m Merge pull request #63 from iZone5/issues
+[33m53ab9d5[m Merge branch 'WIP' into issues
+[33m8e6b16c[m fix idesk profile
+[33m0de2867[m added toast notification for logo update
+[33mbe68608[m complete password toggle
+[33m579aedb[m Merge pull request #61 from iZone5/bugfix/feedback-fixed
+[33ma83571b[m[33m ([m[1;31morigin/bugfix/feedback-fixed[m[33m)[m feedback fixed
+[33m11e7806[m fixed archived tasks
+[33mf384365[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into WIP
+[33mccf262e[m new commit
+[33m93160a1[m Merge pull request #60 from iZone5/feature/feedback
+[33m1f8e21e[m[33m ([m[1;31morigin/feature/feedback[m[33m)[m feedback adds to mongodb database
+[33mfc9aebc[m feedback
+[33mc9fc7a5[m added confirmation dialog and popups
+[33mbb78101[m Merge pull request #59 from iZone5/improvements/popup
+[33mfa7f193[m[33m ([m[1;31morigin/improvements/popup[m[33m)[m popup improvements
+[33m53d26d0[m Merge pull request #58 from iZone5/improvements/task-comments
+[33mf514ce8[m[33m ([m[1;31morigin/improvements/task-comments[m[33m)[m changed all team lead to moderators
+[33md289785[m notification for comment
+[33md56a104[m[33m ([m[1;32mfaeatures/logoupdate[m[33m)[m bug fixed
+[33mf37af3b[m Rename departmentTable.js to DepartmentTable.js
+[33m624922f[m departmentTable
+[33m491989e[m fixed bug
+[33mcd2325f[m new error
+[33mb9c9b7e[m removed memo from taskappheader
+[33m891168d[m added .env
+[33maf015b3[m Merge pull request #56 from iZone5/improvements/dashboard-improvements
+[33m69b0f55[m[33m ([m[1;31morigin/improvements/dashboard-improvements[m[33m)[m Merge branch 'WIP' into improvements/dashboard-improvements
+[33m7cbb5b7[m final
+[33mdd38ded[m finished dashboard improvements
+[33m1d71804[m display units and department
+[33mcec3857[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into WIP
+[33ma98b41c[m env changed
+[33m16535f8[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into WIP
+[33m4033e86[m fixed some little bugs
+[33mda842c3[m changeed env
+[33m083bad0[m Merge pull request #55 from iZone5/feature/crud-units
+[33m3ad5311[m department to Department
+[33m7cfb93e[m[33m ([m[1;31morigin/feature/crud-units[m[33m)[m Merge branch 'WIP' into feature/crud-units
+[33m295769a[m final
+[33m5893a87[m Merge branch 'feature/crud-units' of https://github.com/iZone5/ihub-connect-mvp into feature/crud-units
+[33m162ddb7[m tested with mudiame qa
+[33mebcdda0[m Merge pull request #54 from iZone5/feature/bulkNotification
+[33m8848d30[m[33m ([m[1;31morigin/feature/bulkNotification[m[33m)[m Merge branch 'WIP' into feature/bulkNotification
+[33ma29a9df[m Merge pull request #53 from iZone5/feature/crud-units
+[33m7bcd423[m Merge branch 'WIP' into feature/crud-units
+[33m1b7e2c6[m Merge pull request #52 from iZone5/feature/emailNotificataion
+[33mbc37903[m[33m ([m[1;31morigin/feature/emailNotificataion[m[33m)[m Merge branch 'WIP' into feature/emailNotificataion
+[33m115c0c9[m commit bulk notification
+[33m674d2ad[m finished crud units
+[33m6bbed8a[m added .env
+[33m398ada6[m env checking
+[33m11ec8e0[m done with notification
+[33m64310dc[m Merge pull request #51 from iZone5/improvements/dashboard
+[33m74881dc[m make top 10 to show all users
+[33m683c239[m Merge pull request #50 from iZone5/faeatures/logoupdate
+[33m086b4b6[m Merge pull request #49 from iZone5/improvement/code-cleanup
+[33m7ffa988[m code cleaning phase 1
+[33m9b2e1a9[m[33m ([m[1;31morigin/faeatures/logoupdate[m[33m)[m completed table refactoring for units and departments
+[33m3109e43[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into faeatures/logoupdate
+[33me723173[m Merge pull request #47 from iZone5/improvement/filter-improvement
+[33m42906a5[m adjust role based access control ui
+[33m613c501[m done bulkNotification
+[33m7a310e9[m done with filter improvement
+[33m8c76914[m finished filter by group
+[33m234bd2f[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into faeatures/logoupdate
+[33m313ef75[m tables for department and unit
+[33mc715b81[m modified team lead role
+[33m7e64b6c[m commit
+[33mfeeef00[m Merge pull request #44 from iZone5/improvement/task-manager-perf
+[33m80dd574[m Merge branch 'WIP' into improvement/task-manager-perf
+[33meaf4d77[m cleanup perf
+[33m32a8de3[m finished perf
+[33m65b534b[m Merge branch 'feature/emailNotificataion' of https://github.com/iZone5/ihub-connect-mvp into feature/emailNotificataion
+[33mf6b50a9[m update ignored files
+[33m3c4518d[m update ignored files
+[33m62147da[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into WIP
+[33mc0d6490[m update ignored files
+[33mea7cab0[m update ignored files
+[33mcfe22d5[m Merge pull request #43 from iZone5/feature/emailNotificataion
+[33m17bb172[m Merge branch 'WIP' into feature/emailNotificataion
+[33m6fc4e36[m Merge pull request #42 from iZone5/improvement/dashboard-card-improvements
+[33m5bcb60e[m push
+[33m98442fd[m hardcoded user
+[33mdd1e2ff[m finish dashboard improvements
+[33m261ce3e[m completed feature for creating unit and department
+[33m2c6037c[m comm
+[33m0ad0b40[m Merge pull request #40 from iZone5/feature/custom-role
+[33m1709aff[m finished custom role
+[33me9fea29[m removed axios
+[33mb120d31[m add date-fns to package.json
+[33mb5f4522[m Merge pull request #39 from iZone5/feature/custom-role
+[33m8a77ae0[m custom ui role
+[33m4e900fd[m email done
+[33mf0e9d2d[m emailNotification
+[33m4fbfb60[m updated userSlice.js
+[33m60a3639[m Merge pull request #38 from iZone5/feature/role-based-system
+[33m7dd4f20[m Merge branch 'WIP' into feature/role-based-system
+[33m1b7d4e2[m updated rbac-middleware
+[33m5158b00[m Merge pull request #37 from iZone5/faeatures/logoupdate
+[33m20aa0a8[m added pages for adding unit feature
+[33m702c1a6[m added pages for adding unit feature
+[33m2b9ab83[m Merge branch 'feature/role-based-system' of https://github.com/iZone5/ihub-connect-mvp into feature/role-based-system
+[33m91cc3d5[m assignment of roles
+[33mc6d7170[m Merge pull request #36 from iZone5/feature/role-based-system
+[33mc6193d4[m Merge branch 'WIP' into feature/role-based-system
+[33m673d489[m added role to document update and delete
+[33mf650684[m logo update
+[33mcd91d6d[m create roles in database if it doesn't exists
+[33mb53153c[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into WIP
+[33m51e3e0a[m modified app.js backend
+[33m31b9cd0[m added permission for tasks
+[33m291dc3b[m had issue with refactoring socket
+[33md26b403[m completed logo update feature and integrate it with the backend
+[33m3e233db[m added role schema
+[33m6a67d97[m nonsense
+[33mb2b2b1c[m[33m ([m[1;32mmain[m[33m)[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp
+[33m3e38a39[m installed node cron
+[33m4c50658[m Merge pull request #34 from iZone5/improvement/task-manager-notification
+[33m96d525e[m[33m ([m[1;31morigin/improvement/task-manager-notification[m[33m)[m added notification
+[33maf6190c[m updated backend package.json
+[33m744f216[m Merge pull request #31 from iZone5/improvement/task-manager-archive
+[33m6cd10b2[m[33m ([m[1;31morigin/improvement/task-manager-archive[m[33m)[m Merge branch 'WIP' into improvement/task-manager-archive
+[33md475cc0[m Merge pull request #32 from iZone5/feature/task-manager-comments
+[33m08bb7cb[m Merge pull request #33 from iZone5/feature/notification
+[33md1f925e[m[33m ([m[1;31morigin/feature/notification[m[33m)[m done with notification
+[33ma9cae1a[m[33m ([m[1;31morigin/feature/task-manager-comments[m[33m)[m user can delete comments
+[33m9309cd6[m updated backend env
+[33m5c2be64[m user can add a task
+[33m44c944e[m done with archiving
+[33m1750bbe[m user can archive tasks
+[33mcae00f4[m Merge pull request #30 from iZone5/remove/folderNoAndDate
+[33m3e8543d[m[33m ([m[1;31morigin/settingsFix[m[33m, [m[1;31morigin/remove/folderNoAndDate[m[33m)[m done with alert on document library
+[33m192fbd4[m[33m ([m[1;31morigin/feature/create_folder[m[33m)[m Merge pull request #29 from iZone5/improvement/profile
+[33md9a21c5[m Merge branch 'WIP' into improvement/profile
+[33mbeaa5c3[m completed profile page
+[33m67ab3cd[m Merge pull request #28 from iZone5/feature/task-manager-dashboard
+[33m5927048[m Merge branch 'WIP' into feature/task-manager-dashboard
+[33m4bfc102[m completed profile page
+[33m5bdc573[m Merge pull request #27 from iZone5/feature/document-library-form
+[33m32c8c9d[m[33m ([m[1;31morigin/feature/document-library-form[m[33m)[m Merge branch 'WIP' into feature/document-library-form
+[33m68cf988[m Merge pull request #26 from iZone5/feature/create_folder
+[33mb5d4344[m Merge branch 'WIP' into feature/create_folder
+[33m412b5b0[m Merge pull request #25 from iZone5/improvement/profile
+[33md745474[m Merge branch 'WIP' into improvement/profile
+[33mcd21a3d[m Merge pull request #24 from iZone5/feature/task-manager-advanced-filter
+[33m4e8c41f[m done with bug fix
+[33m64db662[m completed profile page for users
+[33m3e51663[m finished task report
+[33mfbbc0d8[m Add Dashboard component and dependencies
+[33m64fe0f1[m force completionDate to user
+[33m5470e8a[m fix filtering by date range
+[33m0de9bcc[m Merge pull request #23 from iZone5/feature/fix-issues
+[33mb2717f9[m Merge pull request #22 from iZone5/WIP
+[33m853ff70[m want to backup wip
+[33m673facd[m updated custom date picker.js
+[33mc4223fb[m disabled editing in all tasks
+[33m277cbc4[m updated useGroups.js
+[33m4d04fd9[m created date range filter
+[33me2f1fb6[m done with create folder
+[33md51ca2c[m Profile form update fix bug missing unit
+[33mc877ec9[m added filtering by owner
+[33mf920bca[m Merge pull request #21 from iZone5/refactor/task-manager
+[33mc26ba84[m updated .env
+[33m0a629c1[m refactor task manager
+[33m578c047[m new deployment
+[33m04cdf32[m[33m ([m[1;31morigin/feature/fix-issues[m[33m)[m error-fixing
+[33m6f012f4[m remove getAllUsers Import
+[33m4182a90[m Merge pull request #20 from iZone5/fix/task-manager-user-add-fix
+[33m0cab17e[m Merge pull request #19 from iZone5/feature/fix-issues
+[33m65f4807[m Merge branch 'WIP' into feature/fix-issues
+[33m0d43156[m done with fix issues
+[33m3165a68[m update .env backend
+[33m1d20341[m fix issues
+[33mfc2d576[m Merge pull request #18 from iZone5/feature/task-manager-view-bug-fix
+[33m46bc809[m fixed issues
+[33mf19269d[m clear pictures
+[33me7b26b3[m deployment
+[33mcb70ff8[m Merge pull request #17 from iZone5/feature/pdf-review
+[33mf1fa083[m[33m ([m[1;31morigin/feature/pdf-review[m[33m)[m Merge branch 'WIP' into feature/pdf-review
+[33ma194189[m Merge pull request #16 from iZone5/feature/fix-bug
+[33ma9b06f2[m[33m ([m[1;31morigin/feature/fix-bug[m[33m)[m cascade delete
+[33md703b4c[m Merge pull request #7 from iZone5/contact-user-interface
+[33m237be54[m Merge pull request #15 from iZone5/feature/fixing-missing-feature-idesk-dcl-uac
+[33m6b78cb8[m[33m ([m[1;31morigin/feature/fixing-missing-feature-idesk-dcl-uac[m[33m)[m Merge branch 'WIP' into feature/fixing-missing-feature-idesk-dcl-uac
+[33mf54faff[m Merge pull request #10 from iZone5/feature/task-manager-filter
+[33m5f04a14[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into contact-user-interface
+[33m18d668c[m[33m ([m[1;31morigin/contact-user-interface[m[33m)[m completed update user feature
+[33ma386465[m Merge pull request #14 from iZone5/feature/fix-bug
+[33mb7281a0[m uncomment
+[33mbd6223f[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into contact-user-interface
+[33mbf4d2b6[m changed dept to unit
+[33m76f9cf3[m Merge pull request #13 from iZone5/feature/fix-bug
+[33m67df5a1[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into contact-user-interface
+[33m271f768[m Merge pull request #12 from iZone5/main
+[33mc68b333[m done with addUser for chimezie
+[33mf1d9d2d[m updated UserTaskList
+[33m93b8683[m Merge branch 'WIP' of https://github.com/iZone5/ihub-connect-mvp into contact-user-interface
+[33mf65076a[m userform changes
+[33me627ba2[m Merge pull request #11 from iZone5/feature/fix-bug
+[33mb6a5bf2[m fix bug
+[33me2d72f3[m done with link show in another tab
+[33m76ab76c[m added view team tasks
+[33mcf0a058[m updated UserTaskList
+[33m0f34eed[m finished status filter
+[33m780014c[m fixed filteri by date bug
+[33ma8b7a9f[m Merge pull request #8 from iZone5/feature/task-manager-delete
+[33m54a6bf5[m Merge branch 'feature/task-manager-filter' into feature/task-manager-delete
+[33mfbc21b2[m final commit
+[33m7f961cf[m modified useTableData
+[33md526c0c[m modified useTableData
+[33m8ee8083[m modified useTableData
+[33m964d412[m finished filter
+[33m7971274[m added delete functionalities
+[33m06183d6[m revamped ui and loading issues
+[33m9e8b9d5[m fixed deleting bug
+[33m3aa56d8[m commit
+[33mb4aae5d[m monday 4th march 24
+[33m3a4a759[m Merge pull request #6 from iZone5/feature/task-manager-bug-fix
+[33m4492449[m fixed adding owners bug
+[33mdbe5498[m breadcrumbs
+[33mf0199ce[m document library breadcrumbs
+[33m30ca0d1[m document library breadcrumbs
+[33m5647d29[m wip merged
+[33mab1bf0c[m Merge pull request #4 from iZone5/feature/contact
+[33m08cfdfb[m[33m ([m[1;31morigin/feature/contact[m[33m)[m Merge branch 'WIP' into feature/contact
+[33m0ac8d86[m push
+[33mf31afd0[m added isactive
+[33md6a1404[m status
+[33m363ddc5[m Merge pull request #2 from iZone5/feature/task-manager
+[33mb91a4f6[m Merge pull request #5 from iZone5/WIP
+[33m62dd58c[m Merge branch 'WIP' into feature/task-manager
+[33m4efb00a[m Merge pull request #1 from iZone5/feature/document-library-isaac
+[33m8650ee3[m added some code
+[33m896c422[m form fix
+[33me731ffc[m finished assignment of owners
+[33mab2410c[m[33m ([m[1;31morigin/feature/document-library-isaac[m[33m)[m removed console log
+[33m849097d[m down with deleting and updating files
+[33mc96e3eb[m worked on form retriving
+[33mc7d218c[m added getUsers backend
+[33mafbe511[m created filtered tasks
+[33mbe7db45[m done with delete document
+[33m45d1a15[m fixed new task bug
+[33mcec054c[m seprated addnew and edit
+[33m4ef6e7e[m done with delete document
+[33m8e66668[m added task updates
+[33m7f5043c[m renamed
+[33ma928662[m changed -8 to 8
+[33mb2c8e7b[m correction
+[33m5a0e064[m help
+[33m42416d9[m updated user controller
+[33m3a4747f[m contact changes
+[33m077c5e4[m Merge branch 'feature/contact' of https://github.com/iZone5/ihub-connect-mvp into feature/contact
+[33m75a69f2[m changes
+[33me8cfc7b[m changed get contact to user route
+[33m01917a2[m Merge branch 'feature/contact' of https://github.com/iZone5/ihub-connect-mvp into feature/contact
+[33m3985609[m changed user update
+[33m61de5e9[m can get users in users option
+[33m2810d16[m almost done with document library
+[33mcc237f9[m fixed adding creating user
+[33m3bfa92f[m test update route
+[33m0f982e3[m done with CRD
+[33mb9ea2e5[m finished owner ui
+[33m3da1867[m started owner
+[33m36f606a[m done with refactor
+[33m51d520a[m done with dialog and dates
+[33m31cb84e[m completed status and priority dialog
+[33m50b81aa[m added few paddings
+[33m1e28aaf[m Merge branch 'feature/contact' of https://github.com/iZone5/ihub-connect-mvp into feature/contact
+[33m6bb84df[m user setting
+[33m5157dbd[m fix chimezie type issue
+[33mda0fc94[m want to fix type for chimezie
+[33m693c4c2[m started dialog
+[33m022bb4a[m user endpoints
+[33me642fb8[m Merge branch 'feature/task-manager' of https://github.com/iZone5/ihub-connect-mvp into feature/task-manager
+[33m43fb212[m added create async thunk
+[33m7c1a9f2[m end point for taskmanager
+[33m088b527[m done with retrieve
+[33m22136d1[m made cells editable
+[33ma2ce9a0[m profile
+[33m4727680[m Merge branch 'feature/task-manager' of https://github.com/iZone5/ihub-connect-mvp into feature/contact
+[33mc0f585a[m added redux store
+[33m22b1a7e[m settings interface
+[33m26b5518[m redesigned cells in table
+[33me1921f4[m added user functionality
+[33md0658dc[m created group table header
+[33m615e352[m created users screen
+[33m701affc[m userSlice feature
+[33mb2aa6ce[m reducers
+[33m9506bb5[m merged header and content
+[33mfd2eaef[m added users content
+[33me465bdf[m header display
+[33mf06d0a9[m Merge branch 'feature/contact' of https://github.com/iZone5/ihub-connect-mvp into feature/contact
+[33mde57d1e[m user headers
+[33mb70a383[m fixed usersSlice
+[33m012d16a[m added users list
+[33m7f678e6[m Add user mock data
+[33m8ec736e[m added user url
+[33m3b48d79[m started user control functionality
+[33m694f6c4[m task app working with code base
+[33m83e1d23[m added task manager base folder
+[33m4726dea[m new
+[33m437bcea[m[33m ([m[1;31morigin/feature/unit-testing[m[33m)[m test
+[33m910ea33[m document upload
+[33m2c31bf1[m resolving file upload post values
+[33ma7aee5b[m edit button
+[33m1199a75[m create document completed
+[33m6a27784[m Document slice with add thunk
+[33m6849bca[m add document backend
+[33m9015f13[m latest document library
+[33m5d535ef[m Document upload form completed
+[33mdc1a038[m env
+[33mcd17e17[m Merge pull request #10 from iZone5/feature/displayUnitMembers
+[33m2ec1ff2[m Update FuseSidePanel.js
+[33m385c5e4[m update on form
+[33m795c718[m Merge pull request #7 from iZone5/feature/profile-idesk-section
+[33mfe2e493[m ADDED TASK ON NAVIGATION BAR
+[33m74a31f7[m made little update on slice state
+[33m18dcefb[m just added Tooltip from mui
+[33ma79e0ac[m final commit on displayUnitMember
+[33m1c06b76[m done again
+[33mf727f67[m done with see less
+[33m263622e[m Merge branch 'feature/displayUnitMembers' of https://github.com/iZone5/ihub-connect-fe-mvp into feature/displayUnitMembers
+[33m28f4340[m done with see more
+[33mbeed745[m Merge branch 'main' into feature/displayUnitMembers
+[33m6dbea48[m cleanup unitDisplay
+[33m3241624[m finished toggle unit and myteam
+[33m5bf18f1[m done with displayUnit
+[33mfa58dba[m Updating
+[33md8aed08[m arranged post-from
+[33m872844a[m done with cleanup of user controller
+[33ma9be632[m commiting signToken refactor
+[33mba7340d[m added some images
+[33me1401f1[m delete images
+[33m6697bb9[m done with update posts and comments when user data change
+[33m256acd7[m created deployment project in mongodb atlas
+[33m227c5ca[m done with displayUnitMembers
+[33m1c15af2[m did cleanup on signup
+[33m55f5cc7[m done with displayunitMembers
+[33mac02e3f[m remove console.log from user update controller
+[33mf95b9ac[m socket was not connecting on deploying main branch
+[33mb061265[m created db for deployment
+[33m4a5d52b[m first commit on displayunitMember
+[33m44ca75e[m Merge pull request #5 from iZone5/wip
+[33m6e3e2e8[m first commit on wip from isaac
+[33m0a7a5a9[m Merge pull request #4 from iZone5/main
+[33ma9a67da[m Merge pull request #3 from iZone5/feature/document-library-form
+[33m6cdf762[m logo
+[33m5731a58[m clean up form adding title to pages
+[33mc37359f[m Merge pull request #2 from iZone5/idesk-app-isaac
+[33mba95934[m merging and conflict resolved
+[33m45b6af3[m removed example and noticeboard
+[33m643c97d[m block vps local mongodb
+[33m2fe2030[m disconnected local mongodb
+[33mc924a2d[m changed mongodb ip
+[33mdb05cf1[m image folder missing
+[33m38911ed[m testing
+[33m3e3c05c[m cor
+[33m83a5cbf[m using new in socket
+[33mbb444ac[m added cors origin
+[33m6463470[m add s to http
+[33maf6be0e[m change backend api route
+[33m8509f63[m changed backend api
+[33m4516222[m commit
+[33meb4ba96[m Update azure-pipelines.yml
+[33m8ecab0e[m Set up CI with Azure Pipelines
+[33m0557fe5[m clean the menu bar
+[33mc46e892[m form is working
+[33mc33865c[m cleanup socket
+[33m489362f[m ihub-connect mongodb
+[33mf999b46[m locked document library
+[33m134911b[m done with cascade delete
+[33mdf858f6[m I learnt that async makes return not to be able to stop execution
+[33m0423ef1[m clean up delete post
+[33maa26046[m delete post picture done
+[33m23a6426[m idesk completed
+[33m3690da1[m redirect after updated profile
+[33m856c117[m Merge branch 'idesk-app-isaac' of https://github.com/iZone5/ihub-connect-fe-mvp into idesk-app-isaac
+[33mfd6bbff[m done with authentication
+[33m5f9c5c8[m File upload Form description,teams ,share - Brice
+[33m43f33cd[m added drawer in document library
+[33m1bab8ae[m working on document form
+[33m05ae066[m File Upload Form component created - Bric
+[33m883a60e[m Merge pull request #1 from iZone5/idesk-app-isaac
+[33m6488383[m file manager menu done
+[33mf2c40af[m finished idesk app
+[33mffff136[m comment done
+[33m59901c2[m comment done
+[33m6fd70dd[m like and dislike done
+[33mf0c28b2[m add and delete post done
+[33m6bae8d8[m h-200
+[33m85c978f[m Event Card & Event Slider draft
+[33m6e0fd21[m MVP as at 23 July 2023

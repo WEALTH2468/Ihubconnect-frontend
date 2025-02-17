@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "Real-Time Chat Now Available!",
+    "description": "We are excited to introduce our new chat feature, designed to enhance your experience by providing instant communication and support. Whether you need help, have questions, or just want to connect with others, our chat feature is here to make your interactions smoother and more efficient.",
+    "addedAt": "2024-06-30T12:00:00Z",
+    "action": "Acknowledge"
+  },
+  {
+    "id": 2,
+    "title": "Advanced CRM Integration Now Live!",
+    "description": "We are excited to unveil our new CRM feature, built to provide you with robust tools for managing customer interactions, tracking leads, and improving overall efficiency. With this feature, you can effortlessly keep track of customer details, interactions, and sales pipelines all in one place.",
+    "addedAt": "2024-06-01T15:30:00Z",
+    "action": "Acknowledge"
+  }
+]
