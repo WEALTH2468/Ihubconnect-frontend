@@ -1,10 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import FuseSearch from '@fuse/core/FuseSearch';
 import { selectFlatNavigation } from 'app/store/fuse/navigationSlice';
-import {
-    getFoldersAndUsers,
-    selectAllFoldersAndFiles,
-} from 'src/app/main/file-manager/store/documentSlice';
 import { useEffect } from 'react';
 
 function NavigationSearch(props) {

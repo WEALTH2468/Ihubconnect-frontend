@@ -18,12 +18,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { showMessage } from 'app/store/fuse/messageSlice';
-import {
-    addTaskToGroup,
-    getGroups,
-    selectGroups,
-} from 'src/app/main/tasks/store/groupSlice';
-import { addFeedback, addTask } from 'src/app/main/tasks/store/taskSlice';
 import axios from 'axios';
 
 function FooterLayout3(props) {

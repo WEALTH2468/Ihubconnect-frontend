@@ -30,7 +30,6 @@ import {
 import { selectUser } from 'app/store/userSlice';
 import useDestopNotification from './hooks/useDestopNotification';
 import { useQueryClient } from '@tanstack/react-query';
-import { NotificationType } from 'src/app/main/iperformance/enums/NotificationEnums';
 import { selectSocket } from 'app/store/socketSlice';
 
 const StyledSwipeableDrawer = styled(SwipeableDrawer)(({ theme }) => ({
@@ -111,21 +110,6 @@ function NotificationPanel(props) {
       }
 
       console.log({ item });
-
-      if (item.type === NotificationType.TASK) {
-        // invalidate the task query key
-        queryClient.invalidateQueries(['tasks']);
-      }
-
-       if (item.type === NotificationType.GOAL) {
-         // invalidate the task query key
-         queryClient.invalidateQueries(['goals']);
-       }
-
-       if (item.type === NotificationType.OBJECTIVE) {
-         // invalidate the task query key
-         queryClient.invalidateQueries(['objectives']);
-       }
 
 
     });

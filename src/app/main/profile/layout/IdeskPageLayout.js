@@ -168,7 +168,7 @@ function IdeskPageLayout(props) {
 
             <div className="hidden lg:flex h-32 mx-32 border-l-2" />
 
-            <div className="flex items-center mt-24 lg:mt-0 space-x-24">
+            {/* <div className="flex items-center mt-24 lg:mt-0 space-x-24">
               <div className="flex flex-col items-center">
                 <Typography className="font-bold">-</Typography>
                 <Typography
@@ -187,7 +187,7 @@ function IdeskPageLayout(props) {
                   TASK(S)
                 </Typography>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex flex-1 justify-end my-16 lg:my-0">
               <Tabs
