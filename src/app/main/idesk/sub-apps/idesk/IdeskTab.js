@@ -52,6 +52,7 @@ import { getNewFeatures } from 'app/shared-components/features';
 import { AnnouncementDialog } from 'app/shared-components/Announcement';
 import { useNavigate } from 'react-router-dom';
 import { Can } from 'src/app/AbilityContext';
+import ScoreCardApp from 'src/app/main/profile/sub-apps/score-card/ScoreCardTab';
 
 const IdeskTab = ({ setSelectedTab }) => {
   const navigate = useNavigate();
@@ -154,24 +155,12 @@ const IdeskTab = ({ setSelectedTab }) => {
             </Card>
 
             <Card
-              sx={{ marginTop: '10px' }}
-              component={motion.div}
-              variants={item}
-              className="flex flex-col w-full px-32 pt-24"
-            >
-              <div className="flex justify-between items-center pb-16">
-                <Typography className="text-2xl font-semibold leading-tight">
-                  KPI
-                </Typography>
-                <Button
-                  color="inherit"
-                  size="small"
-                  className="font-medium -mx-8"
-                ></Button>
-              </div>
+                sx={{ marginTop: '10px' }}
+              >
+                  <ScoreCardApp /> {/* Passing the component inside CardContent */}
+                
+              </Card>
 
-              <CardContent className="p-0"></CardContent>
-            </Card>
             <Card
               sx={{ marginTop: '10px' }}
               component={motion.div}

@@ -12,6 +12,8 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { selectUser } from 'app/store/userSlice';
 import { updazteUser } from 'src/app/main/settings/users/store/userSlice';
 import addBackendProtocol from './addBackendProtocol';
+import { Star } from '@mui/icons-material';
+import Box from '@mui/material/Box';
 
 function UserMenu(props) {
   const user = useSelector(selectUser);
@@ -43,6 +45,11 @@ function UserMenu(props) {
             {user.role.toString()}
             {(!user.role || (Array.isArray(user.role) && user.role.length === 0)) && 'Guest'}
           </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+                    {Array.from({ length: 5 }, (_, index) => (
+                        <Star key={index} sx={{ color: index? 'orange' : 'gray', fontSize: 15 }} />
+                    ))}
+                </Box>
         </div>
 
         {user.avatar ? (

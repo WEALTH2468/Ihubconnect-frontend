@@ -19,7 +19,7 @@ const createReducer = (asyncReducers) => (state, action) => {
       settings,
       companyProfile,
       rolePermissions,
-      dashboard,
+
       ...asyncReducers,
     });
 

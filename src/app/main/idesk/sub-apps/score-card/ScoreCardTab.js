@@ -18,12 +18,15 @@ const ScoreCardApp = ({setSelectedTab}) => {
     
     return (
         <div>
-        <Card>
-          <CardContent>
+        <Card 
+        className="w-full mb-16"
+        >
+          <CardContent >
             <Typography variant="h5" component="div">
-              Score Card
+              Score Card Ceruhoiurhoure
             </Typography>
             {/* Add your score card content here */}
+
           </CardContent>
         </Card>
       </div>

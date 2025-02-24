@@ -76,16 +76,6 @@ function IdeskPageLayout(props) {
   const [taskCount, setTaskCount] = useState(0);
   const userData = useSelector(state => selectUser(state));
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const response = await axios.get(`/iperformance/tasks/count/user/${userData._id}`);
-      const data = await response.data;
-      setTaskCount(data.totalRowCount)
-    }
-
-    fetchTasks();
-  }, [])
-
   const dispatch = useDispatch();
 
   // dispatch(getCountries());
