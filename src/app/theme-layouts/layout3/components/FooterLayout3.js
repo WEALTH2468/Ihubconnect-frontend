@@ -197,7 +197,7 @@ function FooterLayout3(props) {
                     className="container min-h-18 md:min-h-24 px-8 sm:px-12 lg:px-20 py-0 flex items-center overflow-x-auto text-[.8rem] font-medium capitalize"
                     color="text.secondary"
                 >
-                    iHub Connect 1.0.0.6 - MVP Release : February 6th 25 
+                    iHub Connect 1.0.0.7 - MVP Release : February 21st 25 
                 </Toolbar>
             </AppBar>
         </ThemeProvider>

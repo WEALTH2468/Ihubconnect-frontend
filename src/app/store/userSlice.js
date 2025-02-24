@@ -186,6 +186,9 @@ const userSlice = createSlice({
       console.log('pending');
       state.user.isLoading = true;
     },
+    [getRandomUserAvatars.fulfilled]: (state, action) => {
+      state.randomUserAvatars = action.payload;
+    },
     [updateUserData.fulfilled]: (state, action) => {
       console.log('fulfilled');
       console.log({ state });

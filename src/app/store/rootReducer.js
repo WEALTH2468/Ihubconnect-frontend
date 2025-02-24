@@ -4,10 +4,9 @@ import i18n from './i18nSlice';
 import roles from './roleSlice';
 import user from './userSlice';
 import settings from './settingsSlice';
-import logo from '../main/settings/users/store/settingsSlice';
+import companyProfile from '../main/settings/users/store/settingsSlice';
 import dashboard from '../main/idashboard/store/dashboardSlice';
 import rolePermissions from "./rolePermissionsSlice";
-
 import socket from './socketSlice';
 
 const createReducer = (asyncReducers) => (state, action) => {
@@ -18,10 +17,9 @@ const createReducer = (asyncReducers) => (state, action) => {
       socket,
       roles,
       settings,
-      logo,
+      companyProfile,
       rolePermissions,
       dashboard,
-
       ...asyncReducers,
     });
 

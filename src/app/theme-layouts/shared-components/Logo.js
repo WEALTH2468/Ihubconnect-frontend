@@ -1,7 +1,8 @@
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
-import { selectLogo } from 'src/app/main/settings/users/store/settingsSlice';
+import { selectCompanyProfile} from 'src/app/main/settings/users/store/settingsSlice';
+import addBackendProtocol from './addBackendProtocol';
 
 const Root = styled('div')(({ theme }) => ({
   '& > .logo-icon': {
@@ -20,11 +21,10 @@ const Root = styled('div')(({ theme }) => ({
 
 function Logo() {
 
-  const logo = useSelector(selectLogo);
-  console.log(logo)
+  const company = useSelector(selectCompanyProfile);
   return (
     <Root className="flex items-center">
-      <img className="logo-icon w-32 h-32" src={logo} alt="logo" />
+      <img className="logo-icon w-32 h-32" src={addBackendProtocol(company?.logo)} alt="logo" />
 
       <div
         className="badge flex items-center py-4 px-8 mx-8 rounded"
@@ -33,7 +33,7 @@ function Logo() {
       >
         
         <Typography className="text-11 font-medium capitalize" color="text.secondary">
-        iHub Connect 1.0.0
+            {company?.companyName}
           </Typography>
       
       </div>

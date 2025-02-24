@@ -160,9 +160,9 @@ function App() {
       });
 
       return () => {
-        socket.off('onlineUsers');
-        socket.off('emitGetUsers');
-        socket.off('refreshPost');
+        socket?.off('onlineUsers');
+        socket?.off('emitGetUsers');
+        socket?.off('refreshPost');
       };
     }
   }, [socket]);
