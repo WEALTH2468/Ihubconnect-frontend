@@ -353,12 +353,7 @@ function SignUpPage() {
                     {randomUserAvatars.length > 0
                       ? randomUserAvatars.slice(0, 4).map((avatar, index) => <Avatar key={index} src={addBackendProtocol(avatar)} />)
                       : // Fallback avatars if API returns empty
-                        [
-                          'assets/images/avatars/female-18.jpg',
-                          'assets/images/avatars/female-11.jpg',
-                          'assets/images/avatars/male-09.jpg',
-                          'assets/images/avatars/male-16.jpg',
-                        ].map((avatar, index) => <Avatar key={index} src={avatar} />)}
+                        [ ].map((avatar, index) => <Avatar key={index} src={avatar} />)}
                   </AvatarGroup>
 
             <div className="ml-16 font-medium tracking-tight text-gray-400">

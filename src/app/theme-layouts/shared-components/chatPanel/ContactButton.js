@@ -53,7 +53,7 @@ const StyledStatus = styled('div')(({ theme, value }) => ({
   height: 12,
   bottom: 4,
   left: 44,
-  border: `2px solid ${theme.palette.background.default}`,
+  // border: `2px solid ${theme.palette.background.default}`,
   borderRadius: '50%',
   zIndex: 10,
 
@@ -69,9 +69,7 @@ const StyledStatus = styled('div')(({ theme, value }) => ({
     backgroundColor: '#FFC107',
   }),
 
-  ...(value === 'offline' && {
-    backgroundColor: '#646464',
-  }),
+  
 }));
 
 const ContactButton = ({ contact, selectedContactId, onClick }) => {

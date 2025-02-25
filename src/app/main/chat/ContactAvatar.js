@@ -16,7 +16,7 @@ const StyledBadge = styled(Badge)(({ theme, ...props }) => ({
   },
   '& .MuiBadge-badge': {
     backgroundColor: props.statuscolor,
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    // boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
     '&::after': {
       position: 'absolute',
       top: 0,
@@ -38,7 +38,7 @@ function ContactAvatar({id, data, className }) {
       overlap="circular"
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       variant={id === "user" ? null : "dot"}
-      statuscolor={status?.color}
+      statuscolor={status?.color }
     >
       <Avatar src={addBackendProtocol(data.avatar)} alt={data.displayName} className="w-full h-full">
       </Avatar>
