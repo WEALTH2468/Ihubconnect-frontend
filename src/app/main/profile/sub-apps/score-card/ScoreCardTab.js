@@ -1,14 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/store/userSlice';
-import { Card, CardContent, Typography, Box, LinearProgress } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import { Star } from '@mui/icons-material';
 
 const ScoreCardApp = ({ setSelectedTab }) => {
     const user = useSelector(selectUser);
-    const [hovered, setHovered] = useState(null);
     const [visible, setVisible] = useState(false);
-    const [progressValues, setProgressValues] = useState({ tasks: 0, collaboration: 0, performance: 0 });
     const ref = useRef(null);
 
     useEffect(() => {
@@ -21,11 +19,6 @@ const ScoreCardApp = ({ setSelectedTab }) => {
             ([entry]) => {
                 if (entry.isIntersecting) {
                     setVisible(true);
-                    setProgressValues({
-                        tasks: 35,
-                        collaboration: 27,
-                        performance: 35,
-                    });
                 }
             },
             { threshold: 0.3 }
@@ -37,90 +30,86 @@ const ScoreCardApp = ({ setSelectedTab }) => {
     }, []);
 
     const scores = {
-        tasks: {
-            total: 35,
-            details: {
-                "Completed": 10,
-                "Created": 15,
-                "Sprints Done": 10
-            }
-        },
-        collaboration: {
-            total: 27,
-            details: {
-                "Posts": 10,
-                "Comments": 10,
-                "Likes": 7
-            }
-        },
-        performance: {
-            total: 35,
-            details: {
-                "Punctuality": 5,
-                "Team Work": 10,
-                "Chats Made": 20
-            }
-        }
+        tasks: 
+        { total: 100, 
+            done: 70, 
+            inProgress: 20, 
+            notStarted: 10 },
+
+        communication: 
+        { total: 100, 
+            posts: 60, 
+            chats: 25, 
+            commentsLikes: 15 },
+
+        performance: 
+        { total: 100, 
+            punctuality: 80, 
+            tasks: 15 }
     };
 
     const totalPoints = Object.values(scores).reduce((acc, item) => acc + item.total, 0);
     const totalStars = Math.floor(totalPoints / 20);
 
+    const getColor = (key) => {
+        if (key === 'done' || key === 'punctuality' || key === 'posts') return 'green';
+        if (key === 'inProgress' || key === 'chats') return '#144caf';
+        return '#bdbec0';
+    };
+
     return (
-        <Card sx={{ maxWidth: 300, mx: 'auto', p: 2, boxShadow: 3, borderRadius: 5, border: '0px' }} ref={ref}>
-            <CardContent>
-                <Typography variant="h5" fontWeight="bold" textAlign="start" gutterBottom sx={{ fontSize: 16, paddingBottom: 2 }}>
-                    KPI
+        <Card sx={{ maxWidth: 280, mx: 'auto', pl: 2, pr: 2, boxShadow: 3, borderRadius: 5, border: '0px' }} ref={ref}>
+            <CardContent sx={{ pl: 1, pr: 1, pt: 1, }}>
+                <Typography variant="h6" fontWeight="bold" sx={{ fontSize: 13, pb: 1 }}>
+                    Key Performance Indicator
                 </Typography>
 
-                {Object.entries(scores).map(([key, value]) => (
-                    <Box key={key} 
-                        onMouseEnter={() => setHovered(key)}
-                        onMouseLeave={() => setHovered(null)}
-                        sx={{ 
-                            mb: 1,
-                            p: 1, 
-                            borderRadius: 2, 
-                            backgroundColor: hovered === key ? 'rgb(241, 244, 249)' : 'transparent',
-                            transition: 'background-color 0.3s ease-in-out',
-                            cursor: 'pointer'
-                        }}>
-                        <Typography variant="body2" fontWeight="medium" gutterBottom sx={{ fontSize: 13 }}>
-                            {key.replace(/([A-Z])/g, ' $1').toUpperCase()}
-                        </Typography>
-                        <LinearProgress 
-                            variant="determinate" 
-                            value={visible ? (progressValues[key] / 50) * 100 : 0} 
-                            sx={{ height: 6, borderRadius: 3, mb: 1, backgroundColor: '#d0e2ff', '& .MuiLinearProgress-bar': { backgroundColor: '#007bff', transition: 'width 1.5s ease-in-out' } }} 
-                        />
-                        <Typography variant="body2" fontWeight="bold" textAlign="end" fontSize={12} sx={{ color: 'black' }}>
-                            {value.total} Points
-                        </Typography>
-                        {hovered === key && (
-                            <Box sx={{ m: 1, p: 1, borderRadius: 2, backgroundColor: 'white', boxShadow: 1 }}>
-                            {Object.entries(value.details).map(([subKey, subValue]) => (
-                                <Box key={subKey} sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', alignItems: 'center', fontFamily: 'Roboto, sans-serif', borderBottom: '1px solid #f1f4f9', py: 1 }}>
-                                    <Typography variant="body2" fontWeight="medium" sx={{ fontSize: 12 }}>
-                                        {subKey}:
-                                    </Typography>
-                                    <Typography variant="body2" fontWeight="bold" sx={{ fontSize: 12, color: 'black' }}>
-                                        {subValue} Points
-                                    </Typography>
+                {Object.entries(scores).map(([category, data]) => {
+                    const userAchieved = Object.values(data).reduce((acc, value) => 
+                        typeof value === 'number' ? acc + value : acc, 0
+                    ) - data.total;
+
+                    return (
+                        <Box key={category} sx={{ }}>
+                            {/* Category Title with Achieved Score */}
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 'bold' }}>
+                                <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: 11 }}>{category.charAt(0).toUpperCase() + category.slice(1)}</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: 10}}>{userAchieved} / {data.total}%</Typography>
+                            </Box>
+
+                            {/* Progress Bar */}
+                            <Box sx={{ display: 'flex', height: 7, overflow: 'hidden', mb: 0.5 }}>
+                                {Object.entries(data).map(([key, value]) =>
+                                    key !== 'total' ? (
+                                        <Box key={key} sx={{ backgroundColor: getColor(key), width: `${value}%` }} />
+                                    ) : null
+                                )}
+                            </Box>
+
+                        
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, fontWeight: 200 }}>
+                                    {Object.entries(data).map(([key, value]) =>
+                                        key !== 'total' ? (
+                                            <Box key={key} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: getColor(key), fontSize: 10 }}>
+                                                <Typography variant="caption" sx={{ fontSize: 9, fontWeight: 'semi-bold' }}>{key.charAt(0).toUpperCase() + key.slice(1)}</Typography>
+                                                <Typography variant="caption" sx={{ fontSize: 9, fontWeight: 'bold' }}>{value}%</Typography>
+                                            </Box>
+                                        ) : null
+                                    )}
                                 </Box>
-                            ))}
-                        </Box>
-                        )}
-                    </Box>
-                ))}
 
-                <Typography variant="body1" fontWeight="bold" textAlign="center" mt={1} sx={{ fontSize: 14 }}>
-                    Score Points: {totalPoints}
+                        </Box>
+                    );
+                })}
+
+                {/* <Typography variant="body2" fontWeight="bold" textAlign="center" mt={0.5} sx={{ fontSize: 15 }}>
+                    iScore: {totalPoints}
                 </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 0.2 }}>
                     {Array.from({ length: 5 }, (_, index) => (
-                        <Star key={index} sx={{ color: index < totalStars ? 'orange' : 'gray', fontSize: 18 }} />
+                        <Star key={index} sx={{ color: index < totalStars ? 'orange' : 'gray', fontSize: 12 }} />
                     ))}
-                </Box>
+                </Box> */}
             </CardContent>
         </Card>
     );

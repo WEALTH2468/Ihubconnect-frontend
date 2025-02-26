@@ -17,13 +17,15 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { useEffect } from 'react';
 import jwtService from '../../auth/services/jwtService';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from 'app/store/fuse/messageSlice';
 import { useState } from 'react';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { resetPassword } from 'app/store/userSlice';
+import { getRandomUserAvatars } from 'app/store/userSlice';
+import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
 
 /**
  * Form Validation Schema
@@ -65,6 +67,12 @@ function ResetPasswordPage() {
 
     const { isValid, dirtyFields, errors } = formState;
     console.log('isValid: ', isValid, dirtyFields);
+
+      const randomUserAvatars = useSelector(({ user }) => user.randomUserAvatars);
+              // Fetch avatars on mount
+      useEffect(() => {
+        dispatch(getRandomUserAvatars());
+      }, [dispatch]);
 
     useEffect(() => {
         setValue('password', 'user', {
@@ -292,22 +300,23 @@ function ResetPasswordPage() {
               a large enterprise, iHub Connect is the smarter way to work.
             </div>
             <div className="flex items-center mt-32">
-              <AvatarGroup
-                sx={{
-                  '& .MuiAvatar-root': {
-                    borderColor: 'primary.main',
-                  },
-                }}
-              >
-                <Avatar src="assets/images/avatars/female-18.jpg" />
-                <Avatar src="assets/images/avatars/female-11.jpg" />
-                <Avatar src="assets/images/avatars/male-09.jpg" />
-                <Avatar src="assets/images/avatars/male-16.jpg" />
-              </AvatarGroup>
+            <AvatarGroup
+                    max={4} // Display only 4 avatars
+                    sx={{
+                      '& .MuiAvatar-root': {
+                        borderColor: 'primary.main',
+                      },
+                    }}
+                  >
+                    {randomUserAvatars.length > 0
+                      ? randomUserAvatars.slice(0, 4).map((avatar, index) => <Avatar key={index} src={addBackendProtocol(avatar)} />)
+                      : // Fallback avatars if API returns empty
+                        [ ].map((avatar, index) => <Avatar key={index} src={avatar} />)}
+                  </AvatarGroup>
 
-              <div className="ml-16 font-medium tracking-tight text-gray-400">
-                More than 17k people joined us, it's your turn
-              </div>
+            <div className="ml-16 font-medium tracking-tight text-gray-400">
+              All of your colleague are here, it's your turn
+            </div>
             </div>
           </div>
         </Box>

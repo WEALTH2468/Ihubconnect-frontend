@@ -87,5 +87,5 @@ const settingsSlice = createSlice({
 
     }
 });
-export const selectLogo = (state) => state.logo.logo;
+export const selectLogo = (state) => state?.logo?.logo;
 export default settingsSlice.reducer;

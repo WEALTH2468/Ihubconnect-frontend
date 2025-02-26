@@ -135,7 +135,7 @@ const IdeskTab = ({ setSelectedTab }) => {
               className="flex flex-col w-full px-32 pt-24"
             >
               <div className="flex justify-between items-center pb-16">
-                <Typography className="text-2xl font-semibold leading-tight">
+                <Typography className="text-[20px] font-semibold leading-tight">
                   About
                 </Typography>
                 <Button
@@ -168,7 +168,7 @@ const IdeskTab = ({ setSelectedTab }) => {
               className="flex flex-col w-full px-32 pt-24"
             >
               <div className="flex justify-between items-center pb-16">
-                <Typography className="text-2xl font-semibold leading-tight">
+                <Typography className="text-[20px] font-semibold leading-tight">
                   Background
                 </Typography>
                 <Button
