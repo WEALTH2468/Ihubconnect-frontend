@@ -50,6 +50,10 @@ import AbilityProvider from './AbilityContext';
 // Axios HTTP Request defaults
 axios.defaults.baseURL = `${process.env.REACT_APP_BASE_BACKEND}`;
 
+window.REACT_APP_FRONTEND_DOMAIN = window.location.origin;
+
+console.log(window.REACT_APP_FRONTEND_DOMAIN);
+
 // Options for emotion cache, supporting RTL and LTR
 const emotionCacheOptions = {
   rtl: {
@@ -140,7 +144,7 @@ function App() {
   }, [dispatch, user]);
 
   // Function to handle updating status
-  const handleGetUsers = () => {
+  const handleGetUsersAndPosts = () => {
     dispatch(getUsers());
     dispatch(getPosts());
   };
@@ -153,7 +157,7 @@ function App() {
   useEffect(() => {
     if (socket) {
       emitGetUsers();
-      socket.on('emitGetUsers', handleGetUsers);
+      socket.on('emitGetUsers', handleGetUsersAndPosts);
       socket.on('onlineUsers', handleSetOnlineUsers);
       socket?.on('refreshPost', ({ action, payload }) => {
         getAction(action)(payload);

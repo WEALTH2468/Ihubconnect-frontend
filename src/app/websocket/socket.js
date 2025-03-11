@@ -3,6 +3,7 @@ import { io } from 'socket.io-client';
 
 export const initializeSocket = (dispatch) => {
   const token = localStorage.getItem('jwt_access_token');
+  const companyDomain = window.location.origin;
   if (!token) {
     console.error('Token not found! Socket connection will not be established.');
     return null;
@@ -10,7 +11,7 @@ export const initializeSocket = (dispatch) => {
 
   // Initialize the socket connection
   const socket = io(process.env.REACT_APP_BASE_BACKEND, {
-    query: { token },
+    query: { token, companyDomain },
     withCredentials: true,
     reconnection: true, // Enable automatic reconnection
   });
