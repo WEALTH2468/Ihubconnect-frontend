@@ -54,6 +54,7 @@ import { parseTextAsLinkIfURLC } from '../../idesk/sub-apps/idesk/utils';
 import { ImagesearchRoller } from '@mui/icons-material';
 import { sub } from 'date-fns';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
+import useDestopNotification from 'app/theme-layouts/shared-components/notificationPanel/hooks/useDestopNotification';
 
 const StyledMessageRow = styled('div')(({ theme }) => ({
   '&.contact': {
@@ -139,11 +140,14 @@ function Chat(props) {
   const [selectedMessageId, setSelectedMessageId] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [editedText, setEditedText] = useState('');
+  const { showNotification } = useDestopNotification();
 
   const { getStatus } = useGetUserStatus();
   const { emitSendChat } = useEmit();
   const { emitEditChat } = useEmit();
   const { emitDeleteChat } = useEmit();
+  const { emitNotification } = useEmit();
+  const { emitSendPanelChat } = useEmit();
 
   const { setMainSidebarOpen, setContactSidebarOpen } =
     useContext(ChatAppContext);
@@ -267,56 +271,74 @@ function Chat(props) {
   };
 
   // Function to handle sending a message
-  async function onMessageSubmit(ev) {
-    ev.preventDefault();
+async function onMessageSubmit(ev) {
+  ev.preventDefault();
 
-    if (
-      messageText === '' &&
-      imageFile.length === 0 &&
-      selectedDocuments.length === 0
-    ) {
-      return;
-    }
-
-    try {
-      // Dispatch the FormData via the sendMessage action
-      const { payload } = await dispatch(
-        sendMessage({
-          subject: 'chat',
-          messageText,
-          contactId,
-          avatar: user.avatar,
-          link: '/chat',
-          images: imageFile,
-          documents: documentFile,
-        })
-      );
-
-      // Handle response and state updates
-      emitSendChat(payload);
-      if (payload.chat) {
-        dispatch(addPanelChat(payload.chat));
-        if (selectedPanelContactId === payload.message.contactId) {
-          dispatch(addPanelMessage(payload.message));
-        }
-      } else {
-        const message = payload;
-        dispatch(updatePanelChat(message));
-        if (selectedPanelContactId === message.contactId) {
-          dispatch(addPanelMessage(message));
-        }
-      }
-
-      // Reset inputs after sending
-      setMessageText('');
-      setImageFile([]);
-      setSelectedImages([])
-      setDocumentFile([]);
-      setSelectedDocuments([])
-    } catch (error) {
-      console.error('Error submitting message:', error);
-    }
+  if (
+    messageText === '' &&
+    imageFile.length === 0 &&
+    selectedDocuments.length === 0
+  ) {
+    return;
   }
+
+  try {
+    // Dispatch the FormData via the sendMessage action
+    const { payload } = await dispatch(
+      sendMessage({
+        subject: 'chat',
+        messageText,
+        contactId,
+        avatar: user.avatar,
+        link: '/chat',
+        images: imageFile,
+        documents: documentFile,
+      })
+    );
+
+    // Handle response and state updates
+    emitSendChat(payload);
+
+                // Emit the notification only if the recipient is not the sender
+            const notificationData = {
+              senderId: user._id,
+              receivers: [{ _id: contactId }],
+              image: user.avatar,
+              description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
+              content: messageText, // To be used by the desktop notification
+              read: false,
+              link: `/chat/${user._id}`,
+              subject: 'chat',
+              useRouter: true,
+            };
+            
+            emitNotification(notificationData);
+
+
+    if (payload.chat) {
+      dispatch(addPanelChat(payload.chat));
+      if (selectedPanelContactId === payload.message.contactId) {
+        dispatch(addPanelMessage(payload.message));
+      }
+    } else {
+      const message = payload;
+      dispatch(updatePanelChat(message));
+      if (selectedPanelContactId === message.contactId) {
+        dispatch(addPanelMessage(message));
+      }
+    }
+
+    // Reset inputs after sending
+    setMessageText('');
+    setImageFile([]);
+    setSelectedImages([]);
+    setDocumentFile([]);
+    setSelectedDocuments([]);
+  } catch (error) {
+    console.error('Error submitting message:', error);
+  }
+}
+
 
   // Function to handle deleting a message
   function handleDeleteMessage(chatId) {
