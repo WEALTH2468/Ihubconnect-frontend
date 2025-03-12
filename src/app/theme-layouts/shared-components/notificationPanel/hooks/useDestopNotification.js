@@ -6,7 +6,7 @@ export default function useDestopNotification() {
     const showNotification = async (data) => {
       const body = {
         idesk: 'New interesting post on idesk',
-        chat: data.content,
+        chat: data.content || 'You have a new message on iHubconnect',
         file: 'You are given access to a new file',
         task: data.content || 'You have a new task',
         iteam: data.content
