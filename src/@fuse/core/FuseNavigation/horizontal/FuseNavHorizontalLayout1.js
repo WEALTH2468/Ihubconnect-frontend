@@ -50,6 +50,7 @@ function FuseNavHorizontalLayout1(props) {
           item={_item}
           nestedLevel={0}
           dense={dense}
+          
         />
       ))}
     </StyledList>

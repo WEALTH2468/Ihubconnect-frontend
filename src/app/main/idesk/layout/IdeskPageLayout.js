@@ -92,44 +92,50 @@ function IdeskPageLayout(props) {
   }
 
   function useDailyRandomImages() {
-
     const images = [
-    "assets/images/idesk-images/pexels-cookiecutter-1148820.jpg",
-    "assets/images/idesk-images/pexels-divinetechygirl-1181354.jpg",
-    "assets/images/idesk-images/pexels-divinetechygirl-1181675.jpg",
-    "assets/images/idesk-images/pexels-joshsorenson-1714208.jpg",
-    "assets/images/idesk-images/pexels-luis-gomes-166706-546819.jpg",
-    "assets/images/idesk-images/pexels-pixabay-257699.jpg",
-    "assets/images/idesk-images/pexels-pixabay-356056.jpg",
-    "assets/images/idesk-images/pexels-shottrotter-1309766.jpg"
-    ]
+      "assets/images/idesk-images/pexels-cookiecutter-1148820.jpg",
+      "assets/images/idesk-images/pexels-divinetechygirl-1181354.jpg",
+      "assets/images/idesk-images/pexels-divinetechygirl-1181675.jpg",
+      "assets/images/idesk-images/pexels-joshsorenson-1714208.jpg",
+      "assets/images/idesk-images/pexels-luis-gomes-166706-546819.jpg",
+      "assets/images/idesk-images/pexels-pixabay-257699.jpg",
+      "assets/images/idesk-images/pexels-pixabay-356056.jpg",
+      "assets/images/idesk-images/pexels-shottrotter-1309766.jpg",
+    ];
+  
     const [randomImages, setRandomImages] = useState([]);
   
-    // Shuffle array based on seed (day)
+    useEffect(() => {
+      // Use today's date as seed (in milliseconds)
+      const today = new Date().toDateString();
+      const seed = [...today].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  
+      // Shuffle images and pick the first one
+      const shuffled = shuffle([...images], seed);
+      setRandomImages(shuffled.slice(0, 1));
+    }, []);
+  
+    // Shuffle array based on seed
     const shuffle = (array, seed) => {
-      let currentIndex = array.length, randomIndex;
+      let currentIndex = array.length;
+      let randomIndex;
       while (currentIndex !== 0) {
-        randomIndex = Math.floor((Math.sin(seed++) * 10000) % currentIndex);
+        randomIndex = Math.floor((random(seed++) * currentIndex));
         currentIndex--;
         [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
       }
       return array;
     };
   
-    useEffect(() => {
-      // Use today's date as seed
-      const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
-      const seed = parseInt(today.replace(/-/g, ''), 10);
-  
-      // Shuffle images and pick the first 1
-      const shuffled = shuffle([...images], seed);
-      setRandomImages(shuffled.slice(0, 1));
-    }, []);
-
+    // Pseudo-random number generator based on seed
+    const random = (seed) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
   
     return randomImages;
   }
-
+  
   const randomImage = useDailyRandomImages();
   console.log(randomImage);
 

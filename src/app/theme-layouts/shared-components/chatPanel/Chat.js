@@ -23,7 +23,8 @@ import useEmit from 'src/app/websocket/emit';
 const StyledMessageRow = styled('div')(({ theme }) => ({
   '&.contact': {
     '& .bubble': {
-      backgroundColor: lighten(theme.palette.primary.main, 0.1),
+      // backgroundColor: lighten(theme.palette.primary.main, 0.1),
+      backgroundColor: '#2e160e',
       color: theme.palette.secondary.contrastText,
       borderTopLeftRadius: 5,
       borderBottomLeftRadius: 5,
@@ -49,7 +50,8 @@ const StyledMessageRow = styled('div')(({ theme }) => ({
 
     '& .bubble': {
       marginLeft: 'auto',
-      backgroundColor: lighten(theme.palette.secondary.main, 0.1),
+      // backgroundColor: lighten(theme.palette.secondary.main, 0.1),
+      backgroundColor: 'rgb(241, 126, 68)',
       color: theme.palette.primary.contrastText,
       borderTopLeftRadius: 20,
       borderBottomLeftRadius: 20,
