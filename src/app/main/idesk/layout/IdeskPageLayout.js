@@ -32,10 +32,6 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-//Components
-// import AboutTab from './tabs/AboutTab';
-// import PhotosVideosTab from './tabs/PhotosVideosTab';
-// import TimelineTab from './tabs/TimelineTab';
 
 //libraries
 import { motion } from "framer-motion";
@@ -89,10 +85,59 @@ function IdeskPageLayout(props) {
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
   const location = useLocation();
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
+  
 
   function handleTabChange(event, value) {
     setSelectedTab(value);
   }
+
+  function useDailyRandomImages() {
+    const images = [
+      "assets/images/idesk-images/pexels-cookiecutter-1148820.jpg",
+      "assets/images/idesk-images/pexels-divinetechygirl-1181354.jpg",
+      "assets/images/idesk-images/pexels-divinetechygirl-1181675.jpg",
+      "assets/images/idesk-images/pexels-joshsorenson-1714208.jpg",
+      "assets/images/idesk-images/pexels-luis-gomes-166706-546819.jpg",
+      "assets/images/idesk-images/pexels-pixabay-257699.jpg",
+      "assets/images/idesk-images/pexels-pixabay-356056.jpg",
+      "assets/images/idesk-images/pexels-shottrotter-1309766.jpg",
+    ];
+  
+    const [randomImages, setRandomImages] = useState([]);
+  
+    useEffect(() => {
+      // Use today's date as seed (in milliseconds)
+      const today = new Date().toDateString();
+      const seed = [...today].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  
+      // Shuffle images and pick the first one
+      const shuffled = shuffle([...images], seed);
+      setRandomImages(shuffled.slice(0, 1));
+    }, []);
+  
+    // Shuffle array based on seed
+    const shuffle = (array, seed) => {
+      let currentIndex = array.length;
+      let randomIndex;
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor((random(seed++) * currentIndex));
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+      }
+      return array;
+    };
+  
+    // Pseudo-random number generator based on seed
+    const random = (seed) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
+  
+    return randomImages;
+  }
+  
+  const randomImage = useDailyRandomImages();
+  console.log(randomImage);
 
 
   useDeepCompareEffect(() => {
@@ -131,11 +176,12 @@ function IdeskPageLayout(props) {
       header={
         <div className="flex flex-col">
           <img
-            className="h-160 lg:h-100 object-cover w-full"
-            src={addBackendProtocol(user.background)} //"assets/images/pages/profile/cover.jpg"
-            alt="Profile Cover"
+          src={randomImage[0]}
+          alt={`IHOBCONNECT ADS`}
+          className="h-[280px] lg:h-110 object-cover w-full"
+          // src={addBackendProtocol(user.background)} //"assets/images/pages/profile/cover.jpg"
           />
-
+        
           <div className="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto px-32 lg:h-72">
             <div className="-mt-96 lg:-mt-88 rounded-full">
               <motion.div
@@ -156,28 +202,6 @@ function IdeskPageLayout(props) {
               <Typography color="text.secondary">{`${country}, ${user.city}`}</Typography>
             </div>)}
 
-            {/* <div className="hidden lg:flex h-32 mx-32 border-l-2" */}
-
-            {/* <div className="flex items-center mt-24 lg:mt-0 space-x-24">
-              <div className="flex flex-col items-center">
-                <Typography className="font-bold">-</Typography>
-                <Typography
-                  className="text-sm font-medium"
-                  color="text.secondary"
-                >
-                  SCORE
-                </Typography>
-              </div>
-              <div className="flex flex-col items-center">
-                <Typography className="font-bold">{taskCount}</Typography>
-                <Typography
-                  className="text-sm font-medium"
-                  color="text.secondary"
-                >
-                  TASK(S)
-                </Typography>
-              </div>
-            </div> */}
 
             <div className="flex flex-1 justify-start my-16 lg:my-0 ml-[50px]">
               <Tabs

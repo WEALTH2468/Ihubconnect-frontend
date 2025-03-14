@@ -160,7 +160,7 @@ export default function VerificationPage() {
         <div className="w-full max-w-320 sm:w-320 mx-auto sm:mx-0">
           <img className="w-48" src="assets/images/logo/logo.svg" alt="logo" />
 
-          <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight">
+          <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight text-[#cd7923]">
             Email Verification
           </Typography>
           <div className="flex items-baseline mt-2 font-medium">
@@ -197,6 +197,15 @@ export default function VerificationPage() {
                         fontSize: '16px',
                         fontWeight: '800',
                       },
+                      fontWeight: '800',
+                      '& .MuiOutlinedInput-root': {
+                        '&:hover fieldset': {
+                          borderColor: '#c96632', // Hover color
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#f17e44', // Focused (clicked) color
+                        },
+                      },
                     }}
                   />
                 );
@@ -213,7 +222,17 @@ export default function VerificationPage() {
                 >
                   <FormControlLabel
                     label="I agree to the Terms of Service and Privacy Policy"
-                    control={<Checkbox size="small" {...field} />}
+                       control={ <Checkbox
+                                          size="small"
+                                          {...field}
+                                          sx={{
+                                            color: '#f17e44', // Unchecked color
+                                            '&.Mui-checked': {
+                                              color: '#f17e44', // Checked color
+                                            },
+                                          }}
+                                        />
+                                      }
                   />
                   <FormHelperText>
                     {errors?.acceptTermsConditions?.message}
@@ -230,6 +249,13 @@ export default function VerificationPage() {
               disabled={_.isEmpty(dirtyFields) || !isValid || isSaving}
               type="submit"
               size="large"
+              sx={{
+                backgroundColor: '#cd7923',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: '#f17e44',
+                },
+              }}
             >
               {isSaving ? (
                 <CircularProgress size={24} color="inherit" />
@@ -251,6 +277,13 @@ export default function VerificationPage() {
             disabled={isDisabled}
             size="large"
             onClick={handleResendClick}
+            sx={{
+              backgroundColor: '#cd7923',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: '#f17e44',
+              },
+            }}
           >
             {isDisabled ? `Resend Code in ${timer}s` : 'Resend Code'}
           </Button>
@@ -259,7 +292,7 @@ export default function VerificationPage() {
 
       <Box
         className="relative hidden md:flex flex-auto items-center justify-center h-full p-64 lg:px-112 overflow-hidden"
-        sx={{ backgroundColor: 'primary.main' }}
+        sx={{ backgroundColor: '#cd7923' }}
       >
         <svg
           className="absolute inset-0 pointer-events-none"
@@ -271,7 +304,7 @@ export default function VerificationPage() {
         >
           <Box
             component="g"
-            sx={{ color: 'primary.light' }}
+            sx={{ color: 'white' }}
             className="opacity-20"
             fill="none"
             stroke="currentColor"
@@ -284,7 +317,7 @@ export default function VerificationPage() {
         <Box
           component="svg"
           className="absolute -top-64 -right-64 opacity-20"
-          sx={{ color: 'primary.light' }}
+          sx={{ color: 'white' }}
           viewBox="0 0 220 192"
           width="220px"
           height="192px"
@@ -310,11 +343,11 @@ export default function VerificationPage() {
         </Box>
 
         <div className="z-10 relative w-full max-w-2xl">
-          <div className="text-7xl font-bold leading-none text-gray-100">
+          <div className="text-7xl font-bold leading-none text-white">
             <div>Welcome to</div>
             <div>iHubconnect</div>
           </div>
-          <div className="mt-24 text-lg tracking-tight leading-6 text-gray-400">
+          <div className="mt-24 text-lg tracking-tight leading-6 text-white">
             Helping organizations boost productivity, improve communication, and
             track performance effortlessly. Whether you manage a small team or a
             large enterprise, iHub Connect is the smarter way to work.
@@ -324,7 +357,7 @@ export default function VerificationPage() {
                     max={4} // Display only 4 avatars
                     sx={{
                       '& .MuiAvatar-root': {
-                        borderColor: 'primary.main',
+                        borderColor: '#f17e44',
                       },
                     }}
                   >
@@ -334,7 +367,7 @@ export default function VerificationPage() {
                         [ ].map((avatar, index) => <Avatar key={index} src={avatar} />)}
                   </AvatarGroup>
 
-            <div className="ml-16 font-medium tracking-tight text-gray-400">
+            <div className="ml-16 font-medium tracking-tight text-white">
             All of your colleague are here, it's your turn
             </div>
           </div>

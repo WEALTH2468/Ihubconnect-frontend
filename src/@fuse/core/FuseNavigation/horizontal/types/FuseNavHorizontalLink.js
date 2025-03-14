@@ -13,7 +13,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   textDecoration: 'none!important',
   minHeight: 48,
   '&.active': {
-    backgroundColor: `${theme.palette.secondary.main}!important`,
+    // backgroundColor: `${theme.palette.secondary.main}!important`,
     color: `${theme.palette.secondary.contrastText}!important`,
     pointerEvents: 'none',
     '& .fuse-list-item-text-primary': {

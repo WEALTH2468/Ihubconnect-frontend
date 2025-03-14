@@ -52,7 +52,7 @@ function ToolbarLayout1(props) {
                                         {(config.navbar.style === 'style-3' ||
                                             config.navbar.style ===
                                                 'style-3-dense') && (
-                                            <NavbarToggleButton className="w-40 h-40 p-0 mx-0" />
+                                            <NavbarToggleButton className="w-40 bg-[#cd7923] h-40 p-0 mx-0" />
                                         )}
 
                                         {config.navbar.style === 'style-1' &&

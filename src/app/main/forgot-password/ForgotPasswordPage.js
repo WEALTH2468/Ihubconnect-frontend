@@ -50,6 +50,25 @@ function ForgotPasswordPage() {
 
     const randomUserAvatars = useSelector(({ user }) => user.randomUserAvatars);
 
+    const [isDisabled, setIsDisabled] = useState(false);
+    const [countdown, setCountdown] = useState(60); // Countdown in seconds
+
+    const handleClick = () => {
+      setIsDisabled(true);
+      setCountdown(60); // Start countdown from 60 seconds
+    
+      // Start the countdown
+      const interval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === 1) {
+            clearInterval(interval); // Stop the interval when it reaches 0
+            setIsDisabled(false); // Re-enable the button
+            return 60; // Reset countdown
+          }
+          return prev - 1;
+        });
+      }, 1000); // Decrement every second
+    };
 
           // Fetch avatars on mount
   useEffect(() => {
@@ -98,15 +117,9 @@ function ForgotPasswordPage() {
               alt="logo"
             />
 
-            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight">
+            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight text-[#cd7923]">
               Forgot Password
             </Typography>
-            {/* <div className="flex items-baseline mt-2 font-medium">
-                        <Typography>Don't have an account?</Typography>
-                        <Link className="ml-4" to="/sign-up">
-                            Sign up
-                        </Link>
-                    </div> */}
 
             <form
               name="loginForm"
@@ -129,28 +142,44 @@ function ForgotPasswordPage() {
                     variant="outlined"
                     required
                     fullWidth
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '&:hover fieldset': {
+                          borderColor: '#c96632', // Hover color
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#f17e44', // Focused (clicked) color
+                        },
+                      },
+                    }}
                   />
                 )}
               />
 
-              <Button
-                variant="contained"
-                color="secondary"
-                className=" w-full mt-16"
-                aria-label="Sign in"
-                disabled={_.isEmpty(dirtyFields) || !isValid}
-                type="submit"
-                size="large"
-              >
-                Send E-Mail
-              </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: '#cd7923',
+                      color: 'white',
+                      '&:hover': {
+                        backgroundColor: '#f17e44',
+                      },
+                    }}
+                    className="w-full mt-16"
+                    aria-label="Send E-Mail"
+                    disabled={isDisabled || _.isEmpty(dirtyFields) || !isValid}
+                    onClick={handleClick}
+                    size="large"
+                  >
+                    {isDisabled ? `Resend Mail In... ${countdown}s` : 'Send E-Mail'}
+                  </Button>
             </form>
           </div>
         </Paper>
 
         <Box
           className="relative hidden md:flex flex-auto items-center justify-center h-full p-64 lg:px-112 overflow-hidden"
-          sx={{ backgroundColor: 'primary.main' }}
+          sx={{ backgroundColor: '#cd7923' }}
         >
           <svg
             className="absolute inset-0 pointer-events-none"
@@ -162,7 +191,7 @@ function ForgotPasswordPage() {
           >
             <Box
               component="g"
-              sx={{ color: 'primary.light' }}
+              sx={{ color: 'white'  }}
               className="opacity-20"
               fill="none"
               stroke="currentColor"
@@ -175,7 +204,7 @@ function ForgotPasswordPage() {
           <Box
             component="svg"
             className="absolute -top-64 -right-64 opacity-20"
-            sx={{ color: 'primary.light' }}
+            sx={{ color: 'white' }}
             viewBox="0 0 220 192"
             width="220px"
             height="192px"
@@ -201,11 +230,11 @@ function ForgotPasswordPage() {
           </Box>
 
           <div className="z-10 relative w-full max-w-2xl">
-            <div className="text-7xl font-bold leading-none text-gray-100">
+            <div className="text-7xl font-bold leading-none text-white">
               <div>Welcome to</div>
               <div>iHubconnect</div>
             </div>
-            <div className="mt-24 text-lg tracking-tight leading-6 text-gray-400">
+            <div className="mt-24 text-lg tracking-tight leading-6 text-white">
               Helping organizations boost productivity, improve communication, and
               track performance effortlessly. Whether you manage a small team or
               a large enterprise, iHub Connect is the smarter way to work.
@@ -215,7 +244,7 @@ function ForgotPasswordPage() {
                     max={4} // Display only 4 avatars
                     sx={{
                       '& .MuiAvatar-root': {
-                        borderColor: 'primary.main',
+                        borderColor: '#f17e44',
                       },
                     }}
                   >
@@ -225,7 +254,7 @@ function ForgotPasswordPage() {
                         [].map((avatar, index) => <Avatar key={index} src={avatar} />)}
                   </AvatarGroup>
 
-              <div className="ml-16 font-medium tracking-tight text-gray-400">
+              <div className="ml-16 font-medium tracking-tight text-white">
               All of your colleague are here, it's your turn
               </div>
             </div>

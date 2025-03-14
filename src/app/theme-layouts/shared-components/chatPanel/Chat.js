@@ -17,11 +17,14 @@ import { selectUser } from 'app/store/userSlice';
 import { addPanelChat, getPanelChats, updatePanelChat } from './store/chatsSlice';
 import { addMessage } from 'src/app/main/chat/store/chatSlice';
 import { parseTextAsLinkIfURLC } from 'src/app/main/idesk/sub-apps/idesk/utils';
+import useEmit from 'src/app/websocket/emit';
+
 
 const StyledMessageRow = styled('div')(({ theme }) => ({
   '&.contact': {
     '& .bubble': {
-      backgroundColor: lighten(theme.palette.primary.main, 0.1),
+      // backgroundColor: lighten(theme.palette.primary.main, 0.1),
+      backgroundColor: '#2e160e',
       color: theme.palette.secondary.contrastText,
       borderTopLeftRadius: 5,
       borderBottomLeftRadius: 5,
@@ -47,7 +50,8 @@ const StyledMessageRow = styled('div')(({ theme }) => ({
 
     '& .bubble': {
       marginLeft: 'auto',
-      backgroundColor: lighten(theme.palette.secondary.main, 0.1),
+      // backgroundColor: lighten(theme.palette.secondary.main, 0.1),
+      backgroundColor: 'rgb(241, 126, 68)',
       color: theme.palette.primary.contrastText,
       borderTopLeftRadius: 20,
       borderBottomLeftRadius: 20,
@@ -102,6 +106,11 @@ function Chat(props) {
 
   const chatScroll = useRef(null);
   const [messageText, setMessageText] = useState('');
+
+    const { emitSendPanelChat } = useEmit();
+      const { emitNotification } = useEmit();
+    
+  
 
 
   useEffect(() => {
@@ -216,6 +225,25 @@ function Chat(props) {
               contactId: selectedContactId,
             })
           ).then(({payload}) => {
+
+                          // Handle response and state updates
+                  emitSendPanelChat(payload);
+
+                  // Emit the notification only if the recipient is not the sender
+              const notificationData = {
+                senderId: user._id,
+                receivers: [{ _id: selectedContactId}],
+                image: user.avatar,
+                description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
+                content: messageText, // To be used by the desktop notification
+                read: false,
+                link: `/chat/${user._id}`,
+                subject: 'chat',
+                useRouter: true,
+              };
+
+              emitNotification(notificationData);
+
             if(payload.chat){
               dispatch(addPanelChat(payload.chat));
               if(contactId == payload.message.contactId) {

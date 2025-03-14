@@ -15,7 +15,7 @@ export const parseTextAsLinkIfURL = (text) => {
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              color: 'blue',
+              color: '#f17e44',
               textDecoration: 'underline',
               cursor: 'pointer',
               backgroundColor: 'transparent',
