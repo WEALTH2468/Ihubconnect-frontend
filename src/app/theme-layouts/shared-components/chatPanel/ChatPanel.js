@@ -198,9 +198,9 @@ function ChatPanel(props) {
             dispatch(addMessage(message));
           }
 
-          if (document.visibilityState === 'hidden') {
-            showNotification(message);
-          }
+          // if (document.visibilityState === 'hidden') {
+          //   showNotification(message);
+          // }
         }
       } else {
         const message = data;
@@ -221,9 +221,9 @@ function ChatPanel(props) {
             dispatch(addMessage(message));
           }
 
-          if (document.visibilityState === 'hidden') {
-            showNotification(message);
-          }
+          // if (document.visibilityState === 'hidden') {
+          //   showNotification(message);
+          // }
         }
       }
     };
@@ -255,9 +255,9 @@ function ChatPanel(props) {
             dispatch(addMessage(message));
           }
 
-          if (document.visibilityState === 'hidden') {
-            showNotification(message);
-          }
+          // if (document.visibilityState === 'hidden') {
+          //   showNotification(message);
+          // }
         }
       } else {
         const message = data;
@@ -278,9 +278,9 @@ function ChatPanel(props) {
             dispatch(addMessage(message));
           }
 
-          if (document.visibilityState === 'hidden') {
-            showNotification(message);
-          }
+          // if (document.visibilityState === 'hidden') {
+          //   showNotification(message);
+          // }
         }
       }
     };
