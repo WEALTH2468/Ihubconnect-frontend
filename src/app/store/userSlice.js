@@ -181,6 +181,9 @@ const userSlice = createSlice({
     [setUser.fulfilled]: (state, action) => action.payload,
     [getUser.fulfilled]: (state, action) => action.payload,
     [forgotPassword.fulfilled]: (state, action) => action.payload,
+    [forgotPassword.rejected]: (state, action) => {
+      state.error = action.payload?.message || 'Failed to reset password';
+  },
     [resetPassword.fulfilled]: (state, action) => action.payload,
     [updateUserData.pending]: (state, action) => {
       console.log('pending');
