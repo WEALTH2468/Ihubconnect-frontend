@@ -242,7 +242,7 @@ function Chat(props) {
                     useRouter: true,
                 };
         
-                emitNotification(notificationData);
+                 emitNotification(notificationData);
             
 
             if(payload.chat){
