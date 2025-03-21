@@ -26,6 +26,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { resetPassword } from 'app/store/userSlice';
 import { getRandomUserAvatars } from 'app/store/userSlice';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
+import CircularProgress from '@mui/material/CircularProgress';
 
 /**
  * Form Validation Schema
@@ -53,6 +54,7 @@ function ResetPasswordPage() {
     console.log('routeParams', routeParams);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const dispatch = useDispatch();
     const { control, formState, handleSubmit, setError, setValue } = useForm({
         mode: 'onChange',
@@ -93,6 +95,7 @@ function ResetPasswordPage() {
     };
 
     function onSubmit({ password, confirmPassword }) {
+        setIsSaving(true);
         const data = {
             password,
             confirmPassword,
@@ -119,7 +122,7 @@ function ResetPasswordPage() {
                 );
                 navigate('/sign-in');
             }
-
+            setIsSaving(false);
             //
         });
     }
@@ -134,7 +137,7 @@ function ResetPasswordPage() {
               alt="logo"
             />
 
-            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight">
+            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight text-[#cd7923]">
               Reset Password
             </Typography>
 
@@ -158,6 +161,16 @@ function ResetPasswordPage() {
                     variant="outlined"
                     required
                     fullWidth
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '&:hover fieldset': {
+                          borderColor: '#c96632', // Hover color
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#f17e44', // Focused (clicked) color
+                        },
+                      },
+                    }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -197,6 +210,16 @@ function ResetPasswordPage() {
                     variant="outlined"
                     required
                     fullWidth
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '&:hover fieldset': {
+                          borderColor: '#c96632', // Hover color
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#f17e44', // Focused (clicked) color
+                        },
+                      },
+                    }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -230,8 +253,19 @@ function ResetPasswordPage() {
                 disabled={_.isEmpty(dirtyFields) || !isValid}
                 type="submit"
                 size="large"
+                sx={{
+                  backgroundColor: '#cd7923',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: '#f17e44', // A darker shade for hover
+                  },
+                }}
               >
-                Change Password
+                 {isSaving ? (
+                                    <CircularProgress size={24} color="inherit" />
+                                  ) : (
+                                    'Reset Password'
+                                  )}
               </Button>
             </form>
           </div>
@@ -239,7 +273,7 @@ function ResetPasswordPage() {
 
         <Box
           className="relative hidden md:flex flex-auto items-center justify-center h-full p-64 lg:px-112 overflow-hidden"
-          sx={{ backgroundColor: 'primary.main' }}
+          sx={{ backgroundColor: '#cd7923' }}
         >
           <svg
             className="absolute inset-0 pointer-events-none"
@@ -251,7 +285,7 @@ function ResetPasswordPage() {
           >
             <Box
               component="g"
-              sx={{ color: 'primary.light' }}
+              sx={{ color: 'white' }}
               className="opacity-20"
               fill="none"
               stroke="currentColor"
@@ -264,7 +298,7 @@ function ResetPasswordPage() {
           <Box
             component="svg"
             className="absolute -top-64 -right-64 opacity-20"
-            sx={{ color: 'primary.light' }}
+            sx={{ color: 'white' }}
             viewBox="0 0 220 192"
             width="220px"
             height="192px"
@@ -290,11 +324,11 @@ function ResetPasswordPage() {
           </Box>
 
           <div className="z-10 relative w-full max-w-2xl">
-            <div className="text-7xl font-bold leading-none text-gray-100">
+            <div className="text-7xl font-bold leading-none text-white">
               <div>Welcome to</div>
               <div>iHubconnect</div>
             </div>
-            <div className="mt-24 text-lg tracking-tight leading-6 text-gray-400">
+            <div className="mt-24 text-lg tracking-tight leading-6 text-white">
               Helping organizations boost productivity, improve communication, and
               track performance effortlessly. Whether you manage a small team or
               a large enterprise, iHub Connect is the smarter way to work.
@@ -304,7 +338,7 @@ function ResetPasswordPage() {
                     max={4} // Display only 4 avatars
                     sx={{
                       '& .MuiAvatar-root': {
-                        borderColor: 'primary.main',
+                        borderColor: '#f17e44',
                       },
                     }}
                   >
@@ -314,7 +348,7 @@ function ResetPasswordPage() {
                         [ ].map((avatar, index) => <Avatar key={index} src={avatar} />)}
                   </AvatarGroup>
 
-            <div className="ml-16 font-medium tracking-tight text-gray-400">
+            <div className="ml-16 font-medium tracking-tight text-white">
               All of your colleague are here, it's your turn
             </div>
             </div>

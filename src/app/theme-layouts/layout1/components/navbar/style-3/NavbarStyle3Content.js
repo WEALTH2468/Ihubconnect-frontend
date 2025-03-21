@@ -105,11 +105,11 @@ function NavbarStyle3Content(props) {
   return (
     <ClickAwayListener onClickAway={() => setPanelOpen(false)}>
       <Root className={clsx('flex flex-auto flex h-full', props.className)}>
-        <div id="fuse-navbar-side-panel" className="flex shrink-0 flex-col items-center">
+        <div id="fuse-navbar-side-panel" className="flex shrink-0 flex-col items-center ">
           <img className="w-44 my-32" src="assets/images/logo/logo.svg" alt="logo" />
 
           <FuseScrollbars
-            className="flex flex-1 min-h-0 justify-center w-full overflow-y-auto overflow-x-hidden"
+            className="flex flex-1 min-h-0 justify-center w-full overflow-y-auto overflow-x-hidden "
             option={{ suppressScrollX: true, wheelPropagation: false }}
           >
             <FuseNavigation
@@ -132,7 +132,7 @@ function NavbarStyle3Content(props) {
             option={{ suppressScrollX: true, wheelPropagation: false }}
           >
             <FuseNavigation
-              className={clsx('navigation')}
+              className={clsx('navigation bg-[#1a1a1a]')}
               navigation={selectedNavigation}
               layout="vertical"
               onItemClick={handleChildItemClick}

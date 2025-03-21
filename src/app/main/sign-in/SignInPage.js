@@ -134,12 +134,12 @@ function SignInPage() {
               alt="logo"
             />
 
-            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight">
+            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight text-[#cd7923]">
               Sign in
             </Typography>
             <div className="flex items-baseline mt-2 font-medium">
               <Typography>Don't have an account?</Typography>
-              <Link className="ml-4" to="/sign-up">
+              <Link className="ml-4 text-[#f17e44] !text-[#f17e44]" to="/sign-up">
                 Sign up
               </Link>
             </div>
@@ -150,24 +150,35 @@ function SignInPage() {
               className="flex flex-col justify-center w-full mt-32"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <Controller
-                name="email"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    className="mb-24"
-                    label="Email"
-                    autoFocus
-                    type="email"
-                    error={!!errors.email}
-                    helperText={errors?.email?.message}
-                    variant="outlined"
-                    required
-                    fullWidth
-                  />
-                )}
-              />
+             <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  className="mb-24"
+                  label="Email"
+                  autoFocus
+                  type="email"
+                  error={!!errors.email}
+                  helperText={errors?.email?.message}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '&:hover fieldset': {
+                        borderColor: '#c96632', // Hover color
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#f17e44', // Focused (clicked) color
+                      },
+                    },
+                  }}
+                />
+              )}
+            />
+
 
               <Controller
                 name="password"
@@ -183,6 +194,16 @@ function SignInPage() {
                     variant="outlined"
                     required
                     fullWidth
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '&:hover fieldset': {
+                          borderColor: '#c96632', // Hover color
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#f17e44', // Focused (clicked) color
+                        },
+                      },
+                    }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -215,15 +236,27 @@ function SignInPage() {
                   render={({ field }) => (
                     <FormControl>
                       <FormControlLabel
-                        label="Remember me"
-                        control={<Checkbox size="small" {...field} />}
-                      />
+                             label="Remember me"
+                             control={
+                               <Checkbox
+                                 size="small"
+                                 {...field}
+                                 sx={{
+                                   color: '#f17e44', // Unchecked color
+                                   '&.Mui-checked': {
+                                     color: '#f17e44', // Checked color
+                                   },
+                                 }}
+                               />
+                             }
+                           />                             
+
                     </FormControl>
                   )}
                 />
 
                 <Link
-                  className="text-md font-medium"
+                  className="text-md font-medium text-[#f17e44] !text-[#f17e44]"
                   to="/auth/forgot-password"
                 >
                   Forgot password?
@@ -231,20 +264,26 @@ function SignInPage() {
               </div>
 
               <Button
-                variant="contained"
-                color="secondary"
-                className=" w-full mt-16"
-                aria-label="Sign in"
-                disabled={_.isEmpty(dirtyFields) || !isValid}
-                type="submit"
-                size="large"
-              >
-                {isSaving ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  'Sign in'
-                )}
-              </Button>
+                  variant="contained"
+                  className="w-full mt-16"
+                  aria-label="Sign in"
+                  disabled={_.isEmpty(dirtyFields) || !isValid}
+                  type="submit"
+                  size="large"
+                  sx={{
+                    backgroundColor: '#cd7923',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: '#f17e44', // A darker shade for hover
+                    },
+                  }}
+                >
+                  {isSaving ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    'Sign in'
+                  )}
+                </Button>
 
             </form>
           </div>
@@ -252,7 +291,7 @@ function SignInPage() {
 
         <Box
           className="relative hidden md:flex flex-auto items-center justify-center h-full p-64 lg:px-112 overflow-hidden"
-          sx={{ backgroundColor: 'primary.main' }}
+          sx={{  backgroundColor: '#cd7923' }}
         >
           <svg
             className="absolute inset-0 pointer-events-none"
@@ -264,7 +303,7 @@ function SignInPage() {
           >
             <Box
               component="g"
-              sx={{ color: 'primary.light' }}
+              sx={{ color: 'white' }}
               className="opacity-20"
               fill="none"
               stroke="currentColor"
@@ -277,7 +316,7 @@ function SignInPage() {
           <Box
             component="svg"
             className="absolute -top-64 -right-64 opacity-20"
-            sx={{ color: 'primary.light' }}
+            sx={{ color: 'white' }}
             viewBox="0 0 220 192"
             width="220px"
             height="192px"
@@ -303,11 +342,11 @@ function SignInPage() {
           </Box>
 
           <div className="z-10 relative w-full max-w-2xl">
-            <div className="text-7xl font-bold leading-none text-gray-100">
+            <div className="text-7xl font-bold leading-none text-white">
               <div>Welcome to</div>
               <div>iHubconnect</div>
             </div>
-            <div className="mt-24 text-lg tracking-tight leading-6 text-gray-400">
+            <div className="mt-24 text-lg tracking-tight leading-6 text-white">
               Helping organizations boost productivity, improve communication, and track performance effortlessly. Whether you manage a small team or a large enterprise, iHub Connect is the smarter way to work.
             </div>
             <div className="flex items-center mt-32">
@@ -315,7 +354,7 @@ function SignInPage() {
                     max={4} // Display only 4 avatars
                     sx={{
                       '& .MuiAvatar-root': {
-                        borderColor: 'primary.main',
+                        borderColor: '#f17e44',
                       },
                     }}
                   >
@@ -325,7 +364,7 @@ function SignInPage() {
                         [ ].map((avatar, index) => <Avatar key={index} src={avatar} />)}
                   </AvatarGroup>
 
-              <div className="ml-16 font-medium tracking-tight text-gray-400">
+              <div className="ml-16 font-medium tracking-tight text-white">
               All of your colleague are here, it's your turn
               </div>
             </div>

@@ -333,7 +333,7 @@ function ChatPanel(props) {
     <Root opened={state ? 1 : 0} {...handlers}>
       <div className="panel flex flex-col max-w-full" ref={ref}>
         <AppBar position="static" className="shadow-md">
-          <Toolbar className="px-4">
+          <Toolbar className="px-4 bg-[#2e160e]">
             {(!state || !selectedContactId) && (
               <div className="flex flex-1 items-center px-8 space-x-12">
                 <IconButton
