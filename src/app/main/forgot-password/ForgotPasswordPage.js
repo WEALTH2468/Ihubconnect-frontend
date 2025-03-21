@@ -53,22 +53,18 @@ function ForgotPasswordPage() {
     const [isDisabled, setIsDisabled] = useState(false);
     const [countdown, setCountdown] = useState(60); // Countdown in seconds
 
-    const handleClick = () => {
-      setIsDisabled(true);
-      setCountdown(60); // Start countdown from 60 seconds
-    
-      // Start the countdown
-      const interval = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev === 1) {
-            clearInterval(interval); // Stop the interval when it reaches 0
-            setIsDisabled(false); // Re-enable the button
-            return 60; // Reset countdown
-          }
-          return prev - 1;
-        });
-      }, 1000); // Decrement every second
-    };
+    useEffect(() => {
+      let timer;
+      if (isDisabled && countdown > 0) {
+          timer = setInterval(() => {
+              setCountdown((prev) => prev - 1);
+          }, 1000);
+      } else if (countdown === 0) {
+          setIsDisabled(false);
+          setCountdown(60); // Reset countdown
+      }
+      return () => clearInterval(timer);
+  }, [isDisabled, countdown]);
 
           // Fetch avatars on mount
   useEffect(() => {
@@ -88,24 +84,36 @@ function ForgotPasswordPage() {
     }, [setValue]);
 
     function onSubmit({ email }) {
-        dispatch(forgotPassword({ email })).then((action) => {
-            if (action.error) {
-                dispatch(
-                    showMessage({
-                        message: action.payload.message,
-                        variant: 'error',
-                    })
-                );
-            } else {
-                dispatch(
-                    showMessage({
-                        message: 'Email Sent Successfully!',
-                        variant: 'success',
-                    })
-                );
-            }
-        });
-    }
+      dispatch(forgotPassword({ email }))
+          .then((action) => {
+              if (forgotPassword.rejected.match(action)) {
+                  const errorMessage = action.payload?.message || 'This Email is not found in our database';
+                  dispatch(
+                      showMessage({
+                          message: errorMessage,
+                          variant: 'error',
+                      })
+                  );
+              } else if (forgotPassword.fulfilled.match(action)) {
+                setIsDisabled(true);
+                  dispatch(
+                      showMessage({
+                          message: 'Email Sent Successfully!',
+                          variant: 'success',
+                      })
+                  );
+              }
+          })
+          .catch((err) => {
+              dispatch(
+                  showMessage({
+                      message: err.message || 'An unexpected error occurred',
+                      variant: 'error',
+                  })
+              );
+          });
+  }
+  
 
     return (
       <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-1 min-w-0">
@@ -122,10 +130,11 @@ function ForgotPasswordPage() {
             </Typography>
 
             <form
-              name="loginForm"
+              name="forgotPasswordForm"
               noValidate
               className="flex flex-col justify-center w-full mt-32"
               onSubmit={handleSubmit(onSubmit)}
+
             >
               <Controller
                 name="email"
@@ -165,12 +174,13 @@ function ForgotPasswordPage() {
                         backgroundColor: '#f17e44',
                       },
                     }}
+                    type='submit'
                     className="w-full mt-16"
                     aria-label="Send E-Mail"
                     disabled={isDisabled || _.isEmpty(dirtyFields) || !isValid}
-                    onClick={handleClick}
                     size="large"
                   >
+                    
                     {isDisabled ? `Resend Mail In... ${countdown}s` : 'Send E-Mail'}
                   </Button>
             </form>
@@ -248,7 +258,7 @@ function ForgotPasswordPage() {
                       },
                     }}
                   >
-                    {randomUserAvatars.length > 0
+                    {randomUserAvatars?.length > 0
                       ? randomUserAvatars.slice(0, 4).map((avatar, index) => <Avatar key={index} src={addBackendProtocol(avatar)} />)
                       : // Fallback avatars if API returns empty
                         [].map((avatar, index) => <Avatar key={index} src={avatar} />)}

@@ -217,32 +217,33 @@ function Chat(props) {
 
           dispatch(
             sendPanelMessage({
-              subject: "chat",
-              link: '/chat',
-              avatar: user.avatar,
-              messageText,
-              chatId: chat.id,
-              contactId: selectedContactId,
+                subject: "chat",
+                link: `/chat`,
+                avatar: user.avatar,
+                messageText,
+                chatId: chat.id,
+                contactId: selectedContactId,
             })
-          ).then(({payload}) => {
-
-                          // Handle response and state updates
-                  emitSendPanelChat(payload);
-
-                  // Emit the notification only if the recipient is not the sender
-              const notificationData = {
-                senderId: user._id,
-                receivers: [{ _id: selectedContactId}],
-                image: user.avatar,
-                description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
-                content: messageText, // To be used by the desktop notification
-                read: false,
-                link: `/chat/${user._id}`,
-                subject: 'chat',
-                useRouter: true,
-              };
-
-              emitNotification(notificationData);
+        ).then(({ payload }) => {
+        
+            // Emit real-time message to the recipient
+            emitSendPanelChat(payload);
+        
+            // Emit the notification only if the recipient is not the sender
+                const notificationData = {
+                    senderId: user._id,
+                    receivers: [{ _id: selectedContactId }],
+                    image: user.avatar,
+                    description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
+                    content: messageText, // To be used by the desktop notification
+                    read: false,
+                    link: `/chat/${user._id}`,
+                    subject: 'chat',
+                    useRouter: true,
+                };
+        
+                emitNotification(notificationData);
+            
 
             if(payload.chat){
               dispatch(addPanelChat(payload.chat));

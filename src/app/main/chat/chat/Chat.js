@@ -292,7 +292,7 @@ async function onMessageSubmit(ev) {
         messageText,
         contactId,
         avatar: user.avatar,
-        link: '/chat',
+        link: `/chat`,
         images: imageFile,
         documents: documentFile,
       })

@@ -358,7 +358,7 @@ function SignInPage() {
                       },
                     }}
                   >
-                    {randomUserAvatars.length > 0
+                    {randomUserAvatars?.length > 0
                       ? randomUserAvatars.slice(0, 4).map((avatar, index) => <Avatar key={index} src={addBackendProtocol(avatar)} />)
                       : // Fallback avatars if API returns empty
                         [ ].map((avatar, index) => <Avatar key={index} src={avatar} />)}
