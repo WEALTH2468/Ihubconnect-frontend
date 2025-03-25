@@ -28,9 +28,10 @@ export default function useDesktopNotification() {
             notification.onclick = (event) => {
                 event.preventDefault(); // Prevent focusing the Notification's tab
             
-                // Open the link in the same tab and bring it to focus
+                // Open the link in the same tab and bring it to focus   
                 self.focus();
                 window.location.assign(`${process.env.REACT_APP_BASE_FRONTEND + data.link}`);
+                
             };
           };
         

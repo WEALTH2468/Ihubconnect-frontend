@@ -56,6 +56,7 @@ import { sub } from 'date-fns';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
 import useDestopNotification from 'app/theme-layouts/shared-components/notificationPanel/hooks/useDestopNotification';
 
+
 const StyledMessageRow = styled('div')(({ theme }) => ({
   '&.contact': {
     '& .bubble': {
@@ -161,6 +162,8 @@ function Chat(props) {
   const selectedContact = useSelector((state) =>
     selectPanelContactById(state, contactId)
   );
+  const [isSending, setIsSending] = useState(false);
+
   const selectedPanelContactId = useSelector(selectSelectedPanelContactId);
 
   const chatRef = useRef(null);
@@ -279,10 +282,12 @@ async function onMessageSubmit(ev) {
   if (
     messageText === '' &&
     imageFile.length === 0 &&
-    selectedDocuments.length === 0
+    selectedDocuments.length === 0  || isSending
   ) {
     return;
   }
+
+  setIsSending(true); // Disable input while sending
 
   try {
     // Dispatch the FormData via the sendMessage action
@@ -336,6 +341,7 @@ async function onMessageSubmit(ev) {
     setSelectedImages([]);
     setDocumentFile([]);
     setSelectedDocuments([]);
+    setIsSending(false); // Re-enable input
   } catch (error) {
     console.error('Error submitting message:', error);
   }
@@ -742,17 +748,40 @@ async function onMessageSubmit(ev) {
                   onChange={handleDocumentChange}
                 />
 
-                <InputBase
-                  autoFocus={false}
-                  id="message-input"
-                  className="flex-1 flex grow shrink-0 h-11 mx-2 px-4 border-2 rounded-full"
-                  placeholder="Type your message"
-                  onChange={onInputChange}
-                  value={messageText}
-                  sx={{ backgroundColor: 'background.paper' }}
-                />
+                 <TextField
+                                      autoFocus={false}
+                                      id="message-input"
+                                      className="flex flex-1 grow shrink-0 mx-16 ltr:mr-48 rtl:ml-48 my-8 p-2 "
+                                      placeholder="Type your message"
+                                      onChange={onInputChange}
+                                      value={messageText}
+                                      disabled={isSending} // Prevent typing while sending
+                                      multiline // Enables multi-line input
+                                      minRows={1}
+                                       sx={{
+                                      '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                          borderColor: '#c96632', // Hover color
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                          borderColor: '#f17e44', // Focused (clicked) color
+                                        },
+                                      },
+                                    }}
+                                      maxRows={2} // Limit max rows
+                                      onKeyDown={(ev) => {
+                                        if (ev.key === "Enter" && !ev.shiftKey && !isSending) {
+                                          ev.preventDefault(); // Prevent default Enter behavior
+                                          onMessageSubmit(ev);
+                                        }
+                                      }}
+                                    />
 
-                <IconButton type="submit" size="large">
+                <IconButton
+                 type="submit"
+                 size="large"  
+                 disabled={isSending}
+                 >
                   <FuseSvgIcon className="rotate-90 text-24" color="action">
                     heroicons-outline:paper-airplane
                   </FuseSvgIcon>
