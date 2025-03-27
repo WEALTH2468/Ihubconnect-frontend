@@ -39,28 +39,35 @@ const chatsSlice = createSlice({
       });
     },
     addPanelChat: (state, { payload }) => {
-      const newChatId = payload._id;
+      const newChatId = payload._id || `temp-${Date.now()}`; // Temporary ID for frontend
       state.ids.unshift(newChatId);
-      state.entities[newChatId] = payload;
+      state.entities[newChatId] = { 
+        ...payload, 
+        status: "pending" // Message is pending until backend confirms
+      };
     },
     addPanelChatAndCount: (state, { payload }) => {
       const newChatId = payload._id;
       state.ids.unshift(newChatId);
       state.entities[newChatId] = { ...payload, unreadCount: 1 };
     },
+
     updatePanelChat: (state, { payload }) => {
-      const chats = current(state);
-      const chat = chats.entities[payload.chatId];
-      chatsAdapter.updateOne(state, {
-        id: payload.chatId,
-        changes: {
-          ...chat,
-          lastMessage: payload.content,
-          lastMessageAt: payload.createdAt,
-          unreadCount: 0
-        }
-      });
-    },
+  const chatId = payload.chatId; // Ensure we only use real messages
+  
+  if (chatId && state.entities[chatId]) {
+    chatsAdapter.updateOne(state, {
+      id: chatId,
+      changes: {
+        lastMessage: payload.content,
+        lastMessageAt: payload.createdAt,
+        unreadCount: 0, // Reset unread count
+        seen: true, // Mark as seen
+      },
+    });
+  }
+},
+    
     updatePanelChatAndCount: (state, { payload }) => {
       const chats = current(state);
       const chat = chats.entities[payload.chatId];
@@ -74,13 +81,14 @@ const chatsSlice = createSlice({
         }
       });
     },
+    
   },
   extraReducers: (builder) => {
     builder.addCase(getPanelChats.fulfilled, chatsAdapter.setAll);
   },
 });
 
-export const { updatePanelChat, updatePanelChatAndCount, addPanelChatAndCount, addPanelChat, clearCount} =
+export const { updatePanelChat, updatePanelChatAndCount, addPanelChatAndCount, addPanelChat, clearCount } =
   chatsSlice.actions;
 
 export default chatsSlice.reducer;
