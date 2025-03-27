@@ -96,18 +96,6 @@ function App() {
     }
   }, [user])
 
-  useEffect(() => {
-    const broadcast = new BroadcastChannel('close-tabs');
-
-    broadcast.addEventListener('message', (event) => {
-        if (event.data === 'close') {
-            window.close();
-        }
-    });
-
-    return () => broadcast.close();
-}, []);
-
 
   const permissions = useSelector(state => selectRolePermissions(state));
 

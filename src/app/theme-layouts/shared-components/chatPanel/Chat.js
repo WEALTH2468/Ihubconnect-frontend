@@ -18,6 +18,8 @@ import { addPanelChat, getPanelChats, updatePanelChat } from './store/chatsSlice
 import { addMessage } from 'src/app/main/chat/store/chatSlice';
 import { parseTextAsLinkIfURLC } from 'src/app/main/idesk/sub-apps/idesk/utils';
 import useEmit from 'src/app/websocket/emit';
+import TextField from "@mui/material/TextField";
+
 
 
 const StyledMessageRow = styled('div')(({ theme }) => ({
@@ -103,6 +105,7 @@ function Chat(props) {
   const user = useSelector(selectUser);
   const location = useLocation();
   const contactId = location.pathname.split('/chat/')[1];
+  const [isSending, setIsSending] = useState(false);
 
   const chatScroll = useRef(null);
   const [messageText, setMessageText] = useState('');
@@ -173,16 +176,26 @@ function Chat(props) {
                       <div className="bubble flex relative items-center justify-center p-12 max-w-full">
                         <div className="leading-tight whitespace-pre-wrap break-words overflow-hidden">
                           {parseTextAsLinkIfURLC(item.content)}
+                          
                         </div>
 
                         <Typography
                           className="time absolute hidden w-full text-11 mt-8 -mb-24 ltr:left-0 rtl:right-0 bottom-0 whitespace-nowrap"
                           color="text.secondary"
                         >
-                          {formatDistanceToNow(new Date(item.createdAt), {
-                            addSuffix: true,
-                          })}
+                          {item.createdAt
+                            ? formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })
+                            : 'Just now'}
                         </Typography>
+
+                        {item.failed && (
+                          <ErrorOutlineIcon 
+                            color="error" 
+                            fontSize="small" 
+                            className="ml-2 cursor-pointer"
+                            titleAccess="Failed to send"
+                          />
+                        )}
                       </div>
                     </StyledMessageRow>
                   );
@@ -208,90 +221,124 @@ function Chat(props) {
         )}
       </div>
 
-      {useMemo(() => {
-        const onMessageSubmit = (ev) => {
-          ev.preventDefault();
-          if (messageText === '') {
-            return;
-          }
-
-          dispatch(
-            sendPanelMessage({
-                subject: "chat",
-                link: `/chat`,
-                avatar: user.avatar,
-                messageText,
-                chatId: chat.id,
-                contactId: selectedContactId,
-            })
-        ).then(({ payload }) => {
-        
-            // Emit real-time message to the recipient
-            emitSendPanelChat(payload);
-        
-            // Emit the notification only if the recipient is not the sender
-                const notificationData = {
-                    senderId: user._id,
-                    receivers: [{ _id: selectedContactId }],
-                    image: user.avatar,
-                    description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
-                    content: messageText, // To be used by the desktop notification
-                    read: false,
-                    link: `/chat/${user._id}`,
-                    subject: 'chat',
-                    useRouter: true,
-                };
-        
-                 emitNotification(notificationData);
+                  {useMemo(() => {
+             const onMessageSubmit = (ev) => {
+              ev.preventDefault();
+              if (!messageText.trim() || isSending) return;
             
+              setIsSending(true); // Disable input while sending
+            
+              dispatch(
+                sendPanelMessage({
+                  subject: "chat",
+                  link: `/chat`,
+                  avatar: user.avatar,
+                  messageText,
+                  chatId: chat.id,
+                  contactId: selectedContactId,
+                })
+              )
+                .then(({ payload }) => {
+                  emitSendPanelChat(payload);
+            
+                  if (user._id !== selectedContactId) {
+                    emitNotification({
+                      senderId: user._id,
+                      receivers: [{ _id: selectedContactId }],
+                      image: user.avatar,
+                      description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
+                      content: messageText,
+                      read: false,
+                      link: `/chat/${user._id}`,
+                      subject: "chat",
+                      useRouter: true,
+                    });
+                  }
+            
+                  if (payload.chat) {
+                    dispatch(addPanelChat(payload.chat));
+                    if (contactId === payload.message.contactId) {
+                      dispatch(addMessage({ ...payload.message, failed: false })); 
+                    }
+                  } else {
+                    dispatch(updatePanelChat(payload));
+                    if (contactId === payload.contactId) {
+                      dispatch(addMessage({ ...payload, failed: false }));
+                    }
+                  }
+            
+                  setMessageText('');
+                  setIsSending(false);
+                })
+                .catch(() => {
+                  setIsSending(false);
+                  dispatch(
+                    addMessage({
+                      _id: Date.now(), // Unique ID
+                      senderId: user._id,
+                      messageText,
+                      chatId: chat.id,
+                      contactId: selectedContactId,
+                      failed: true, // Mark as failed
+                      createdAt: new Date().toISOString(), // Provide a fallback timestamp
+                    })
+                  );
+                });
+            };
 
-            if(payload.chat){
-              dispatch(addPanelChat(payload.chat));
-              if(contactId == payload.message.contactId) {
-                dispatch(addMessage(payload.message));
-              }
-            }else{
-              const message = payload
-              dispatch(updatePanelChat(message))
-              if(contactId == message.contactId) {
-                dispatch(addMessage(message));
-              }
-            }
-            setMessageText('');
-          });
-        };
+              return (
+                <>
+                  {chat && (
+                    <form
+                      onSubmit={onMessageSubmit}
+                      className="pb-16 px-8 absolute bottom-0 left-0 right-0"
+                    >
+                      <Paper className="rounded-24 flex items-center relative shadow">
 
-        return (
-          <>
-            {chat && (
-              <form
-                onSubmit={onMessageSubmit}
-                className="pb-16 px-8 absolute bottom-0 left-0 right-0"
-              >
-                <Paper className="rounded-24 flex items-center relative shadow">
-                  <InputBase
-                    autoFocus={false}
-                    id="message-input"
-                    className="flex flex-1 grow shrink-0 mx-16 ltr:mr-48 rtl:ml-48 my-8"
-                    placeholder="Type your message"
-                    onChange={onInputChange}
-                    value={messageText}
-                  />
-                  <IconButton
-                    className="absolute ltr:right-0 rtl:left-0 top-0"
-                    type="submit"
-                    size="large"
-                  >
-                    <FuseSvgIcon className="rotate-90" color="action">
-                      heroicons-outline:paper-airplane
-                    </FuseSvgIcon>
-                  </IconButton>
-                </Paper>
-              </form>
-            )}
-          </>
-        );
-      }, [chat, dispatch, messageText, selectedContactId])}
+                      <TextField
+                      autoFocus={false}
+                      id="message-input"
+                      className="flex flex-1 grow shrink-0 mx-16 ltr:mr-48 rtl:ml-48 my-8 p-2 "
+                      placeholder="Type your message"
+                      onChange={onInputChange}
+                      value={messageText}
+                      disabled={isSending} // Prevent typing while sending
+                      multiline // Enables multi-line input
+                      minRows={1}
+                       sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '&:hover fieldset': {
+                          borderColor: '#c96632', // Hover color
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#f17e44', // Focused (clicked) color
+                        },
+                      },
+                    }}
+                      maxRows={2} // Limit max rows
+                      onKeyDown={(ev) => {
+                        if (ev.key === "Enter" && !ev.shiftKey && !isSending) {
+                          ev.preventDefault(); // Prevent default Enter behavior
+                          onMessageSubmit(ev);
+                        }
+                      }}
+                    />
+                        <IconButton
+                          className="absolute ltr:right-0 rtl:left-0 top-5"
+                          type="submit"
+                          size="large"
+                          disabled={isSending} // Prevent multiple clicks
+                        >
+                          <FuseSvgIcon className="rotate-90" color="action">
+                            heroicons-outline:paper-airplane
+                          </FuseSvgIcon>
+                        </IconButton>
+                      </Paper>
+                    </form>
+                  )}
+                </>
+              );
+            }, [chat, dispatch, messageText, selectedContactId, isSending])}
     </Paper>
   );
 }

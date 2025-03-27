@@ -26,19 +26,15 @@ export default function useDesktopNotification() {
             );
 
             notification.onclick = (event) => {
-              event.preventDefault(); // Prevent focusing the Notification's tab
-              
-              // Notify all other tabs to refresh
-              const broadcast = new BroadcastChannel('close-tabs');
-              broadcast.postMessage('close');
-          
-              // Open the new tab
-              window.open(
-                  `${process.env.REACT_APP_BASE_FRONTEND + data.link}`,
-                  '_blank' // Open in a new tab
-              );
+                event.preventDefault(); // Prevent focusing the Notification's tab
+            
+                // Open the link in the same tab and bring it to focus   
+                self.focus();
+                window.location.assign(`${process.env.REACT_APP_BASE_FRONTEND + data.link}`);
+                
+            };
           };
-        };
+        
 
         // If permission is already cached as granted, skip the request
         if (permissionGranted) {
