@@ -46,6 +46,7 @@ import addBackendProtocol from '../addBackendProtocol';
 import { selectSelectedContactId } from 'src/app/main/chat/store/contactsSlice';
 import { data } from 'autoprefixer';
 import { selectSocket } from 'app/store/socketSlice';
+import { updateMessage } from 'src/app/main/chat/store/chatSlice'; 
 
 const Root = styled('div')(({ theme, opened }) => ({
   position: 'sticky',
@@ -149,6 +150,9 @@ function ChatPanel(props) {
   const selectedContactIdFromMainChat = useSelector(selectSelectedContactId);
   const theme = useTheme();
 
+  const correntUser = user._id
+  console.log("correntuser", correntUser)
+
   const ref = useRef();
   const handlers = useSwipeable({
     onSwipedLeft: () => {
@@ -176,11 +180,11 @@ function ChatPanel(props) {
     selectedContactId && dispatch(getPanelChat(selectedContactId));
   }, [selectedContactId]);
 
-  // Effect to handle receiving new panel chat messages via WebSocket
   useEffect(() => {
     const handleSendPanelChat = async (data) => {
       if (data.chat) {
         const message = data.message;
+        console.log(message)
         if (
           selectedContactId != message.userId &&
           selectedContactIdFromMainChat != message.userId
@@ -197,10 +201,6 @@ function ChatPanel(props) {
           if (selectedContactIdFromMainChat == message.userId) {
             dispatch(addMessage(message));
           }
-
-          // if (document.visibilityState === 'hidden') {
-          //   showNotification(message);
-          // }
         }
       } else {
         const message = data;
@@ -221,9 +221,6 @@ function ChatPanel(props) {
             dispatch(addMessage(message));
           }
 
-          // if (document.visibilityState === 'hidden') {
-          //   showNotification(message);
-          // }
         }
       }
     };
@@ -254,10 +251,6 @@ function ChatPanel(props) {
           if (selectedContactIdFromMainChat == message.userId) {
             dispatch(addMessage(message));
           }
-
-          // if (document.visibilityState === 'hidden') {
-          //   showNotification(message);
-          // }
         }
       } else {
         const message = data;
@@ -277,10 +270,6 @@ function ChatPanel(props) {
           if (selectedContactIdFromMainChat == message.userId) {
             dispatch(addMessage(message));
           }
-
-          // if (document.visibilityState === 'hidden') {
-          //   showNotification(message);
-          // }
         }
       }
     };
@@ -290,6 +279,9 @@ function ChatPanel(props) {
       socket?.off('sendChat', handleSendChat);
     };
   }, [socket, selectedContactId, selectedContactIdFromMainChat, dispatch]);
+  
+  
+  
 
   useEffect(() => {
     dispatch(getPanelUserData());

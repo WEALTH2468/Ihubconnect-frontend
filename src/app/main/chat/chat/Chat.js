@@ -26,6 +26,7 @@ import {
   selectContactById,
   setSelectedContactId,
 } from '../store/contactsSlice';
+import { addMessage, updateMessage } from '../store/chatSlice';
 import ContactAvatar from '../ContactAvatar';
 import ChatMoreMenu from './ChatMoreMenu';
 import { ChatAppContext } from '../ChatApp';
@@ -40,6 +41,7 @@ import {
 import {
   addPanelMessage,
   getPanelChat,
+  updatePanelMessage,
   isRead,
   selectPanelChat,
   sendPanelMessage,
@@ -55,6 +57,9 @@ import { ImagesearchRoller } from '@mui/icons-material';
 import { sub } from 'date-fns';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
 import useDestopNotification from 'app/theme-layouts/shared-components/notificationPanel/hooks/useDestopNotification';
+import RotateRightRoundedIcon from '@mui/icons-material/RotateRightRounded';
+import DoneAllRoundedIcon from '@mui/icons-material/DoneAllRounded';
+import ErrorIcon from "@mui/icons-material/Error";
 
 
 const StyledMessageRow = styled('div')(({ theme }) => ({
@@ -169,6 +174,7 @@ function Chat(props) {
   const chatRef = useRef(null);
   const [messageText, setMessageText] = useState('');
 
+
   useEffect(() => {
     dispatch(getChat(contactId));
     dispatch(setSelectedContactId(contactId));
@@ -275,19 +281,39 @@ function Chat(props) {
     event.target.value = null;
   };
 
-  // Function to handle sending a message
+ // Function to handle sending a message
 async function onMessageSubmit(ev) {
   ev.preventDefault();
 
   if (
-    messageText === '' &&
-    imageFile.length === 0 &&
-    selectedDocuments.length === 0  || isSending
+    (messageText === '' && imageFile.length === 0 && selectedDocuments.length === 0) ||
+    isSending
   ) {
     return;
   }
 
   setIsSending(true); // Disable input while sending
+
+  // Create a temporary message
+  const tempId = `temp-${Date.now()}`;
+  const tempMessage = {
+    _id: tempId,
+    contactId: contactId,
+    content: messageText,
+    avatar: user.avatar,
+    senderId: user._id,
+    createdAt: new Date().toISOString(),
+    status: "pending", // Mark as pending
+  };
+
+ 
+
+  dispatch(addMessage(tempMessage)); // Add temp message to UI immediately
+  // dispatch(addPanelChat(tempMessage));
+  dispatch(addPanelMessage(tempMessage));
+  
+  setIsSending(false); // Re-enable input
+  setMessageText('');
 
   try {
     // Dispatch the FormData via the sendMessage action
@@ -303,24 +329,39 @@ async function onMessageSubmit(ev) {
       })
     );
 
-    // Handle response and state updates
+    // Emit the message and notification
     emitSendChat(payload);
+    
+    if (user._id !== contactId) {
+      emitNotification({
+        senderId: user._id,
+        receivers: [{ _id: contactId }],
+        image: user.avatar,
+        description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
+        content: messageText,
+        read: false,
+        link: `/chat/${user._id}`,
+        subject: 'chat',
+        useRouter: true,
+      });
+    }
 
-                // Emit the notification only if the recipient is not the sender
-            const notificationData = {
-              senderId: user._id,
-              receivers: [{ _id: contactId }],
-              image: user.avatar,
-              description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
-              content: messageText, // To be used by the desktop notification
-              read: false,
-              link: `/chat/${user._id}`,
-              subject: 'chat',
-              useRouter: true,
-            };
-            
-            emitNotification(notificationData);
-
+    // Replace the temp message with the real message and update the status
+    dispatch(updatePanelMessage({
+      tempId: tempMessage._id,
+      realMessage: {
+        ...payload,
+        createdAt: payload.createdAt || new Date().toISOString(), // Fallback to a valid date
+      }
+    }));
+    
+    dispatch(updateMessage({
+      tempId: tempMessage._id,
+      realMessage: {
+        ...payload,
+        createdAt: payload.createdAt || new Date().toISOString(), // Fallback to a valid date
+      }
+    }));
 
     if (payload.chat) {
       dispatch(addPanelChat(payload.chat));
@@ -328,10 +369,9 @@ async function onMessageSubmit(ev) {
         dispatch(addPanelMessage(payload.message));
       }
     } else {
-      const message = payload;
-      dispatch(updatePanelChat(message));
-      if (selectedPanelContactId === message.contactId) {
-        dispatch(addPanelMessage(message));
+      dispatch(updatePanelChat(payload));
+      if (selectedPanelContactId === payload.contactId) {
+        dispatch(addPanelMessage(payload));
       }
     }
 
@@ -341,9 +381,13 @@ async function onMessageSubmit(ev) {
     setSelectedImages([]);
     setDocumentFile([]);
     setSelectedDocuments([]);
-    setIsSending(false); // Re-enable input
   } catch (error) {
     console.error('Error submitting message:', error);
+
+    // Mark temp message as failed
+    dispatch(updatePanelMessage({ tempId: tempMessage._id, status: "failed" }));
+    dispatch(updateMessage({ tempId: tempMessage._id, status: "failed" }));
+    
   }
 }
 
@@ -478,6 +522,56 @@ async function onMessageSubmit(ev) {
                         {item.content && (
                           <div className="leading-tight whitespace-pre-wrap flex flex-start">
                             {parseTextAsLinkIfURLC(item.content)}
+
+                            {!isSender && (
+                              <div>
+                                {item.status === "pending" && (
+                                  <RotateRightRoundedIcon
+                                    sx={{
+                                      fontSize: 16,
+                                      color: "gray-200",
+                                      position: "flex",
+                                      flexDirection: "flex-bottom",
+                                      marginLeft: "8px",
+                                    }}
+                                  />
+                                )}
+                                  {item.seen === true  && (
+                                  <DoneAllRoundedIcon
+                                    sx={{
+                                      fontSize: 16,
+                                      color: "blue",
+                                      position: "flex",
+                                      flexDirection: "flex-bottom",
+                                      marginLeft: "8px",
+                                    }}
+                                 />
+                                )}
+                                 {item.seen === false  && (
+                                  <DoneAllRoundedIcon
+                                    sx={{
+                                      fontSize: 16,
+                                      color: "gray-200",
+                                      position: "flex",
+                                      flexDirection: "flex-bottom",
+                                      marginLeft: "8px",
+                                    }}
+                                  />
+                                )}
+                              
+                                {item.status === "failed" && (
+                                  <ErrorIcon
+                                    sx={{
+                                      fontSize: 16,
+                                      color: "red",
+                                      position: "flex",
+                                      flexDirection: "flex-bottom",
+                                      marginLeft: "8px",
+                                    }}
+                                  />
+                                )}
+                              </div>
+                            )}
                           </div>
                         )}
                         {/* Display Edited Indicator */}
@@ -699,8 +793,7 @@ async function onMessageSubmit(ev) {
                         heroicons-outline:document
                       </FuseSvgIcon>
                       <Typography className="text-blue-500 underline">
-                        {doc || `Document ${index + 1}`}{' '}
-                        {/* Use `doc.name` */}
+                        {doc || `Document ${index + 1}`} {/* Use `doc.name` */}
                       </Typography>
                       <IconButton
                         onClick={() => handleRemoveDocument(index)}
@@ -748,40 +841,35 @@ async function onMessageSubmit(ev) {
                   onChange={handleDocumentChange}
                 />
 
-                 <TextField
-                                      autoFocus={false}
-                                      id="message-input"
-                                      className="flex flex-1 grow shrink-0 mx-16 ltr:mr-48 rtl:ml-48 my-8 p-2 "
-                                      placeholder="Type your message"
-                                      onChange={onInputChange}
-                                      value={messageText}
-                                      disabled={isSending} // Prevent typing while sending
-                                      multiline // Enables multi-line input
-                                      minRows={1}
-                                       sx={{
-                                      '& .MuiOutlinedInput-root': {
-                                        '&:hover fieldset': {
-                                          borderColor: '#c96632', // Hover color
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                          borderColor: '#f17e44', // Focused (clicked) color
-                                        },
-                                      },
-                                    }}
-                                      maxRows={2} // Limit max rows
-                                      onKeyDown={(ev) => {
-                                        if (ev.key === "Enter" && !ev.shiftKey && !isSending) {
-                                          ev.preventDefault(); // Prevent default Enter behavior
-                                          onMessageSubmit(ev);
-                                        }
-                                      }}
-                                    />
+                <TextField
+                  autoFocus={false}
+                  id="message-input"
+                  className="flex flex-1 grow shrink-0 mx-16 ltr:mr-48 rtl:ml-48 my-8 p-2 w-full "
+                  placeholder="Type your message"
+                  onChange={onInputChange}
+                  value={messageText}
+                  multiline // Enables multi-line input
+                  minRows={1}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '&:hover fieldset': {
+                        borderColor: '#c96632', // Hover color
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#f17e44', // Focused (clicked) color
+                      },
+                    },
+                  }}
+                  maxRows={2} // Limit max rows
+                  onKeyDown={(ev) => {
+                    if (ev.key === 'Enter' && !ev.shiftKey && !isSending) {
+                      ev.preventDefault(); // Prevent default Enter behavior
+                      onMessageSubmit(ev);
+                    }
+                  }}
+                />
 
-                <IconButton
-                 type="submit"
-                 size="large"  
-                 disabled={isSending}
-                 >
+                <IconButton type="submit" size="large">
                   <FuseSvgIcon className="rotate-90 text-24" color="action">
                     heroicons-outline:paper-airplane
                   </FuseSvgIcon>
