@@ -60,6 +60,7 @@ import useDestopNotification from 'app/theme-layouts/shared-components/notificat
 import RotateRightRoundedIcon from '@mui/icons-material/RotateRightRounded';
 import DoneAllRoundedIcon from '@mui/icons-material/DoneAllRounded';
 import ErrorIcon from "@mui/icons-material/Error";
+import { selectSocket } from 'app/store/socketSlice';
 
 
 const StyledMessageRow = styled('div')(({ theme }) => ({
@@ -164,6 +165,7 @@ function Chat(props) {
   const user = useSelector(selectUser);
   const routeParams = useParams();
   const contactId = routeParams.id;
+  const socket = useSelector(selectSocket);
   const selectedContact = useSelector((state) =>
     selectPanelContactById(state, contactId)
   );
@@ -173,6 +175,7 @@ function Chat(props) {
 
   const chatRef = useRef(null);
   const [messageText, setMessageText] = useState('');
+
 
 
   useEffect(() => {
@@ -309,9 +312,7 @@ async function onMessageSubmit(ev) {
  
 
   dispatch(addMessage(tempMessage)); // Add temp message to UI immediately
-  // dispatch(addPanelChat(tempMessage));
-  dispatch(addPanelMessage(tempMessage));
-  
+
   setIsSending(false); // Re-enable input
   setMessageText('');
 
@@ -360,13 +361,17 @@ async function onMessageSubmit(ev) {
       realMessage: {
         ...payload,
         createdAt: payload.createdAt || new Date().toISOString(), // Fallback to a valid date
+        // seen: true,
       }
     }));
 
+    console.log(payload)
+    
+
     if (payload.chat) {
       dispatch(addPanelChat(payload.chat));
-      if (selectedPanelContactId === payload.message.contactId) {
-        dispatch(addPanelMessage(payload.message));
+      if (selectedPanelContactId === payload.contactId) {
+        dispatch(addPanelMessage(payload));
       }
     } else {
       dispatch(updatePanelChat(payload));
@@ -390,6 +395,19 @@ async function onMessageSubmit(ev) {
     
   }
 }
+
+useEffect(() => {
+  const handleMessageSeen = ({ messageId }) => {
+    console.log("Message seen:", messageId);
+    dispatch(updateMessage({ tempId: messageId, realMessage: { seen: true } }));
+  };
+
+  socket?.on("messageSeen", handleMessageSeen);
+  
+  return () => {
+    socket?.off("messageSeen", handleMessageSeen);
+  };
+}, [socket, dispatch]);
 
 
   // Function to handle deleting a message

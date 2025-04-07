@@ -48,6 +48,10 @@ const useEmit = () => {
     if (socket) socket.emit('emitSendPanelChat', message);
   };
 
+  const emitMarkMessageSeen = (messageId, senderId) => {
+    if (socket) socket.emit('makeMessageSeen', { messageId, senderId });
+  };
+
   return {
     emitUpdateStatus,
     emitOffline,
@@ -58,7 +62,8 @@ const useEmit = () => {
     emitGetUsers,
     emitSendPanelChat,
     emitDeleteChat,
-    emitEditChat
+    emitEditChat,
+    emitMarkMessageSeen
   };
 };
 

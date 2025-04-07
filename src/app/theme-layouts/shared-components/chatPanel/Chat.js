@@ -298,8 +298,6 @@ function Chat(props) {
               createdAt: new Date().toISOString(),
               status: "pending",
             };
-          
-            dispatch(addMessage(tempMessage));
 
             dispatch(addPanelMessage(tempMessage));
             
@@ -340,13 +338,14 @@ function Chat(props) {
                 createdAt: payload.createdAt || new Date().toISOString(), // Fallback to a valid date
               };
 
+
                // Update sender's temp message
                dispatch(updateMessage({ tempId, realMessage: updatedMessage }));
                dispatch(updatePanelMessage({ tempId, realMessage: updatedMessage }));
           
               if (payload.chat) {
                 dispatch(addPanelChat(payload.chat));
-                if (selectedContactId === payload.message.contactId) {
+                if (selectedContactId === payload.contactId) {
                   dispatch(addMessage(updatedMessage));
                 }
               } else {
@@ -404,7 +403,7 @@ function Chat(props) {
                       }}
                     />
                         <IconButton
-                          className="absolute ltr:right-0 rtl:left-0 top-5"
+                          className="absolute ltr:right-0 rtl:left-0 top-8"
                           type="submit"
                           size="large"
                         >
