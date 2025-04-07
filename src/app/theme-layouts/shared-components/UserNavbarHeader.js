@@ -38,7 +38,7 @@ function UserNavbarHeader(props) {
                     }}
                     className="avatar text-32 font-bold w-96 h-96"
                     src={user.photoURL}
-                    alt={user.displayName.charAt(0)}
+                    alt={user.displayName?.charAt(0)}
                 ></Avatar>
             </div>
             <Typography className="username text-14 whitespace-nowrap font-medium">

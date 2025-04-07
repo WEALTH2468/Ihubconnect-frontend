@@ -88,19 +88,42 @@ const chatSlice = createSlice({
   initialState: [],
   reducers: {
     removeChat: (state, action) => action.payload,
-    addMessage: (state, action) => [...state, action.payload]
+    
+    addMessage: (state, action) => {
+      const tempMessage = action.payload;
+
+      // Prevent duplicate temp messages
+      return state.some((msg) => msg._id === tempMessage._id)
+        ? state
+        : [...state, tempMessage];
+    },
+
+    updateMessage: (state, action) => {
+      const { tempId, realMessage, status } = action.payload;
+      const index = state.findIndex((msg) => msg._id === tempId);
+
+      if (index !== -1) {
+        if (realMessage) {
+          state[index] = realMessage; // Replace temp message with real one
+        } else if (status) {
+          state[index].status = status; // Mark message as failed
+        }
+      }
+    },
   },
+
 
   extraReducers: (builder) => {
     builder.addCase(getChat.fulfilled, (state, action) => action.payload,) 
-    builder.addCase(sendMessage.fulfilled, (state, { payload }) => {
-      return payload.chat ? [...state, payload.message] : [...state, payload]
-     }) 
+    // builder.addCase(sendMessage.fulfilled, (state, { payload }) => {
+    //   return payload.chat ? [...state, payload.message] : [...state, payload]
+    //  }) 
   },
 });
 
+
 export const selectChat = ({ chatApp }) => chatApp.chat;
 
-export const { removeChat, addMessage } = chatSlice.actions;
+export const { removeChat, addMessage, updateMessage  } = chatSlice.actions;
 
 export default chatSlice.reducer;

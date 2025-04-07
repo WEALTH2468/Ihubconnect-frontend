@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux';
 
 
 function FuseSplashScreen() {
-  const logo = useSelector(selectLogo)
+  //const logo = useSelector(selectLogo)
   return (
     <div id="fuse-splash-screen">
       <div className="logo">
-        <img width="128" src={logo} alt="logo" />
+        <img width="128" src={""} alt="logo" />
       </div>
       <Box
         id="spinner"

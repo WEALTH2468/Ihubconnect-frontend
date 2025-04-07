@@ -59,7 +59,7 @@ const schema = yup.object().shape({
   firstName: yup.string().required('You must enter a firstName'),
   lastName: yup.string().required('You must enter a lastName'),
   gender: yup.string().required('You must select gender'),
-  jobPosition: yup.string().required('You must enter your job position'),
+  // jobPosition: yup.string().required('You must enter your job position'),
   emails: yup.array().required('You must enter your email'),
   phoneNumbers: yup.array().required('You must enter your phone number'),
   address: yup.string().required('You must enter your address'),
@@ -87,7 +87,7 @@ const ContactForm = ({ setEdit }) => {
     firstName: userData.firstName || '',
     lastName: userData.lastName || '',
     gender: userData.gender || '',
-    jobPosition: userData.jobPosition || '',
+    // jobPosition: userData.jobPosition || '',
     role: userData.role || '',
     emails: userData.emails || [{ email: '', label: '' }],
     phoneNumbers: userData.phoneNumbers || [
@@ -301,9 +301,9 @@ const ContactForm = ({ setEdit }) => {
                           }}
                           className="object-cover w-full h-full text-64 font-bold"
                           src={value}
-                          alt={userData.displayName}
+                          alt={userData?.displayName}
                         >
-                          {userData.displayName[0]}
+                          {userData?.displayName && userData?.displayName[0]}
                         </Avatar>
                       </Box>
                     )}
@@ -403,7 +403,7 @@ const ContactForm = ({ setEdit }) => {
                 </Grid>
               </Grid>
 
-              <Controller
+              {/* <Controller
                 control={control}
                 name="jobPosition"
                 render={({ field }) => (
@@ -430,7 +430,7 @@ const ContactForm = ({ setEdit }) => {
                     }}
                   />
                 )}
-              />
+              /> */}
 
               <Controller
                 control={control}

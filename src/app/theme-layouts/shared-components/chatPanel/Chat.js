@@ -15,10 +15,17 @@ import { selectSelectedPanelContactId } from './store/contactsSlice';
 import { getPanelChat, selectPanelChat, sendPanelMessage } from './store/chatSlice';
 import { selectUser } from 'app/store/userSlice';
 import { addPanelChat, getPanelChats, updatePanelChat } from './store/chatsSlice';
-import { addMessage } from 'src/app/main/chat/store/chatSlice';
+import { addMessage, updateMessage } from 'src/app/main/chat/store/chatSlice';
 import { parseTextAsLinkIfURLC } from 'src/app/main/idesk/sub-apps/idesk/utils';
 import useEmit from 'src/app/websocket/emit';
 import TextField from "@mui/material/TextField";
+import RotateRightRoundedIcon from '@mui/icons-material/RotateRightRounded';
+import DoneAllRoundedIcon from '@mui/icons-material/DoneAllRounded';
+import ErrorIcon from "@mui/icons-material/Error";
+import {
+  addPanelMessage,
+  updatePanelMessage,
+} from 'app/theme-layouts/shared-components/chatPanel/store/chatSlice';
 
 
 
@@ -162,6 +169,9 @@ function Chat(props) {
 
             return chat?.length > 0
               ? chat.map((item, i) => {
+
+                const isSender = item.contactId === user._id;
+
                   return (
                     <StyledMessageRow
                       key={i}
@@ -176,7 +186,55 @@ function Chat(props) {
                       <div className="bubble flex relative items-center justify-center p-12 max-w-full">
                         <div className="leading-tight whitespace-pre-wrap break-words overflow-hidden">
                           {parseTextAsLinkIfURLC(item.content)}
-                          
+                           {!isSender && (
+                                                        <span>
+                                                          {item.status === "pending" && (
+                                                            <RotateRightRoundedIcon
+                                                              sx={{
+                                                                fontSize: 16,
+                                                                color: "gray-200",
+                                                                position: "flex",
+                                                                flexDirection: "flex-bottom",
+                                                                marginLeft: "5px",
+                                                              }}
+                                                            />
+                                                          )}
+                                                            {item.seen === true  && (
+                                                            <DoneAllRoundedIcon
+                                                              sx={{
+                                                                fontSize: 16,
+                                                                color: "blue",
+                                                                position: "flex",
+                                                                flexDirection: "flex-bottom",
+                                                                marginLeft: "5px",
+                                                              }}
+                                                           />
+                                                          )}
+                                                           {item.seen === false  && (
+                                                            <DoneAllRoundedIcon
+                                                              sx={{
+                                                                fontSize: 16,
+                                                                color: "gray-200",
+                                                                position: "flex",
+                                                                flexDirection: "flex-bottom",
+                                                                marginLeft: "5px",
+                                                              }}
+                                                            />
+                                                          )}
+                                                        
+                                                          {item.status === "failed" && (
+                                                            <ErrorIcon
+                                                              sx={{
+                                                                fontSize: 16,
+                                                                color: "red",
+                                                                position: "flex",
+                                                                flexDirection: "flex-bottom",
+                                                                marginLeft: "5px",
+                                                              }}
+                                                            />
+                                                          )}
+                                                        </span>
+                                                      )}
                         </div>
 
                         <Typography
@@ -222,13 +280,32 @@ function Chat(props) {
       </div>
 
                   {useMemo(() => {
-             const onMessageSubmit = (ev) => {
-              ev.preventDefault();
-              if (!messageText.trim() || isSending) return;
+           const onMessageSubmit = async (ev) => {
+            ev.preventDefault();
+            if (!messageText.trim() || isSending) return;
+          
+            setIsSending(true); // Disable input while sending
+          
+            // Create a temporary message
+            const tempId = `temp-${Date.now()}`;
+            const tempMessage = {
+              _id: tempId,
+              senderId: user._id,
+              contactId: selectedContactId,
+              content: messageText,
+              avatar: user.avatar,
+              chatId: chat.id,
+              createdAt: new Date().toISOString(),
+              status: "pending",
+            };
+
+            dispatch(addPanelMessage(tempMessage));
             
-              setIsSending(true); // Disable input while sending
-            
-              dispatch(
+              setMessageText('');
+              setIsSending(false); // Re-enable input
+          
+            try {
+              const { payload } = await dispatch(
                 sendPanelMessage({
                   subject: "chat",
                   link: `/chat`,
@@ -237,54 +314,57 @@ function Chat(props) {
                   chatId: chat.id,
                   contactId: selectedContactId,
                 })
-              )
-                .then(({ payload }) => {
-                  emitSendPanelChat(payload);
-            
-                  if (user._id !== selectedContactId) {
-                    emitNotification({
-                      senderId: user._id,
-                      receivers: [{ _id: selectedContactId }],
-                      image: user.avatar,
-                      description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
-                      content: messageText,
-                      read: false,
-                      link: `/chat/${user._id}`,
-                      subject: "chat",
-                      useRouter: true,
-                    });
-                  }
-            
-                  if (payload.chat) {
-                    dispatch(addPanelChat(payload.chat));
-                    if (contactId === payload.message.contactId) {
-                      dispatch(addMessage({ ...payload.message, failed: false })); 
-                    }
-                  } else {
-                    dispatch(updatePanelChat(payload));
-                    if (contactId === payload.contactId) {
-                      dispatch(addMessage({ ...payload, failed: false }));
-                    }
-                  }
-            
-                  setMessageText('');
-                  setIsSending(false);
-                })
-                .catch(() => {
-                  setIsSending(false);
-                  dispatch(
-                    addMessage({
-                      _id: Date.now(), // Unique ID
-                      senderId: user._id,
-                      messageText,
-                      chatId: chat.id,
-                      contactId: selectedContactId,
-                      failed: true, // Mark as failed
-                      createdAt: new Date().toISOString(), // Provide a fallback timestamp
-                    })
-                  );
+              );
+          
+              emitSendPanelChat(payload);
+          
+              if (user._id !== selectedContactId) {
+                emitNotification({
+                  senderId: user._id,
+                  receivers: [{ _id: selectedContactId }],
+                  image: user.avatar,
+                  description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
+                  content: messageText,
+                  read: false,
+                  link: `/chat/${user._id}`,
+                  subject: "chat",
+                  useRouter: true,
                 });
-            };
+              }
+          
+              const updatedMessage = {
+                ...payload,
+                seen: selectedContactId === payload.userId, // Mark as seen if recipient is viewing the chat
+                createdAt: payload.createdAt || new Date().toISOString(), // Fallback to a valid date
+              };
+
+
+               // Update sender's temp message
+               dispatch(updateMessage({ tempId, realMessage: updatedMessage }));
+               dispatch(updatePanelMessage({ tempId, realMessage: updatedMessage }));
+          
+              if (payload.chat) {
+                dispatch(addPanelChat(payload.chat));
+                if (selectedContactId === payload.contactId) {
+                  dispatch(addMessage(updatedMessage));
+                }
+              } else {
+                dispatch(updatePanelChat(updatedMessage));
+                if (selectedContactId === payload.contactId) {
+                  dispatch(addMessage(updatedMessage));
+                }
+              }
+
+              setIsSending(false);
+            } catch (error) {
+              console.error("Error submitting message:", error);
+          
+              // Mark temp message as failed
+              dispatch(updateMessage({ tempId, status: "failed" }));
+              dispatch(updatePanelMessage({ tempId, status: "failed" }));
+            } 
+          };
+          
 
               return (
                 <>
@@ -302,7 +382,6 @@ function Chat(props) {
                       placeholder="Type your message"
                       onChange={onInputChange}
                       value={messageText}
-                      disabled={isSending} // Prevent typing while sending
                       multiline // Enables multi-line input
                       minRows={1}
                        sx={{
@@ -324,10 +403,9 @@ function Chat(props) {
                       }}
                     />
                         <IconButton
-                          className="absolute ltr:right-0 rtl:left-0 top-5"
+                          className="absolute ltr:right-0 rtl:left-0 top-8"
                           type="submit"
                           size="large"
-                          disabled={isSending} // Prevent multiple clicks
                         >
                           <FuseSvgIcon className="rotate-90" color="action">
                             heroicons-outline:paper-airplane
