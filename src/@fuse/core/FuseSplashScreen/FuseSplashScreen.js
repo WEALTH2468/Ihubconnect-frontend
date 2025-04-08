@@ -13,15 +13,10 @@ function FuseSplashScreen() {
       </div>
       <Box
         id="spinner"
-        sx={{
-          '& > div': {
-            backgroundColor: 'palette.secondary.main',
-          },
-        }}
       >
-        <div className="bounce1" />
-        <div className="bounce2" />
-        <div className="bounce3" />
+        <div className="bounce1 w-4 h-4 rounded-full !bg-[#f17e46]" />
+          <div className="bounce2 w-4 h-4 rounded-full !bg-[#f17e46]" />
+          <div className="bounce3 w-4 h-4 rounded-full !bg-[#f17e46]" />
       </Box>
     </div>
   );

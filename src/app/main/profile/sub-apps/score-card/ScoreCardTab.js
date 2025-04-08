@@ -58,10 +58,10 @@ const ScoreCardApp = ({ setSelectedTab }) => {
     };
 
     return (
-        <Card sx={{ maxWidth: 280, mx: 'auto', pl: 2, pr: 2, boxShadow: 3, borderRadius: 5, border: '0px' }} ref={ref}>
-            <CardContent sx={{ pl: 1, pr: 1, pt: 1, }}>
-                <Typography variant="h6" fontWeight="bold" sx={{ fontSize: 13, pb: 1 }}>
-                    Key Performance Indicator
+        <Card sx={{ maxWidth: 300, mx: 'auto', pl: 2, pr: 2, boxShadow: 3, borderRadius: 5, border: '0px' }} ref={ref}>
+            <CardContent sx={{ pl: 1, pr: 1, pt: 3, }}>
+                <Typography variant="h6" fontWeight="bold" sx={{ fontSize: 18, pb: 1 }}>
+                    KPI
                 </Typography>
 
                 {Object.entries(scores).map(([category, data]) => {
@@ -102,14 +102,6 @@ const ScoreCardApp = ({ setSelectedTab }) => {
                     );
                 })}
 
-                {/* <Typography variant="body2" fontWeight="bold" textAlign="center" mt={0.5} sx={{ fontSize: 15 }}>
-                    iScore: {totalPoints}
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 0.2 }}>
-                    {Array.from({ length: 5 }, (_, index) => (
-                        <Star key={index} sx={{ color: index < totalStars ? 'orange' : 'gray', fontSize: 12 }} />
-                    ))}
-                </Box> */}
             </CardContent>
         </Card>
     );

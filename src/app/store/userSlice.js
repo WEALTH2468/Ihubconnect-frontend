@@ -22,6 +22,14 @@ export const getUser = createAsyncThunk(
   }
 );
 
+export const getBirthdayUsers = createAsyncThunk(
+  'user/getBirthdayUsers',
+  async () => {
+    const response = await axios.get('/ihub/users/birthdays');
+    return response.data; // { todayBirthdays: [...], upcomingBirthdays: [...] }
+  }
+);
+
 export const setUser = createAsyncThunk(
   'user/setUser',
   async (user, { dispatch, getState }) => {
@@ -158,8 +166,9 @@ export const updateUserData = (data) => async (dispatch, getState) => {
     });
 };
 
+
 const initialState = {
-  role: [], // guest
+  role: [],
   displayName: 'John Doe',
   photoURL: 'assets/images/avatars/brian-hughes.jpg',
   email: 'johndoe@withinpixels.com',
@@ -167,7 +176,10 @@ const initialState = {
   isLoading: false,
   socket: null,
   randomUserAvatars: [],
+  todayBirthdays: [],
+  upcomingBirthdays: [],
 };
+
 
 const userSlice = createSlice({
   name: 'user',
@@ -184,6 +196,12 @@ const userSlice = createSlice({
     [forgotPassword.rejected]: (state, action) => {
       state.error = action.payload?.message || 'Failed to reset password';
   },
+
+  [getBirthdayUsers.fulfilled]: (state, action) => {
+    state.todayBirthdays = action.payload.todayBirthdays;
+    state.upcomingBirthdays = action.payload.upcomingBirthdays;
+  },
+  
     [resetPassword.fulfilled]: (state, action) => action.payload,
     [updateUserData.pending]: (state, action) => {
       console.log('pending');

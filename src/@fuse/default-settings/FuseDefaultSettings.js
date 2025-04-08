@@ -1,5 +1,5 @@
 import { fuseDark } from '@fuse/colors';
-import { lightBlue, red } from '@mui/material/colors';
+import { red } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 import qs from 'qs';
 
@@ -22,9 +22,9 @@ const defaultTheme = {
       contrastDefaultColor: 'light',
     },
     secondary: {
-      light: '#bdf2fa',
-      main: '#22d3ee',
-      dark: '#0cb7e2',
+      light: '#f17e45',
+      main: '#f17e45',
+      dark: '#f17e45',
     },
     background: {
       paper: '#FFFFFF',
@@ -38,9 +38,6 @@ const defaultTheme = {
   },
 };
 
-/**
- * SETTINGS DEFAULTS
- */
 export const defaultSettings = {
   customScrollbars: true,
   direction: 'ltr',
@@ -59,17 +56,8 @@ export function getParsedQuerySettings() {
     return JSON.parse(parsedQueryString.defaultSettings);
   }
   return {};
-
-  // Generating route params from settings
-  /* const settings = qs.stringify({
-        defaultSettings: JSON.stringify(defaultSettings, {strictNullHandling: true})
-    });
-    console.info(settings); */
 }
 
-/**
- * THEME DEFAULTS
- */
 export const defaultThemeOptions = {
   typography: {
     fontFamily: [
@@ -108,11 +96,11 @@ export const defaultThemeOptions = {
       defaultProps: {
         variant: 'text',
         color: 'inherit',
+        backgroundColor: '#f17e45',
       },
       styleOverrides: {
         root: {
           textTransform: 'none',
-          // lineHeight: 1,
         },
         sizeMedium: {
           borderRadius: 4,
@@ -122,9 +110,11 @@ export const defaultThemeOptions = {
         },
         sizeSmall: {
           borderRadius: '4px',
+          backgroundColor: '#f17e45',
         },
         sizeLarge: {
           borderRadius: '8px',
+          backgroundColor: '#f17e45',
         },
         contained: {
           boxShadow: 'none',
@@ -265,9 +255,9 @@ export const defaultThemes = {
       mode: 'light',
       primary: fuseDark,
       secondary: {
-        light: lightBlue[400],
-        main: lightBlue[600],
-        dark: lightBlue[700],
+        light: '#f17e45',
+        main: '#f17e45',
+        dark: '#f17e45',
       },
       error: red,
     },
@@ -280,9 +270,9 @@ export const defaultThemes = {
       mode: 'dark',
       primary: fuseDark,
       secondary: {
-        light: lightBlue[400],
-        main: lightBlue[600],
-        dark: lightBlue[700],
+        light: '#f17e45',
+        main: '#f17e45',
+        dark: '#f17e45',
       },
       error: red,
     },

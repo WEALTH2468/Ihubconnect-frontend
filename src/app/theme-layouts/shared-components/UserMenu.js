@@ -17,6 +17,8 @@ import Box from '@mui/material/Box';
 
 function UserMenu(props) {
   const user = useSelector(selectUser);
+
+  console.log("users", user)
   
   const [userMenu, setUserMenu] = useState(null);
   let id = user._id;
@@ -38,19 +40,13 @@ function UserMenu(props) {
         color="inherit"
       >
         <div className="hidden md:flex flex-col mx-4 items-end">
-          {/* <Typography component="span" className="font-semibold flex">
+          <Typography className="font-semibold flex text-[11px]">
             {user.displayName}
-          </Typography> */}
+          </Typography>
            <Typography className="text-11 font-medium capitalize" color="text.secondary">
             {user.role.toString()}
             {(!user.role || (Array.isArray(user.role) && user.role.length === 0)) && 'Guest'}
           </Typography>
-          <Typography variant="body2" fontWeight="bold" textAlign="center"  sx={{ fontSize: 9 }}>
-                    iScore: 100
-                </Typography>
-                <Typography variant="body2" fontWeight="bold" textAlign="center"  sx={{ fontSize: 9 }}>
-                    Performance: 100
-                </Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 0.2 }}>
                     {Array.from({ length: 5 }, (_, index) => (
                         <Star key={index} sx={{ color: index < 10 ? 'orange' : 'gray', fontSize: 10 }} />

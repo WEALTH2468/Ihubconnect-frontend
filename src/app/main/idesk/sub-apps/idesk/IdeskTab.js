@@ -53,6 +53,12 @@ import { AnnouncementDialog } from 'app/shared-components/Announcement';
 import { useNavigate } from 'react-router-dom';
 import { Can } from 'src/app/AbilityContext';
 import ScoreCardApp from 'src/app/main/profile/sub-apps/score-card/ScoreCardTab';
+import BirthdayCard from 'src/app/main/profile/sub-apps/upcoming-birthdays/birthdaysCard';
+
+//Mui icons
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import EmailIcon from '@mui/icons-material/Email';
+import FmdGoodIcon from '@mui/icons-material/FmdGood';
 
 const IdeskTab = ({ setSelectedTab }) => {
   const navigate = useNavigate();
@@ -128,34 +134,47 @@ const IdeskTab = ({ setSelectedTab }) => {
         className="w-full"
       >
         <div className="flex gap-[20px]">
-          <div className="sticky top-0 w-[25%]">
+          <div className="sticky top-0 w-[35%]">
             <Card
               component={motion.div}
               variants={item}
-              className="flex flex-col w-full px-32 pt-24"
+              className="flex flex-col w-full px-[20px] pt-24"
             >
               <div className="flex justify-between items-center pb-16">
                 <Typography className="text-[20px] font-semibold leading-tight">
                   About
                 </Typography>
-                <Button
+                {/* <Button
                   color="inherit"
                   size="small"
                   className="font-medium -mx-8"
-                ></Button>
+                ></Button> */}
               </div>
 
-              <CardContent className="p-0">
-                <Typography>
-                  {user.firstName} {user.lastName}
-                </Typography>
-                <Typography>{user.email}</Typography>
-                <Typography>{user.address}</Typography>
-              </CardContent>
+              <CardContent className="p-0 space-y-2">
+              <Typography className="text-sm text-gray-800">
+                {user.aboutMe || "Not available"}
+              </Typography>
+
+              <Typography className="text-sm text-gray-800 flex items-center gap-5 pt-[20px] font-semibold pb-[10px]">
+                <BusinessCenterIcon fontSize="small" sx={{ color: 'black' }} />
+                {user.jobPosition || "Not available"}
+              </Typography>
+
+              <Typography className="text-sm text-gray-800 flex items-center gap-5 font-semibold pb-[10px]">
+                <EmailIcon fontSize="small" sx={{ color: 'black' }} />
+                {user.email || "Not available"}
+              </Typography>
+
+              <Typography className="text-sm text-gray-800 flex items-center gap-5 font-semibold pb-[10px]">
+                <FmdGoodIcon fontSize="small" sx={{ color: 'black' }} />
+                {user.address || "Not available"}
+              </Typography>
+            </CardContent>
             </Card>
 
             <Card
-                sx={{ marginTop: '10px' }}
+                sx={{ marginTop: '10px', }}
               >
                   <ScoreCardApp /> {/* Passing the component inside CardContent */}
                 
@@ -165,26 +184,31 @@ const IdeskTab = ({ setSelectedTab }) => {
               sx={{ marginTop: '10px' }}
               component={motion.div}
               variants={item}
-              className="flex flex-col w-full px-32 pt-24"
+              className="flex flex-col w-full px-[20px] pt-24"
             >
               <div className="flex justify-between items-center pb-16">
                 <Typography className="text-[20px] font-semibold leading-tight">
                   Background
                 </Typography>
-                <Button
+                {/* <Button
                   color="inherit"
                   size="small"
                   className="font-medium -mx-8"
-                ></Button>
-              </div>
+                ></Button> */}
+                 </div>
 
-              <CardContent className="p-0">
-                <Typography>{user.jobPosition}</Typography>
-              </CardContent>
+            <CardContent className="p-0 space-y-2">
+            
+              <Typography className="text-sm text-gray-800 flex items-center gap-5 font-semibold">
+                <BusinessCenterIcon fontSize="small" sx={{ color: 'black' }} />
+                {user.jobPosition || "Not available"}
+              </Typography>
+            </CardContent>
+             
             </Card>
           </div>
 
-          <div className="w-[50%]">
+          <div className="w-[60%]">
             <PostForm />
             {posts.length > 0 && (
               <InfiniteScroll
@@ -207,52 +231,14 @@ const IdeskTab = ({ setSelectedTab }) => {
             )}
           </div>
 
-          <div className="sticky top-0 w-[25%]">
-            <Card
-              component={motion.div}
-              variants={item}
-              className="flex flex-col w-full px-32 pt-24"
-            >
-              <div className="flex justify-between items-center pb-16">
-                <Typography className="text-2xl font-semibold leading-tight">
-                  Notifications
-                </Typography>
-                <Button
-                  color="inherit"
-                  size="small"
-                  className="font-medium -mx-8"
-                >
-                  See All
-                </Button>
-              </div>
-
-              {/* <CardContent className="p-0">
-                <List className="p-0">
-                  <ListItem key={user.id} className="px-0 space-x-12">
-                    <Avatar className="" alt={user.firstName} src={user.avatar} />
-                    <ListItemText
-                      className="flex-1"
-                      primary={
-                        <div className="flex">
-                          <Typography
-                            className="font-normal whitespace-nowrap"
-                            color="secondary"
-                            paragraph={false}
-                          >
-                            {user.firstName}
-                          </Typography>
-
-                          <Typography className="px-4 truncate" paragraph={false}>
-                           Hello Bro 
-                          </Typography>
-                        </div>
-                      }
-                      secondary={user.time}
-                    />
-                  </ListItem>
-                </List>
-              </CardContent> */}
-            </Card>
+          <div className="sticky top-0 w-[35%]">
+                    <Card
+            component={motion.div}
+            variants={item}
+            className="flex flex-col w-full px-32 pt-24"
+          >
+            <BirthdayCard />
+          </Card>
           </div>
         </div>
       </motion.div>
