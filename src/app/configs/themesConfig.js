@@ -1,5 +1,7 @@
-import { fuseDark, skyBlue } from '@fuse/colors';
+import { fuseDark, skyBlue, customOrange } from '@fuse/colors';
 import { blueGrey } from '@mui/material/colors';
+
+import { deepOrange } from '@mui/material/colors';
 
 export const lightPaletteText = {
   primary: 'rgb(17, 24, 39)',
@@ -30,9 +32,9 @@ const themesConfig = {
         contrastText: darkPaletteText.primary,
       },
       secondary: {
-        light: '#818cf8',
-        main: '#4f46e5',
-        dark: '#3730a3',
+        light: '#f17e46',
+        main: '#f17e46',
+        dark: '#d8712f',
         contrastText: darkPaletteText.primary,
       },
       background: {
@@ -100,9 +102,9 @@ const themesConfig = {
         contrastText: darkPaletteText.primary,
       },
       secondary: {
-        light: skyBlue[100],
-        main: skyBlue[500],
-        dark: skyBlue[900],
+        light: customOrange[100],
+        main: customOrange[500],
+        dark: customOrange[900],
         contrastText: lightPaletteText.primary,
       },
       background: {
@@ -875,14 +877,14 @@ const themesConfig = {
         contrastText: darkPaletteText.primary,
       },
       secondary: {
-        light: skyBlue[100],
-        main: skyBlue[500],
-        dark: skyBlue[900],
+        light: customOrange[100],
+        main: customOrange[500],
+        dark: customOrange[900],
         contrastText: lightPaletteText.primary,
       },
       background: {
-        paper: blueGrey[700],
-        default: blueGrey[900],
+        paper: deepOrange[700],
+        default: deepOrange[900],
       },
       error: {
         light: '#ffcdd2',

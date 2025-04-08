@@ -16,4 +16,5 @@ const skyBlue = {
   contrastDefaultColor: 'dark',
 };
 
+
 export default skyBlue;

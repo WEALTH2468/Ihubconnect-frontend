@@ -19,28 +19,23 @@ function FuseLoading(props) {
   }, props.delay);
 
   return (
-    <div
-      className={clsx(
-        'flex flex-1 flex-col items-center justify-center p-24',
-        !showLoading && 'hidden'
-      )}
-    >
-      <Typography className="text-13 sm:text-20 font-medium -mb-16" color="text.secondary">
-        Loading
-      </Typography>
-      <Box
-        id="spinner"
-        sx={{
-          '& > div': {
-            backgroundColor: 'palette.secondary.main',
-          },
-        }}
+      <div
+        className={clsx(
+          'flex flex-1 flex-col items-center justify-center p-24',
+          !showLoading && 'hidden'
+        )}
       >
-        <div className="bounce1" />
-        <div className="bounce2" />
-        <div className="bounce3" />
-      </Box>
-    </div>
+        <Typography className="text-13 sm:text-20 font-medium -mb-16" color="text.secondary">
+          Loading
+        </Typography>
+    
+        <Box id="spinner">
+          <div className="bounce1 w-4 h-4 rounded-full !bg-[#f17e46]" />
+          <div className="bounce2 w-4 h-4 rounded-full !bg-[#f17e46]" />
+          <div className="bounce3 w-4 h-4 rounded-full !bg-[#f17e46]" />
+        </Box>
+      </div>
+    
   );
 }
 

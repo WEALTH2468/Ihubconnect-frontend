@@ -54,6 +54,8 @@ window.REACT_APP_FRONTEND_DOMAIN = window.location.origin;
 
 console.log(window.REACT_APP_FRONTEND_DOMAIN);
 
+
+
 // Options for emotion cache, supporting RTL and LTR
 const emotionCacheOptions = {
   rtl: {

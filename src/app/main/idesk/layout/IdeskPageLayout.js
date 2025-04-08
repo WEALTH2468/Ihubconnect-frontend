@@ -31,6 +31,10 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 
 
 //libraries
@@ -171,106 +175,144 @@ function IdeskPageLayout(props) {
     return countries.find((country) => country.iso === iso);
   }
 
+  const stats = [
+    {
+      icon: <MilitaryTechIcon fontSize="medium" sx={{ color: '#fff' }} />,
+      count: 1000,
+      label: 'Iscore',
+    },
+    {
+      icon: <RocketLaunchIcon fontSize="medium" sx={{ color: '#fff' }} />,
+      count: 1000,
+      label: 'Performance',
+    },
+    {
+      icon: <PostAddIcon fontSize="medium" sx={{ color: '#fff' }} />,
+      count: 1000,
+      label: 'Post',
+    },
+  
+  
+  ];
+
   return (
     <Root
       header={
-        <div className="flex flex-col">
-          <img
+        <div className="flex flex-col relative h-[250px] lg:h-[350px] w-full">
+        {/* Background image */}
+        <img
           src={randomImage[0]}
-          alt={`IHOBCONNECT ADS`}
-          className="h-[280px] lg:h-110 object-cover w-full"
-          // src={addBackendProtocol(user.background)} //"assets/images/pages/profile/cover.jpg"
-          />
-        
-          <div className="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto px-32 lg:h-72">
-            <div className="-mt-96 lg:-mt-88 rounded-full">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1, transition: { delay: 0.1 } }}
-              >
-                <Avatar
-                  sx={{ borderColor: "background.paper" }}
-                  className="w-128 h-128 border-4"
-                  src={addBackendProtocol(user.avatar)} //"assets/images/avatars/male-04.jpg"
-                  alt="User avatar"
-                />
-              </motion.div>
+          alt="IHOBCONNECT ADS"
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        />
+      
+        {/* Optional dark overlay for readability */}
+        <div className="absolute inset-0 bg-black/40 z-10" />
+      
+        {/* Bottom-aligned content */}
+        <div className="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto pt-[50px]
+         px-32 lg:h-[120px] absolute bottom-0 left-20 right-0 z-20 text-white bg-black/40 rounded-lg">
+          {/* Avatar */}
+          <div className="-mt-[50px] lg:-mt-[80px] lg:ml-[0px] rounded-full">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1, transition: { delay: 0.1 } }}
+            >
+              <Avatar
+                sx={{ borderColor: "white" }}
+                className="w-128 h-128 border-4"
+                src={addBackendProtocol(user.avatar)}
+                alt="User avatar"
+              />
+            </motion.div>
+          </div>
+      
+          {/* User info */}
+          {user.firstName && (
+            <div className="flex flex-col items-center lg:items-start -mt-[30px] lg:-mt-[30px] lg:ml-[20px]">
+              <Typography className="text-[30px] font-bold leading-none text-white">
+                {`${user.firstName}`}
+              </Typography>
+              <Typography className="text-lg font-bold leading-none text-white pt-[3px]">
+                {`${user.jobPosition}`}
+              </Typography>
+              <Typography className="text-white pt-[3px]">{`${country}, ${user.city}`}</Typography>
+            </div>
+          )}
+      
+          {/* Tabs */}
+          <div className="flex justify-start my-16 lg:my-0 ml-[40px]">
+            <Tabs
+              value={selectedTab}
+              onChange={handleTabChange}
+              indicatorColor="primary"
+              textColor="#cd7923"
+              variant="scrollable"
+              scrollButtons={false}
+              className="-mx-4 min-h-40 text-white"
+              classes={{
+                indicator: "flex justify-center bg-transparent w-full h-full",
+              }}
+              TabIndicatorProps={{
+                children: (
+                  <Box
+                    sx={{ bgcolor: "text.disabled" }}
+                    className="w-full h-full rounded-[10%] opacity-40 text-[#cd7923]"
+                  />
+                ),
+              }}
+            >
+              {[
+                { label: "Idesk", icon: "heroicons-outline:home" },
+                { label: "Profile", icon: "heroicons-outline:user-circle" },
+                { label: "Score", icon: "heroicons-outline:book-open" },
+              ].map((tab, index) => {
+                const isActive = selectedTab === index;
+
+                return (
+                  <Tab
+                    key={index}
+                    className={`
+                      min-h-40 min-w-64 mx-4 px-12
+                      ${isActive ? "text-[#e9913a]" : "text-white"}
+                      hover:text-[#cd7923] transition-colors duration-200
+                    `}
+                    disableRipple
+                    label={
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <FuseSvgIcon sx={{ marginRight: 1, fontSize: 20 }}>
+                          {tab.icon}
+                        </FuseSvgIcon>
+                        <span className="text-14 font-semibold">{tab.label}</span>
+                      </Box>
+                    }
+                  />
+                );
+              })}
+
+            </Tabs>
+          </div>
+
+          {/* User performance */}
+          <div className="flex justify-center gap-x-[20px] -mt-[50px] lg:-mt-[45px] ml-[60px]">
+              {stats.map((stat, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center"
+                >
+                  {stat.icon}
+                  <Typography className="text-[20px] font-bold leading-none text-white pt-[7px]">
+                    {stat.count}
+                  </Typography>
+                  <Typography className="text-white pt-[7px]">{stat.label}</Typography>
+                </div>
+              ))}
             </div>
 
-            {user.firstName && (<div className="flex flex-col items-center lg:items-start mt-16 lg:mt-0 lg:ml-32">
-              <Typography className="text-lg font-bold leading-none">{`${user.firstName} (${user.jobPosition})`}</Typography>
-              <Typography color="text.secondary">{`${country}, ${user.city}`}</Typography>
-            </div>)}
-
-
-            <div className="flex flex-1 justify-start my-16 lg:my-0 ml-[50px]">
-              <Tabs
-                value={selectedTab}
-                onChange={handleTabChange}
-                indicatorColor="primary"
-                textColor="inherit"
-                variant="scrollable"
-                scrollButtons={false}
-                className="-mx-4 min-h-40"
-                classes={{
-                  indicator: "flex justify-center bg-transparent w-full h-full",
-                }}
-                TabIndicatorProps={{
-                  children: (
-                    <Box
-                      sx={{ bgcolor: "text.disabled" }}
-                      className="w-full h-full rounded-full opacity-20"
-                    />
-                  ),
-                }}
-              >
-                <Tab
-                  className="min-h-40 min-w-64 mx-4 px-12"
-                  disableRipple
-                  label={
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <FuseSvgIcon
-                        sx={{ marginRight: 1, fontSize: 20 }}
-                      >
-                        heroicons-outline:home
-                      </FuseSvgIcon>
-                      <span className="text-14 font-semibold">Idesk</span>
-                    </Box>
-                  }
-                />
-                <Tab
-                  className="min-h-40 min-w-64 mx-4 px-12"
-                  disableRipple
-                  label={
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <FuseSvgIcon
-                        sx={{ marginRight: 1, fontSize: 20 }}
-                      >
-                        heroicons-outline:user-circle
-                      </FuseSvgIcon>
-                      <span className="text-14 font-semibold">Profile</span>
-                    </Box>
-                  }
-                />
-                <Tab
-                  className="min-h-40 min-w-64 mx-4 px-12"
-                  disableRipple
-                  label={
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <FuseSvgIcon
-                        sx={{ marginRight: 1, fontSize: 20 }}
-                      >
-                        heroicons-outline:book-open
-                      </FuseSvgIcon>
-                      <span className="text-14 font-semibold">Score</span>
-                    </Box>
-                  }
-                />
-              </Tabs>
-            </div>
-          {/* </div> */}
         </div>
-        </div>
+      </div>
+      
+
     }
       
       content={
