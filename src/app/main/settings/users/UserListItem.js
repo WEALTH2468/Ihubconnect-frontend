@@ -34,7 +34,7 @@ function ContactListItem(props) {
                 variant="body2"
                 color="text.secondary"
               >
-                {user.jobPosition}
+               {user?.jobPosition?.level && user.jobPosition.level + " " } {user?.jobPosition?.title}
               </Typography>
             </>
           }

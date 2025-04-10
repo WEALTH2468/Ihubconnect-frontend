@@ -35,29 +35,30 @@ import { selectDepartments } from 'app/store/settingsSlice';
 import { getUser, removeUser, updateUser, addUser } from '../store/userSlice';
 import PhoneNumberSelector from './phone-number-selector/PhoneNumberSelector';
 import { selectCountries } from '../store/countriesSlice';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 /**
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  background: yup.string(),
-  avatar: yup.string(),
-  displayName: yup.string(),
-  firstName: yup.string(),
-  lastName: yup.string(),
-  gender: yup.string(),
-  departments: yup.array(),
-  units: yup.array(),
-  jobPosition: yup.string(),
-  email: yup.string(),
-  emails: yup.array(),
-  phoneNumbers: yup.array(),
-  address: yup.string(),
-  city: yup.string(),
-  birthday: yup.date().nullable(),
-  aboutMe: yup.string(),
-  roleId: yup.string(),
-  password: yup.string(),
-  isActive: yup.boolean(),
+  // background: yup.string(),
+  // avatar: yup.string(),
+  // displayName: yup.string(),
+  // firstName: yup.string(),
+  // lastName: yup.string(),
+  // gender: yup.string(),
+  // departments: yup.array(),
+  // units: yup.array(),
+  // email: yup.string(),
+  // emails: yup.array(),
+  // phoneNumbers: yup.array(),
+  // address: yup.string(),
+  // city: yup.string(),
+  // birthday: yup.date().nullable(),
+  // aboutMe: yup.string(),
+  // roleId: yup.string(),
+  // password: yup.string(),
+  // isActive: yup.boolean(),
 });
 
 function UserForm() {
@@ -122,7 +123,7 @@ function UserForm() {
     gender: user?.gender || '',
     departments: user?.departments || null,
     units: user?.units || null,
-    jobPosition: user?.jobPosition || '',
+    jobPosition: user?.jobPosition ? [user?.jobPosition._id] : null,
     roleId: user?.roleId || '',
     email: user?.email || '',
     emails: user?.emails || [{ email: '', label: '' }],
@@ -136,7 +137,14 @@ function UserForm() {
     isActive: user?.isActive || active,
   };
 
-  
+  const { data: jobPositions, isLoading } = useQuery({
+    queryKey: ['job-positions'],
+    queryFn: async () => {
+      const response = await axios.get('/settings/job-positions');
+      const data = await response.data;
+      return data;
+    },
+  });
 
   const { control, watch, reset, handleSubmit, formState, getValues } = useForm(
     {
@@ -147,7 +155,7 @@ function UserForm() {
   );
 
   const { isValid, dirtyFields, errors } = formState;
-
+  console.log({ values: getValues(), isValid, dirtyFields, errors });
   const form = watch();
 
   useEffect(() => {
@@ -173,6 +181,7 @@ function UserForm() {
    * Form Submit
    */
   function onSubmit(data) {
+    console.log({ data });
     if (!pathName) {
       data.background = user.background; // change from base64 to image path
       data.avatar = user.avatar; // change from base64 to image path
@@ -334,7 +343,9 @@ function UserForm() {
                                 type="file"
                                 onChange={async (e) => {
                                   setAvatarFile(e.target.files[0]);
-                                  onChange(URL.createObjectURL(e.target.files[0]));
+                                  onChange(
+                                    URL.createObjectURL(e.target.files[0])
+                                  );
                                 }}
                               />
                               <FuseSvgIcon className="text-white">
@@ -383,7 +394,7 @@ function UserForm() {
                     id="displayName"
                     error={!!errors.displayName}
                     helperText={errors?.displayName?.message}
-                    variant="outlined"              
+                    variant="outlined"
                     fullWidth
                     InputProps={{
                       startAdornment: (
@@ -429,7 +440,6 @@ function UserForm() {
                         fullWidth
                         error={!!errors.lastName}
                         helperText={errors?.lastName?.message}
-                      
                       />
                     )}
                   />
@@ -460,34 +470,53 @@ function UserForm() {
                 </Grid>
               </Grid>
 
-             
               <Controller
                 control={control}
                 name="jobPosition"
-                render={({ field }) => (
-                  <TextField
-                    size="small"
-                    className="mt-32"
-                    {...field}
-                    label="Job Position"
-                    placeholder="Job Position"
-                    id="jobPosition"
-                    variant="outlined"
-                    fullWidth
-                    error={!!errors.jobPosition}
-                    helperText={errors?.jobPosition?.message}
-                  
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <FuseSvgIcon size={20}>
-                            heroicons-solid:briefcase
-                          </FuseSvgIcon>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                )}
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <Autocomplete
+                      multiple={false}
+                      id="jobPosition"
+                      className="mt-32"
+                      size="small"
+                      required
+                      options={jobPositions ?? []}
+                      disableCloseOnSelect={false}
+                      getOptionLabel={(option) =>
+                        `${option?.level ? option.level + ' ' : ''}${
+                          option?.title
+                        }` || ''
+                      }
+                      renderOption={(_props, option, { selected }) => (
+                        <li {..._props}>
+                          {option?.level ? `${option.level} ` : ''}
+                          {option?.title}
+                        </li>
+                      )}
+                      value={
+                        value
+                          ? jobPositions?.find((team) => team._id === value[0])
+                          : null
+                      }
+                      onChange={(event, newValue) => {
+                        if (newValue) {
+                          onChange([newValue._id]);
+                        } else {
+                          onChange([]);
+                        }
+                      }}
+                      fullWidth
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Job Position"
+                          placeholder="Job Position"
+                        />
+                      )}
+                    />
+                  );
+                }}
               />
 
               <Controller
@@ -505,7 +534,6 @@ function UserForm() {
                     size="small"
                     error={!!errors.roleId}
                     helperText={errors?.roleId?.message}
-                  
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -517,7 +545,9 @@ function UserForm() {
                     }}
                   >
                     {roles.map((role) => (
-                      <MenuItem value={role._id} className="capitalize">{role.name}</MenuItem>
+                      <MenuItem value={role._id} className="capitalize">
+                        {role.name}
+                      </MenuItem>
                     ))}
                   </TextField>
                 )}
@@ -535,7 +565,6 @@ function UserForm() {
                     error={!!errors.email}
                     helperText={errors?.email?.message}
                     variant="outlined"
-                  
                     fullWidth
                   />
                 )}
@@ -551,7 +580,6 @@ function UserForm() {
                     {...field}
                     error={!!errors.phoneNumbers}
                     helperText={errors?.phoneNumbers?.message}
-                  
                   />
                 )}
               />
@@ -570,7 +598,6 @@ function UserForm() {
                     size="small"
                     error={!!errors.city}
                     helperText={errors?.city?.message}
-                  
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -603,7 +630,6 @@ function UserForm() {
                     fullWidth
                     error={!!errors.address}
                     helperText={errors?.address?.message}
-                  
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -629,7 +655,6 @@ function UserForm() {
                     showTodayButton
                     error={!!errors.birthday}
                     helperText={errors?.birthday?.message}
-                  
                   />
                 )}
               />
