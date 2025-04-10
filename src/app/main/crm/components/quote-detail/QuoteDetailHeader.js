@@ -17,6 +17,7 @@ import {
   updateQuote,
 } from '../../store/quotesSlice';
 import { selectItems } from '../../store/itemsSlice';
+import { selectCompanyProfile } from 'src/app/main/settings/users/store/settingsSlice';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -29,7 +30,9 @@ export default function QuoteDetailHeader({
   isValid,
   dirtyFields,
 }) {
-  const teamLogo = useSelector((state) => state.crmApp.quotes.logo);
+  const company = useSelector(selectCompanyProfile);
+  console.log({ company });
+
   const hasUpdatedTerms = useSelector(selectHasUpdatedTerms);
   const [open, setOpen] = useState(false);
   const items = useSelector(selectItems);
@@ -303,7 +306,7 @@ export default function QuoteDetailHeader({
         };
       },
       images: {
-        snow: `${process.env.REACT_APP_BASE_BACKEND}${teamLogo}`,
+        snow: `${process.env.REACT_APP_BASE_BACKEND}${company.logo}`,
         //banner: `${process.env.REACT_APP_BASE_BACKEND}/images/mudiame-quote-banner.png`,
       },
       header(currentPage, pageSize) {
@@ -381,12 +384,12 @@ export default function QuoteDetailHeader({
           ],
           lineHeight: 1.3,
         },
-        {
-          image: 'banner',
-          width: 520,
-          height: 100,
-          margin: [0, 20],
-        },
+        // {
+        //   image: 'banner',
+        //   width: 520,
+        //   height: 100,
+        //   margin: [0, 20],
+        // },
         {
           text: `Subject: ${quoteTitle}`,
           margin: [0, 5],

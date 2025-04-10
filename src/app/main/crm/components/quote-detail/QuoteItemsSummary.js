@@ -11,7 +11,7 @@ export default function QuoteItemsSummary({ quote, items }) {
           <h3 className="font-bold text-lg">Sub Total</h3>
           <p className="font-bold text-lg text-[#090707]">
             {quote.currency.name}
-            {quote.subTotal.toLocaleString()}
+            {quote.subTotal?.toLocaleString()}
           </p>
         </div>
         <div className=" flex items-center justify-between">
