@@ -59,8 +59,7 @@ const StyledMessageRow = styled('div')(({ theme }) => ({
 
     '& .bubble': {
       marginLeft: 'auto',
-      // backgroundColor: lighten(theme.palette.secondary.main, 0.1),
-      backgroundColor: 'rgb(241, 126, 68)',
+      backgroundColor: lighten(theme.palette.secondary.main, 0.1),
       color: theme.palette.primary.contrastText,
       borderTopLeftRadius: 20,
       borderBottomLeftRadius: 20,
@@ -180,12 +179,12 @@ function Chat(props) {
                         item.contactId === user._id ? 'contact' : 'me',
                         { 'first-of-group': isFirstMessageOfGroup(item, i) },
                         { 'last-of-group': isLastMessageOfGroup(item, i) },
-                        i + 1 === chat.length && 'pb-72'
+                        i + 1 === chat?.length && 'pb-72'
                       )}
                     >
                       <div className="bubble flex relative items-center justify-center p-12 max-w-full">
                         <div className="leading-tight whitespace-pre-wrap break-words overflow-hidden">
-                          {parseTextAsLinkIfURLC(item.content)}
+                          {parseTextAsLinkIfURLC(item?.content)}
                            {!isSender && (
                                                         <span>
                                                           {item.status === "pending" && (
@@ -300,6 +299,7 @@ function Chat(props) {
             };
 
             dispatch(addPanelMessage(tempMessage));
+            dispatch(addMessage(tempMessage));
             
               setMessageText('');
               setIsSending(false); // Re-enable input

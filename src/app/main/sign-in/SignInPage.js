@@ -165,16 +165,16 @@ function SignInPage() {
                   variant="outlined"
                   required
                   fullWidth
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '&:hover fieldset': {
-                        borderColor: '#c96632', // Hover color
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: '#f17e44', // Focused (clicked) color
-                      },
-                    },
-                  }}
+                  // sx={{
+                  //   '& .MuiOutlinedInput-root': {
+                  //     '&:hover fieldset': {
+                  //       borderColor: '#c96632', // Hover color
+                  //     },
+                  //     '&.Mui-focused fieldset': {
+                  //       borderColor: '#f17e44', // Focused (clicked) color
+                  //     },
+                  //   },
+                  // }}
                 />
               )}
             />
@@ -194,16 +194,16 @@ function SignInPage() {
                     variant="outlined"
                     required
                     fullWidth
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        '&:hover fieldset': {
-                          borderColor: '#c96632', // Hover color
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#f17e44', // Focused (clicked) color
-                        },
-                      },
-                    }}
+                    // sx={{
+                    //   '& .MuiOutlinedInput-root': {
+                    //     '&:hover fieldset': {
+                    //       borderColor: '#c96632', // Hover color
+                    //     },
+                    //     '&.Mui-focused fieldset': {
+                    //       borderColor: '#f17e44', // Focused (clicked) color
+                    //     },
+                    //   },
+                    // }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -271,10 +271,10 @@ function SignInPage() {
                   type="submit"
                   size="large"
                   sx={{
-                    backgroundColor: '#cd7923',
+                    backgroundColor: '#f17e44',
                     color: 'white',
                     '&:hover': {
-                      backgroundColor: '#f17e44', // A darker shade for hover
+                      backgroundColor: '#cd7923', // A darker shade for hover
                     },
                   }}
                 >

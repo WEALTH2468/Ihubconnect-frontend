@@ -304,7 +304,7 @@ export default function QuoteDetailHeader({
       },
       images: {
         snow: `${process.env.REACT_APP_BASE_BACKEND}${teamLogo}`,
-        banner: `${process.env.REACT_APP_BASE_BACKEND}/images/mudiame-quote-banner.png`,
+        //banner: `${process.env.REACT_APP_BASE_BACKEND}/images/mudiame-quote-banner.png`,
       },
       header(currentPage, pageSize) {
         return [
