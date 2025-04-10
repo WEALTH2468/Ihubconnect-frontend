@@ -210,10 +210,10 @@ function IdeskPageLayout(props) {
         <div className="absolute inset-0 bg-black/40 z-10" />
       
         {/* Bottom-aligned content */}
-        <div className="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto pt-[50px]
-         px-32 lg:h-[120px] absolute bottom-0 left-20 right-0 z-20 text-white bg-black/40 rounded-lg">
+        <div className="flex flex-col flex-0 lg:flex-row items-center justify-center  w-full mx-auto pt-[50px]
+         px-32 lg:h-[120px] absolute bottom-0  right-0 z-20 text-white bg-black/40 rounded-lg">
           {/* Avatar */}
-          <div className="-mt-[50px] lg:-mt-[80px] lg:ml-[0px] rounded-full">
+          <div className="-mt-[50px] lg:-mt-[70px] rounded-full">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1, transition: { delay: 0.1 } }}
@@ -229,7 +229,7 @@ function IdeskPageLayout(props) {
       
           {/* User info */}
           {user.firstName && (
-            <div className="flex flex-col items-center lg:items-start -mt-[30px] lg:-mt-[30px] lg:ml-[20px]">
+            <div className="hidden lg:flex flex-col items-start lg:items-start -mt-[30px] lg:-mt-[30px] lg:ml-[20px]">
               <Typography className="text-[30px] font-bold leading-none text-white">
                 {`${user.firstName}`}
               </Typography>
@@ -294,14 +294,14 @@ function IdeskPageLayout(props) {
           </div>
 
           {/* User performance */}
-          <div className="flex justify-center gap-x-[20px] -mt-[50px] lg:-mt-[45px] ml-[60px]">
+          <div className="hidden lg:flex justify-center gap-x-[20px] -mt-[50px] lg:-mt-[45px] ml-[60px]">
               {stats.map((stat, index) => (
                 <div
                   key={index}
                   className="flex flex-col items-center"
                 >
                   {stat.icon}
-                  <Typography className="text-[20px] font-bold leading-none text-white pt-[7px]">
+                  <Typography className="text-[18px] font-bold leading-none text-white pt-[7px]">
                     {stat.count}
                   </Typography>
                   <Typography className="text-white pt-[7px]">{stat.label}</Typography>
@@ -329,19 +329,6 @@ function IdeskPageLayout(props) {
           )}
         </Box>
       }
-      // leftSidebarContent={
-      //   <div className="px-16 py-24">
-      //     <FuseNavigation
-      //       className={clsx('navigation')}
-      //       navigation={IdeskNavigation.children}
-      //     />
-      //   </div>
-      // }
-      // leftSidebarOpen={leftSidebarOpen}
-      // leftSidebarWidth={288}
-      // leftSidebarOnClose={() => {
-      //   setLeftSidebarOpen(false);
-      // }}
       scroll={isMobile ? "normal" : "page"}
     />
   )

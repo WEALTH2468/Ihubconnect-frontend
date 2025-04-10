@@ -93,8 +93,8 @@ const StyledMessageRow = styled('div')(({ theme }) => ({
 
     '& .bubble': {
       marginLeft: 'auto',
-      // backgroundColor: lighten(theme.palette.secondary.main, 0.1),
-      backgroundColor: 'rgb(241, 126, 68)',
+      backgroundColor: lighten(theme.palette.secondary.main, 0.1),
+      // backgroundColor: 'rgb(241, 126, 68)',
       color: theme.palette.primary.contrastText,
       borderTopLeftRadius: 20,
       borderBottomLeftRadius: 20,
@@ -312,6 +312,7 @@ async function onMessageSubmit(ev) {
  
 
   dispatch(addMessage(tempMessage)); // Add temp message to UI immediately
+  dispatch(addPanelMessage(tempMessage)); // Add temp message to UI immediately
 
   setIsSending(false); // Re-enable input
   setMessageText('');
@@ -347,25 +348,28 @@ async function onMessageSubmit(ev) {
       });
     }
 
-    // Replace the temp message with the real message and update the status
-    dispatch(updatePanelMessage({
-      tempId: tempMessage._id,
-      realMessage: {
+    console.log('Real Message Payload:', payload);
+      // Determine if this is the first message (contains chat and message)
+      const realMessage = payload.message ? {
+        ...payload.message,
+        createdAt: payload.message.createdAt || new Date().toISOString(),
+      } : {
         ...payload,
-        createdAt: payload.createdAt || new Date().toISOString(), // Fallback to a valid date
-      }
-    }));
-    
-    dispatch(updateMessage({
-      tempId: tempMessage._id,
-      realMessage: {
-        ...payload,
-        createdAt: payload.createdAt || new Date().toISOString(), // Fallback to a valid date
-        // seen: true,
-      }
-    }));
+        createdAt: payload.createdAt || new Date().toISOString(),
+      };
 
-    console.log(payload)
+      // Update messages with consistent structure
+      dispatch(updatePanelMessage({
+        tempId: tempMessage._id,
+        realMessage
+      }));
+
+      dispatch(updateMessage({
+        tempId: tempMessage._id,
+        realMessage
+      }));
+
+
     
 
     if (payload.chat) {
@@ -445,15 +449,18 @@ useEffect(() => {
   }
 
   // Check if it's the first message of a group
-  function isFirstMessageOfGroup(item, i) {
-    return i === 0 || (chat[i - 1] && chat[i - 1].contactId !== item.contactId);
+  function isFirstMessageOfGroup(item, i, chat) {
+    if (!item || !chat || !Array.isArray(chat)) return false;
+    if (i === 0) return true;
+    const prevItem = chat[i - 1];
+    return !prevItem || prevItem.contactId !== item.contactId;
   }
 
   // Check if it's the last message of a group
   function isLastMessageOfGroup(item, i) {
     return (
       i === chat.length - 1 ||
-      (chat[i + 1] && chat[i + 1].contactId !== item.contactId)
+      (chat[i + 1] && chat[i + 1].contactId !== item?.contactId)
     );
   }
 
@@ -520,26 +527,25 @@ useEffect(() => {
           <div ref={chatRef} className="flex flex-1 flex-col overflow-y-auto">
             {chat?.length > 0 && (
               <div className="flex flex-col pt-16 px-16 pb-40">
-                {chat.map((item, i) => {
+                {chat?.map((item, i) => {
                   const isSender = item.contactId === user._id;
                   // const chatId = item.chatId
 
                   return (
                     <StyledMessageRow
-                      key={i}
-                      className={clsx(
-                        'flex flex-col grow-0 shrink-0 items-start justify-end relative px-16 pb-4',
-                        isSender ? 'contact' : 'me',
-                        { 'first-of-group': isFirstMessageOfGroup(item, i) },
-                        { 'last-of-group': isLastMessageOfGroup(item, i) },
-                        i + 1 === chat.length && 'pb-96'
-                      )}
-                    >
-                      <div className="bubble flex flex-col relative items-center justify-center p-12 max-w-full">
-                        {/* Display Text Message */}
-                        {item.content && (
-                          <div className="leading-tight whitespace-pre-wrap flex flex-start">
-                            {parseTextAsLinkIfURLC(item.content)}
+                    key={i}
+                    className={clsx(
+                      'flex flex-col grow-0 shrink-0 items-start justify-end relative px-16 pb-4',
+                      isSender ? 'contact' : 'me',
+                      { 'first-of-group': isFirstMessageOfGroup(item, i, chat) },
+                      { 'last-of-group': isLastMessageOfGroup(item, i, chat) },
+                      i + 1 === chat?.length && 'pb-96'
+                    )}
+                  >
+                    <div className="bubble flex flex-col relative items-center justify-center p-12 max-w-full">
+                      {item?.content && (
+                        <div className="leading-tight whitespace-pre-wrap flex flex-start">
+                          {parseTextAsLinkIfURLC(item.content)}
 
                             {!isSender && (
                               <div>
