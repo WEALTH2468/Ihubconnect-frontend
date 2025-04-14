@@ -15,12 +15,14 @@ import { Avatar, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateLogo, getLogo, selectCompanyProfile } from './users/store/settingsSlice';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
+import { Tooltip } from '@mui/material';
 
 /**
  * Form Validation Schema
  */
 const schema = yup.object().shape({
   logo: yup.string(),
+  banner: yup.string(),
   companyName: yup.string().required('Company name is required'),
   address: yup.string().required('Address is required'),
   phone: yup
@@ -40,12 +42,14 @@ const schema = yup.object().shape({
 
 const LogoForm = () => {
   const [logo, setLogo] = useState(null);
+  const [bannerFile, setBannerFile] = useState(null);
   const dispatch = useDispatch();
   const company = useSelector(selectCompanyProfile);
 
-  console.log({ company });
+  console.log("company details",{ company });
 
   const defaultValues = {
+    banner: addBackendProtocol(company?.banner) || '',
     logo: addBackendProtocol(company?.logo) || '',
     companyName: company?.companyName || '',
     address:company?.address || '',
@@ -55,6 +59,7 @@ const LogoForm = () => {
     ownerPhone: company?.ownerPhone || '',
     ownerEmail: company?.ownerEmail || '',
   };
+
 
   const { control, watch, reset, handleSubmit, formState } = useForm({
     mode: 'onChange',
@@ -68,8 +73,10 @@ const LogoForm = () => {
    */
   function onSubmit(data) {
     data.logo = company?.logo;
+    data.banner = company?.banner;
     const formData = new FormData();
     formData.append('logo', logo);
+    formData.append('banner', bannerFile);
     formData.append('company', JSON.stringify(data));
 
     dispatch(updateLogo({ formData, dispatch }));
@@ -79,7 +86,7 @@ const LogoForm = () => {
     <div className="flex flex-col flex-1 md:ltr:pr-32 md:rtl:pl-32">
       <Typography
         variant="h5"
-        className="font-medium flex flex-auto items-center justify-center p-8"
+        className="font-medium flex flex-auto items-center justify-center p-8 mt-10"
       >
         Update Company Details
       </Typography>
@@ -87,8 +94,71 @@ const LogoForm = () => {
       <Card component={motion.div} className="w-full mb-32">
         <CardContent className="px-32 py-24">
           <div className="relative flex flex-col flex-auto items-center px-24 sm:px-48">
+
+            {/* BANNER UPLOAD */}
+          <Controller
+                        control={control}
+                        name="banner"
+                        render={({ field: { onChange, value } }) => (
+                          <Box
+                            required
+                            sx={{
+                              borderWidth: 4,
+                              borderStyle: 'solid',
+                              borderColor: 'background.paper',
+                            }}
+                            className="relative w-full h-160 sm:h-192 px-32 rounded-[15px] sm:px-48"
+                          >
+                            <div className="absolute inset-0 bg-black bg-opacity-50 z-10 rounded-2" />
+                            <div className="absolute inset-0 flex items-center justify-center z-20">
+                              <div>
+                                <label
+                                  htmlFor="companyBanner"
+                                  className="flex p-8 cursor-pointer"
+                                >
+                                  <input
+                                    
+                                    accept="image/*"
+                                    className="hidden"
+                                    id="companyBanner"
+                                    type="file"
+                                    onChange={(e) => {
+                                      const file = e.target.files[0];
+                                      setBannerFile(file);
+                                      onChange(URL.createObjectURL(file));
+                                    }}
+                                  />
+                                  <Tooltip title="Upload Company Banner" arrow>
+                                  <FuseSvgIcon className="text-white cursor-pointer">
+                                    heroicons-outline:camera
+                                  </FuseSvgIcon>
+                                </Tooltip>
+                                </label>
+                              </div>
+          
+                              <div>
+                                <IconButton
+                                  onClick={() => {
+                                    setBannerFile(null);
+                                    onChange('');
+                                  }}
+                                >
+                                  <FuseSvgIcon className="text-white">
+                                    heroicons-solid:trash
+                                  </FuseSvgIcon>
+                                </IconButton>
+                              </div>
+                            </div>
+                            <img
+                              className="absolute inset-0 object-cover w-full h-full"
+                              src={value}
+                            />
+                          </Box>
+                        )}
+                      />
+
             {/* LOGO UPLOAD */}
-            <div className="w-full mt-8 flex flex-auto items-center justify-center">
+            <div className="w-full flex flex-auto items-center -mt-64 justify-center">
               <Controller
                 control={control}
                 name="logo"
@@ -100,7 +170,7 @@ const LogoForm = () => {
                       borderStyle: 'solid',
                       borderColor: 'background.paper',
                     }}
-                    className="relative flex items-center justify-center w-192 h-192 rounded-full overflow-hidden"
+                    className="relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-black bg-opacity-50 z-10" />
                     <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -119,9 +189,11 @@ const LogoForm = () => {
                             onChange(URL.createObjectURL(file));
                           }}
                         />
-                        <FuseSvgIcon className="text-white">
+                        <Tooltip title="Upload Company Logo" arrow>
+                        <FuseSvgIcon className="text-white cursor-pointer">
                           heroicons-outline:camera
                         </FuseSvgIcon>
+                      </Tooltip>
                       </label>
                       <IconButton
                         onClick={() => {

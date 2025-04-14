@@ -24,7 +24,7 @@ export const updateLogo = createAsyncThunk(
       const response = await axios.patch(`/settings/company`, formData);
       dispatch(
         showMessage({
-          message: 'Logo updated Successfully',
+          message: 'Company info updated Successfully',
           variant: 'success',
         })
       );

@@ -306,8 +306,8 @@ export default function QuoteDetailHeader({
         };
       },
       images: {
-        snow: `${process.env.REACT_APP_BASE_BACKEND}${company.logo}`,
-        //banner: `${process.env.REACT_APP_BASE_BACKEND}/images/mudiame-quote-banner.png`,
+        snow: `${process.env.REACT_APP_BASE_BACKEND}${company?.logo}`,
+        banner: `${process.env.REACT_APP_BASE_BACKEND}${company?.banner}`,
       },
       header(currentPage, pageSize) {
         return [
@@ -322,13 +322,11 @@ export default function QuoteDetailHeader({
               {
                 stack: [
                   {
-                    text: 'Mudiame International Limited',
+                    text: `${company.companyName}`,
                     fontSize: 10,
                     bold: true,
                   },
-                  'Plot 105, Igbo Etche Road',
-                  'Opposite Enerco Rumuokwurusi',
-                  'Port Harcourt, Rivers State, Nigeria',
+                  `${company.address}`,
                 ],
                 fontSize: 10,
                 margin: [60, 20],
@@ -336,14 +334,12 @@ export default function QuoteDetailHeader({
               {
                 stack: [
                   {
-                    text: 'Mudiame International Limited',
+                    text: `${company?.companyName}`,
                     fontSize: 10,
                     bold: true,
                   },
-                  'Tel: +234(0)810 356 7175',
-                  'Email: info@mudiame.com',
-                  'nigeria.mudiame02@yahoo.com',
-                  'Website: www.mudiame.com',
+                  `${company?.ownerPhone}`,
+                  `${company?.email}`,
                 ],
                 fontSize: 10,
                 margin: [0, 20],
@@ -384,12 +380,12 @@ export default function QuoteDetailHeader({
           ],
           lineHeight: 1.3,
         },
-        // {
-        //   image: 'banner',
-        //   width: 520,
-        //   height: 100,
-        //   margin: [0, 20],
-        // },
+        {
+          image: 'banner',
+          width: 520,
+          height: 100,
+          margin: [0, 20],
+        },
         {
           text: `Subject: ${quoteTitle}`,
           margin: [0, 5],

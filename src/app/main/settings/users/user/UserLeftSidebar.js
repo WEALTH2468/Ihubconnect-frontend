@@ -14,8 +14,9 @@ import { useState } from 'react';
 import CameraEnhanceOutlinedIcon from '@mui/icons-material/CameraEnhanceOutlined';
 import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 
-function DetailUserSidebarContent({ setOpen, setAppRender }) {
+function DetailUserSidebarContent({ setOpen, setAppRender, appRender }) {
     const [drop, setDrop] = useState(false);
 
     const handleClick = () => {
@@ -38,21 +39,34 @@ function DetailUserSidebarContent({ setOpen, setAppRender }) {
                 </IconButton>
             </div>
             <List>
-                <ListItemButton onClick={handleClick}>
-                    <ListItemIcon>
+                <ListItemButton
+                 sx={{
+                    backgroundColor: appRender === 'User' ? 'rgba(241, 126, 69, 0.1)' : 'transparent',
+                    '&:hover': {
+                        backgroundColor: 'rgba(241, 126, 69, 0.15)',
+                    },
+                }}
+                 onClick={handleClick}>
+                    <ListItemIcon sx={{ minWidth: 36 }}>
                         <AddModeratorOutlinedIcon />
                     </ListItemIcon>
                     <ListItemText primary="Authenticated  " />
                     {drop ? (
-                        <ExpandLess sx={{ pr: 2 }} />
+                        <ExpandLess sx={{ pr: 1 }} />
                     ) : (
-                        <ExpandMore sx={{ pr: 2 }} />
+                        <ExpandMore sx={{ pr: 1 }} />
                     )}
                 </ListItemButton>
                 <Collapse in={drop} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         <ListItemButton
-                            sx={{ pl: 4 }}
+                            sx={{
+                                backgroundColor: appRender === 'User' ? 'rgba(241, 126, 69, 0.1)' : 'transparent',
+                                pl: 3,
+                                '&:hover': {
+                                    backgroundColor: 'rgba(241, 126, 69, 0.15)',
+                                },
+                            }}
                             onClick={() => setAppRender('User')}
                         >
                             <ListItemIcon>
@@ -64,11 +78,19 @@ function DetailUserSidebarContent({ setOpen, setAppRender }) {
                         </ListItemButton>
                     </List>
                 </Collapse>
-                <ListItemButton onClick={() => setAppRender('Logo')}>
-                    <ListItemIcon>
-                        <CameraEnhanceOutlinedIcon />
+                <ListItemButton
+                 sx={{
+                    backgroundColor: appRender === 'Logo' ? 'rgba(241, 126, 69, 0.1)' : 'transparent',
+                    '&:hover': {
+                        backgroundColor: 'rgba(241, 126, 69, 0.15)',
+                    },
+                }}
+                 onClick={() => setAppRender('Logo')}
+                 >
+                    <ListItemIcon sx={{ minWidth: 36 }}>
+                    <BusinessOutlinedIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Team Logo" />
+                    <ListItemText primary="Company Info" />
                 </ListItemButton>
                 
             </List>

@@ -403,34 +403,7 @@ const ContactForm = ({ setEdit }) => {
                 </Grid>
               </Grid>
 
-              {/* <Controller
-                control={control}
-                name="jobPosition"
-                render={({ field }) => (
-                  <TextField
-                    size="small"
-                    className="mt-32"
-                    {...field}
-                    label="Job Position"
-                    placeholder="Job Position"
-                    id="jobPosition"
-                    variant="outlined"
-                    fullWidth
-                    error={!!errors.jobPosition}
-                    helperText={errors?.jobPosition?.message}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <FuseSvgIcon size={20}>
-                            heroicons-solid:briefcase
-                          </FuseSvgIcon>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                )}
-              /> */}
+             
 
               <Controller
                 control={control}

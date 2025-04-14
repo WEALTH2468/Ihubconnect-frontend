@@ -1,5 +1,5 @@
 //React
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment  } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 //Fuse
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
@@ -54,11 +54,20 @@ import { useNavigate } from 'react-router-dom';
 import { Can } from 'src/app/AbilityContext';
 import ScoreCardApp from 'src/app/main/profile/sub-apps/score-card/ScoreCardTab';
 import BirthdayCard from 'src/app/main/profile/sub-apps/upcoming-birthdays/birthdaysCard';
+import BirthdayPopup from 'src/app/main/profile/sub-apps/upcoming-birthdays/birthday-popup';
 
 //Mui icons
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import EmailIcon from '@mui/icons-material/Email';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
+
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const IdeskTab = ({ setSelectedTab }) => {
   const navigate = useNavigate();
@@ -68,6 +77,17 @@ const IdeskTab = ({ setSelectedTab }) => {
   const [count, setCount] = useState(0);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+
+  const [openBirthdayDialog, setOpenBirthdayDialog] = useState(false);
+  // const [closeEnabled, setCloseEnabled] = useState(false);
+
+  const handleOpenBirthdayDialog = () => {
+    setOpenBirthdayDialog(true);
+  };
+  
+  const handleCloseBirthdayDialog = () => {
+      setOpenBirthdayDialog(false); 
+  };
 
 
   useEffect(() => {
@@ -127,6 +147,37 @@ const IdeskTab = ({ setSelectedTab }) => {
  
   return (
     <Box>
+
+      <Dialog
+        open={openBirthdayDialog}
+        fullWidth
+        maxWidth={false}
+        PaperProps={{
+          sx: {
+            width: '50vw',
+            maxWidth: '400px',
+          },
+        }}
+      >
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseBirthdayDialog}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+        <DialogContent>
+          <BirthdayPopup />
+        </DialogContent>
+      </Dialog>
+
+
       <motion.div
         variants={container}
         initial="hidden"
@@ -144,11 +195,6 @@ const IdeskTab = ({ setSelectedTab }) => {
                 <Typography className="text-[20px] font-semibold leading-tight">
                   About
                 </Typography>
-                {/* <Button
-                  color="inherit"
-                  size="small"
-                  className="font-medium -mx-8"
-                ></Button> */}
               </div>
 
               <CardContent className="p-0 space-y-2">
@@ -190,11 +236,6 @@ const IdeskTab = ({ setSelectedTab }) => {
                 <Typography className="text-[20px] font-semibold leading-tight">
                   Background
                 </Typography>
-                {/* <Button
-                  color="inherit"
-                  size="small"
-                  className="font-medium -mx-8"
-                ></Button> */}
                  </div>
 
             <CardContent className="p-0 space-y-2">
@@ -237,7 +278,7 @@ const IdeskTab = ({ setSelectedTab }) => {
             variants={item}
             className="flex flex-col w-full px-32 pt-24"
           >
-            <BirthdayCard />
+            <BirthdayCard onSeeMoreClick={handleOpenBirthdayDialog} />
           </Card>
           </div>
         </div>

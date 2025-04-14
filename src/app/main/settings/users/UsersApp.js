@@ -70,6 +70,7 @@ function UsersApp() {
         <DetailUserSidebarContent
           setOpen={setOpen}
           setAppRender={setAppRender}
+          appRender={appRender} 
         />
       }
       rightSidebarContent={<UsersSidebarContent />}
