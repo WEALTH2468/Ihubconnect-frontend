@@ -331,8 +331,13 @@ function Chat(props) {
                   useRouter: true,
                 });
               }
+              console.log('Real Message Payload:', payload);
           
-              const updatedMessage = {
+              const updatedMessage = payload.message ? {
+                ...payload.message,
+                seen: selectedContactId === payload.message.userId,
+                createdAt: payload.message.createdAt || new Date().toISOString(),
+              } : {
                 ...payload,
                 seen: selectedContactId === payload.userId, // Mark as seen if recipient is viewing the chat
                 createdAt: payload.createdAt || new Date().toISOString(), // Fallback to a valid date

@@ -5,11 +5,13 @@ import { getBirthdayUsers } from 'app/store/userSlice';
 import { useEffect } from 'react';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
 
-const BirthdayCard = () => {
+const BirthdayCard = ({ onSeeMoreClick  }) => {
     const dispatch = useDispatch();
 
   const { todayBirthdays, upcomingBirthdays } = useSelector((state) => state.user);
   const [showAll, setShowAll] = useState(false);
+  // const [openPopup, setOpenPopup] = useState(false);
+
 
   const groupedBirthdays = [
     { title: 'Today Birthdays', users: todayBirthdays || [] },
@@ -50,7 +52,7 @@ const BirthdayCard = () => {
               {user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)} {user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1)} 
               </Typography>
               <Typography className="text-[11px] text-gray-500">
-                    {user.jobPosition?.name || 'No Position'} •{' '}
+                    {user.jobPosition || 'No Position'} •{' '}
                     {new Date(user.birthday).toLocaleString('en-US', {
                         month: 'short',
                         day: 'numeric',
@@ -63,17 +65,16 @@ const BirthdayCard = () => {
         </div>
       ))}
 
-      {displayedUsers.length > 5 && (
+      {displayedUsers.length > 4 && (
         <div className="mt-2 flex justify-center">
-         
-           <Button
-                              variant="contained"
-                              color="secondary"
-                              size="small"
-                              onClick={() => setShowAll(!showAll)}
-                            >
-                              {showAll ? 'Show Less' : 'See More'}
-                            </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={ onSeeMoreClick }
+          >
+            See More
+          </Button>
         </div>
       )}
     </CardContent>
