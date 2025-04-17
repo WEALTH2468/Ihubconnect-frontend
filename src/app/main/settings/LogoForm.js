@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import _ from '@lodash';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
@@ -46,6 +46,12 @@ const LogoForm = () => {
   const dispatch = useDispatch();
   const company = useSelector(selectCompanyProfile);
 
+  const [logoCleared, setLogoCleared] = useState(false);
+  const [bannerCleared, setBannerCleared] = useState(false);
+
+  const fileInputRef = useRef();
+
+
   console.log("company details",{ company });
 
   const defaultValues = {
@@ -72,13 +78,31 @@ const LogoForm = () => {
    * Form Submit
    */
   function onSubmit(data) {
-    data.logo = company?.logo;
-    data.banner = company?.banner;
     const formData = new FormData();
-    formData.append('logo', logo);
-    formData.append('banner', bannerFile);
+  
+    // Handle logo
+    if (logoCleared) {
+      data.logo = ''; // mark as cleared
+      formData.append('logo', ''); // still append key
+    } else if (logo) {
+      formData.append('logo', logo);
+      data.logo = company?.logo;
+    } else {
+      formData.append('logo', ''); // logo not changed, append blank string
+    }
+  
+    // Handle banner
+    if (bannerCleared) {
+      data.banner = '';
+      formData.append('banner', '');
+    } else if (bannerFile) {
+      formData.append('banner', bannerFile);
+      data.banner = company?.banner;
+    } else {
+      formData.append('banner', '');
+    }
+  
     formData.append('company', JSON.stringify(data));
-
     dispatch(updateLogo({ formData, dispatch }));
   }
 
@@ -124,8 +148,11 @@ const LogoForm = () => {
                                     type="file"
                                     onChange={(e) => {
                                       const file = e.target.files[0];
-                                      setBannerFile(file);
-                                      onChange(URL.createObjectURL(file));
+                                      if (file) {
+                                        setBannerCleared(false); // reset clear state
+                                        setBannerFile(file);
+                                        onChange(URL.createObjectURL(file));
+                                      }
                                     }}
                                   />
                                   <Tooltip title="Upload Company Banner" arrow>
@@ -138,9 +165,13 @@ const LogoForm = () => {
           
                               <div>
                                 <IconButton
-                                  onClick={() => {
+                                   onClick={() => {
                                     setBannerFile(null);
+                                    setBannerCleared(true);
                                     onChange('');
+                                    if (fileInputRef.current) {
+                                      fileInputRef.current.value = null;
+                                    }
                                   }}
                                 >
                                   <FuseSvgIcon className="text-white">
@@ -185,8 +216,11 @@ const LogoForm = () => {
                           type="file"
                           onChange={(e) => {
                             const file = e.target.files[0];
-                            setLogo(file);
-                            onChange(URL.createObjectURL(file));
+                            if (file) {
+                              setLogoCleared(false);
+                              setLogo(file);
+                              onChange(URL.createObjectURL(file));
+                            }
                           }}
                         />
                         <Tooltip title="Upload Company Logo" arrow>
@@ -196,10 +230,11 @@ const LogoForm = () => {
                       </Tooltip>
                       </label>
                       <IconButton
-                        onClick={() => {
-                          setLogo(null);
-                          onChange('');
-                        }}
+                       onClick={() => {
+                        setLogo(null);
+                        setLogoCleared(true);
+                        onChange('');
+                      }}
                       >
                         <FuseSvgIcon className="text-white">
                           heroicons-solid:trash

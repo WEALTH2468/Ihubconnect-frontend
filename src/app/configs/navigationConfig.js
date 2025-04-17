@@ -53,37 +53,41 @@ const navigationConfig = [
     url: 'file-manager',
     auth: ['super admin', 'admin', 'team lead', 'manager', 'staff'],
   },
-  {
-    id: 'crm',
-    title: 'Crm',
-    translate: 'Crm',
-    type: 'group',
-    icon: 'heroicons-outline:user-group',
-    children: [
-      {
-        id: 'customers',
-        title: 'Customers',
-        type: 'item',
-        url: 'crm/customers',
-        end: true,
-      },
-      {
-        id: 'quotes',
-        title: 'Quotes',
-        type: 'item',
-        url: 'crm/quotes',
-        end: true,
-      },
-      {
-        id: 'items',
-        title: 'Items',
-        type: 'item',
-        url: 'crm/items',
-        end: true,
-      },
-    ],
-    auth: ['super admin', 'admin', 'manager'],
-  },
+   // Conditionally include CRM group
+   ...(process.env.REACT_APP_BASE_FRONTEND !== 'http://localhost:3001'
+    ? [
+        {
+          id: 'crm',
+          title: 'Crm',
+          type: 'group',
+          icon: 'heroicons-outline:user-group',
+          children: [
+            {
+              id: 'customers',
+              title: 'Customers',
+              type: 'item',
+              url: 'crm/customers',
+              end: true,
+            },
+            {
+              id: 'quotes',
+              title: 'Quotes',
+              type: 'item',
+              url: 'crm/quotes',
+              end: true,
+            },
+            {
+              id: 'items',
+              title: 'Items',
+              type: 'item',
+              url: 'crm/items',
+              end: true,
+            },
+          ],
+          auth: ['super admin', 'admin', 'manager'],
+        },
+      ]
+    : []),
   {
     id: 'setting',
     title: 'Settings',

@@ -21,6 +21,7 @@ import { showMessage } from 'app/store/fuse/messageSlice';
 import CircularProgress from '@mui/material/CircularProgress';
 import { getRandomUserAvatars } from 'app/store/userSlice';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
+import { selectCompanyProfile } from 'src/app/main/settings/users/store/settingsSlice'; 
 
 /**
  * Form Validation Schema
@@ -52,6 +53,7 @@ export default function VerificationPage() {
   });
 
   const randomUserAvatars = useSelector(({ user }) => user.randomUserAvatars);
+  const company = useSelector(selectCompanyProfile);
 
           // Fetch avatars on mount
   useEffect(() => {
@@ -156,11 +158,12 @@ export default function VerificationPage() {
 
   return (
     <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-1 min-w-0">
-      <Paper className="h-full sm:h-auto md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-8 px-16 sm:p-48 md:p-64 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none ltr:border-r-1 rtl:border-l-1">
+      <Paper className="h-full sm:h-auto md:flex md:items-center md:justify-end w-full sm:w-auto 
+      md:h-full md:w-1/2 py-8 px-16 sm:p-48 md:p-64 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none ltr:border-r-1 rtl:border-l-1">
         <div className="w-full max-w-320 sm:w-320 mx-auto sm:mx-0">
-          <img className="w-48" src="assets/images/logo/logo.svg" alt="logo" />
+          <img className="w-48" src={addBackendProtocol(company?.logo)} alt="logo" />
 
-          <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight text-[#cd7923]">
+          <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight">
             Email Verification
           </Typography>
           <div className="flex items-baseline mt-2 font-medium">
@@ -200,10 +203,10 @@ export default function VerificationPage() {
                       fontWeight: '800',
                       '& .MuiOutlinedInput-root': {
                         '&:hover fieldset': {
-                          borderColor: '#c96632', // Hover color
+                          borderColor: 'secondary.main', // Hover color
                         },
                         '&.Mui-focused fieldset': {
-                          borderColor: '#f17e44', // Focused (clicked) color
+                          borderColor: 'secondary.main', // Focused (clicked) color
                         },
                       },
                     }}
@@ -225,12 +228,7 @@ export default function VerificationPage() {
                        control={ <Checkbox
                                           size="small"
                                           {...field}
-                                          sx={{
-                                            color: '#f17e44', // Unchecked color
-                                            '&.Mui-checked': {
-                                              color: '#f17e44', // Checked color
-                                            },
-                                          }}
+                                        
                                         />
                                       }
                   />
@@ -249,13 +247,6 @@ export default function VerificationPage() {
               disabled={_.isEmpty(dirtyFields) || !isValid || isSaving}
               type="submit"
               size="large"
-              sx={{
-                backgroundColor: '#cd7923',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: '#f17e44',
-                },
-              }}
             >
               {isSaving ? (
                 <CircularProgress size={24} color="inherit" />
@@ -277,13 +268,7 @@ export default function VerificationPage() {
             disabled={isDisabled}
             size="large"
             onClick={handleResendClick}
-            sx={{
-              backgroundColor: '#cd7923',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: '#f17e44',
-              },
-            }}
+           
           >
             {isDisabled ? `Resend Code in ${timer}s` : 'Resend Code'}
           </Button>
@@ -292,7 +277,7 @@ export default function VerificationPage() {
 
       <Box
         className="relative hidden md:flex flex-auto items-center justify-center h-full p-64 lg:px-112 overflow-hidden"
-        sx={{ backgroundColor: '#cd7923' }}
+        sx={{ backgroundColor: 'primary.main' }}
       >
         <svg
           className="absolute inset-0 pointer-events-none"
@@ -357,7 +342,7 @@ export default function VerificationPage() {
                     max={4} // Display only 4 avatars
                     sx={{
                       '& .MuiAvatar-root': {
-                        borderColor: '#f17e44',
+                        borderColor: 'secondary.main',
                       },
                     }}
                   >

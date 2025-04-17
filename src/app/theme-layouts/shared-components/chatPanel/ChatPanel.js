@@ -90,7 +90,7 @@ const Root = styled('div')(({ theme, opened }) => ({
     margin: 0,
     overflow: 'hidden',
     zIndex: 1000,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: `${theme.palette.secondary.main}!important`,
     boxShadow:
       '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
     transform: 'translate3d(0,0,0)',
@@ -350,7 +350,7 @@ function ChatPanel(props) {
     <Root opened={state ? 1 : 0} {...handlers}>
       <div className="panel flex flex-col max-w-full" ref={ref}>
         <AppBar position="static" className="shadow-md">
-          <Toolbar className="px-4 bg-[#2e160e]">
+          <Toolbar className="px-4">
             {(!state || !selectedContactId) && (
               <div className="flex flex-1 items-center px-8 space-x-12">
                 <IconButton

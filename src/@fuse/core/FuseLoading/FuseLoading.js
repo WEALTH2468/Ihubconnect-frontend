@@ -3,12 +3,15 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import clsx from 'clsx';
-import Box from '@mui/material/Box';
+import { Box, useTheme } from '@mui/material';
 import { getLogo } from 'src/app/main/settings/users/store/settingsSlice';
 import { useDispatch } from 'react-redux';
 function FuseLoading(props) {
   const [showLoading, setShowLoading] = useState(!props.delay);
   const dispatch = useDispatch()
+
+  const theme = useTheme(); // Access the MUI theme
+  
 
   useEffect(() => {
     dispatch(getLogo())
@@ -29,11 +32,20 @@ function FuseLoading(props) {
           Loading
         </Typography>
     
-        <Box id="spinner">
-          <div className="bounce1 w-4 h-4 rounded-full !bg-[#f17e46]" />
-          <div className="bounce2 w-4 h-4 rounded-full !bg-[#f17e46]" />
-          <div className="bounce3 w-4 h-4 rounded-full !bg-[#f17e46]" />
-        </Box>
+        <Box id="spinner" className="flex gap-2 mt-4">
+                <div
+                  className="bounce1 w-4 h-4 rounded-full"
+                  style={{ backgroundColor: theme.palette.secondary.main }}
+                />
+                <div
+                  className="bounce2 w-4 h-4 rounded-full"
+                  style={{ backgroundColor: theme.palette.secondary.main }}
+                />
+                <div
+                  className="bounce3 w-4 h-4 rounded-full"
+                  style={{ backgroundColor: theme.palette.secondary.main }}
+                />
+              </Box>
       </div>
     
   );

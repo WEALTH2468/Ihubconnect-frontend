@@ -25,6 +25,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import CircularProgress from '@mui/material/CircularProgress';
 import { getRandomUserAvatars } from 'app/store/userSlice';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
+import { selectCompanyProfile } from 'src/app/main/settings/users/store/settingsSlice'; 
 
 /**
  * Form Validation Schema
@@ -57,6 +58,8 @@ function SignInPage() {
     });
 
     const randomUserAvatars = useSelector(({ user }) => user.randomUserAvatars);
+    
+      const company = useSelector(selectCompanyProfile);
 
 
     // Fetch avatars on mount
@@ -126,20 +129,21 @@ function SignInPage() {
 
     return (
       <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-1 min-w-0">
-        <Paper className="h-full sm:h-auto md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-8 px-16 sm:p-48 md:p-64 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none ltr:border-r-1 rtl:border-l-1">
+        <Paper className="h-full sm:h-auto md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full
+         md:w-1/2 py-8 px-16 sm:p-48 md:p-64 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none ltr:border-r-1 rtl:border-l-1">
           <div className="w-full max-w-320 sm:w-320 mx-auto sm:mx-0">
             <img
               className="w-48"
-              src="assets/images/logo/logo.svg"
+              src={addBackendProtocol(company?.logo)}
               alt="logo"
             />
 
-            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight text-[#cd7923]">
+            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight ">
               Sign in
             </Typography>
             <div className="flex items-baseline mt-2 font-medium">
               <Typography>Don't have an account?</Typography>
-              <Link className="ml-4 text-[#f17e44] !text-[#f17e44]" to="/sign-up">
+              <Link className="ml-4 " to="/sign-up">
                 Sign up
               </Link>
             </div>
@@ -165,16 +169,6 @@ function SignInPage() {
                   variant="outlined"
                   required
                   fullWidth
-                  // sx={{
-                  //   '& .MuiOutlinedInput-root': {
-                  //     '&:hover fieldset': {
-                  //       borderColor: '#c96632', // Hover color
-                  //     },
-                  //     '&.Mui-focused fieldset': {
-                  //       borderColor: '#f17e44', // Focused (clicked) color
-                  //     },
-                  //   },
-                  // }}
                 />
               )}
             />
@@ -194,16 +188,6 @@ function SignInPage() {
                     variant="outlined"
                     required
                     fullWidth
-                    // sx={{
-                    //   '& .MuiOutlinedInput-root': {
-                    //     '&:hover fieldset': {
-                    //       borderColor: '#c96632', // Hover color
-                    //     },
-                    //     '&.Mui-focused fieldset': {
-                    //       borderColor: '#f17e44', // Focused (clicked) color
-                    //     },
-                    //   },
-                    // }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -241,12 +225,6 @@ function SignInPage() {
                                <Checkbox
                                  size="small"
                                  {...field}
-                                 sx={{
-                                   color: '#f17e44', // Unchecked color
-                                   '&.Mui-checked': {
-                                     color: '#f17e44', // Checked color
-                                   },
-                                 }}
                                />
                              }
                            />                             
@@ -256,7 +234,7 @@ function SignInPage() {
                 />
 
                 <Link
-                  className="text-md font-medium text-[#f17e44] !text-[#f17e44]"
+                  className="text-md font-medium"
                   to="/auth/forgot-password"
                 >
                   Forgot password?
@@ -270,13 +248,7 @@ function SignInPage() {
                   disabled={_.isEmpty(dirtyFields) || !isValid}
                   type="submit"
                   size="large"
-                  sx={{
-                    backgroundColor: '#f17e44',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: '#cd7923', // A darker shade for hover
-                    },
-                  }}
+                  color="secondary"
                 >
                   {isSaving ? (
                     <CircularProgress size={24} color="inherit" />
@@ -291,7 +263,7 @@ function SignInPage() {
 
         <Box
           className="relative hidden md:flex flex-auto items-center justify-center h-full p-64 lg:px-112 overflow-hidden"
-          sx={{  backgroundColor: '#cd7923' }}
+          sx={{  backgroundColor: 'primary.main' }}
         >
           <svg
             className="absolute inset-0 pointer-events-none"
@@ -354,7 +326,7 @@ function SignInPage() {
                     max={4} // Display only 4 avatars
                     sx={{
                       '& .MuiAvatar-root': {
-                        borderColor: '#f17e44',
+                        borderColor: 'secondary.main',
                       },
                     }}
                   >

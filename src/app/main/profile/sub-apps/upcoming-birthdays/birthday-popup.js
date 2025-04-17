@@ -2,17 +2,12 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Avatar, Typography, Divider, Box } from '@mui/material';
 import CakeIcon from '@mui/icons-material/Cake';
-import { getBirthdayUsers } from 'app/store/userSlice';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
 import CloseIcon from '@mui/icons-material/Close';
 
 const BirthdayPopup = () => {
   const dispatch = useDispatch();
   const { todayBirthdays, upcomingBirthdays } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    dispatch(getBirthdayUsers());
-  }, [dispatch]);
 
   const groupedBirthdays = [
     { title: 'Today Birthdays', users: todayBirthdays || [] },
@@ -48,9 +43,10 @@ const BirthdayPopup = () => {
                   mb: 1,
                   display: 'flex',
                   alignItems: 'center',
-                  color: '#f17e45',
+                  color: 'secondary.main',
                   gap: 1,
                 }}
+               
               >
                 
                 {user.groupTitle}
@@ -77,6 +73,7 @@ const BirthdayPopup = () => {
             <Typography
                 variant="subtitle1"
                 sx={{ fontWeight: 'bold' }}
+                className="text-[15px]"
             >
                 {user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)}{' '}
                 {user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1)}

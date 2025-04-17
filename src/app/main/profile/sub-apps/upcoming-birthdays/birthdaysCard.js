@@ -39,7 +39,7 @@ const BirthdayCard = ({ onSeeMoreClick  }) => {
           {index === 0 || user.groupTitle !== visibleUsers[index - 1]?.groupTitle ? (
             <>
               <Divider className="my-3" />
-              <Typography variant="subtitle2" className="text-[#f17e45] mb-1 font-bold">
+              <Typography variant="subtitle2" className=" mb-1 font-bold" color="secondary.main">
                 {user.groupTitle}
               </Typography>
             </>
@@ -48,10 +48,10 @@ const BirthdayCard = ({ onSeeMoreClick  }) => {
           <div className="flex items-center gap-5 py-3 mb-1">
             <Avatar src={addBackendProtocol(user.avatar)} alt={user.firstName} sx={{ width: 36, height: 36 }} />
             <div className="flex flex-col">
-              <Typography className="text-[14px] text-gray-800 flex pt-[5px] font-semibold">
+              <Typography className="text-[12px] text-gray-800 flex pt-[5px] font-semibold">
               {user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)} {user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1)} 
               </Typography>
-              <Typography className="text-[11px] text-gray-500">
+              <Typography className="text-[9px] text-gray-500">
                     {user.jobPosition || 'No Position'} •{' '}
                     {new Date(user.birthday).toLocaleString('en-US', {
                         month: 'short',
@@ -65,8 +65,8 @@ const BirthdayCard = ({ onSeeMoreClick  }) => {
         </div>
       ))}
 
-      {displayedUsers.length > 4 && (
-        <div className="mt-2 flex justify-center">
+      {displayedUsers.length > 2 && (
+        <div className="mt-9 flex justify-center">
           <Button
             variant="contained"
             color="secondary"

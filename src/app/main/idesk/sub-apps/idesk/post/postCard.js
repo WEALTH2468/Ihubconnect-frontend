@@ -132,7 +132,7 @@ function postCard({ post }) {
           title={
             <span className="flex items-center space-x-8">
               <Typography
-                className="font-normal"
+                className="font-bold"
                 color="secondary.main"
                 paragraph={false}
               >

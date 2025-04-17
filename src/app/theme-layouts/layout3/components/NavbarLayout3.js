@@ -5,8 +5,7 @@ import { memo } from 'react';
 import Navigation from '../../shared-components/Navigation';
 
 const Root = styled('div')(({ theme }) => ({
-  // backgroundColor: theme.palette.background.default,
-  backgroundColor: '#cd7923',
+  backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
 }));
 

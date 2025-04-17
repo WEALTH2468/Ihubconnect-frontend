@@ -20,7 +20,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   color: theme.palette.text.primary,
   minHeight: 48,
   '&.active, &.active:hover, &.active:focus': {
-    // backgroundColor: `${theme.palette.secondary.main}!important`,
+    backgroundColor: `${theme.palette.secondary.main}!important`,
     color: `${theme.palette.secondary.contrastText}!important`,
 
     '&.open': {

@@ -14,8 +14,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   textDecoration: 'none!important',
   minHeight: 48,
   '&.active': {
-    // backgroundColor: `${theme.palette.secondary.main}!important`,
-    backgroundColor: 'rgb(241, 126, 68)',
+    backgroundColor: `${theme.palette.secondary.main}!important`,
     color: `${theme.palette.secondary.contrastText}!important`,
     pointerEvents: 'none',
     '& .fuse-list-item-text-primary': {

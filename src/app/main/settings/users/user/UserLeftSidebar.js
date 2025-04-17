@@ -41,9 +41,9 @@ function DetailUserSidebarContent({ setOpen, setAppRender, appRender }) {
             <List>
                 <ListItemButton
                  sx={{
-                    backgroundColor: appRender === 'User' ? 'rgba(241, 126, 69, 0.1)' : 'transparent',
+                    backgroundColor: appRender === 'User' ? 'rgba(125, 124, 124, 0.1)' : 'transparent',
                     '&:hover': {
-                        backgroundColor: 'rgba(241, 126, 69, 0.15)',
+                        backgroundColor: 'rgba(125, 124, 124, 0.15)',
                     },
                 }}
                  onClick={handleClick}>
@@ -61,10 +61,10 @@ function DetailUserSidebarContent({ setOpen, setAppRender, appRender }) {
                     <List component="div" disablePadding>
                         <ListItemButton
                             sx={{
-                                backgroundColor: appRender === 'User' ? 'rgba(241, 126, 69, 0.1)' : 'transparent',
+                                backgroundColor: appRender === 'User' ? 'rgba(125, 124, 124, 0.1)' : 'transparent',
                                 pl: 3,
                                 '&:hover': {
-                                    backgroundColor: 'rgba(241, 126, 69, 0.15)',
+                                    backgroundColor: 'rgba(125, 124, 124, 0.15)',
                                 },
                             }}
                             onClick={() => setAppRender('User')}
@@ -80,9 +80,9 @@ function DetailUserSidebarContent({ setOpen, setAppRender, appRender }) {
                 </Collapse>
                 <ListItemButton
                  sx={{
-                    backgroundColor: appRender === 'Logo' ? 'rgba(241, 126, 69, 0.1)' : 'transparent',
+                    backgroundColor: appRender === 'Logo' ? 'rgba(125, 124, 124, 0.1)' : 'transparent',
                     '&:hover': {
-                        backgroundColor: 'rgba(241, 126, 69, 0.15)',
+                        backgroundColor: 'rgba(125, 124, 124, 0.15)',
                     },
                 }}
                  onClick={() => setAppRender('Logo')}
