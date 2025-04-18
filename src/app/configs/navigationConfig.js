@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import ar from './navigation-i18n/ar';
 import en from './navigation-i18n/en';
 import tr from './navigation-i18n/tr';
+import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
 i18next.addResourceBundle('en', 'navigation', en);
 i18next.addResourceBundle('tr', 'navigation', tr);
@@ -53,37 +54,41 @@ const navigationConfig = [
     url: 'file-manager',
     auth: ['super admin', 'admin', 'team lead', 'manager', 'staff'],
   },
-  {
-    id: 'crm',
-    title: 'Crm',
-    translate: 'Crm',
-    type: 'group',
-    icon: 'heroicons-outline:user-group',
-    children: [
-      {
-        id: 'customers',
-        title: 'Customers',
-        type: 'item',
-        url: 'crm/customers',
-        end: true,
-      },
-      {
-        id: 'quotes',
-        title: 'Quotes',
-        type: 'item',
-        url: 'crm/quotes',
-        end: true,
-      },
-      {
-        id: 'items',
-        title: 'Items',
-        type: 'item',
-        url: 'crm/items',
-        end: true,
-      },
-    ],
-    auth: ['super admin', 'admin', 'manager'],
-  },
+   // Conditionally include CRM group
+   ...(!AhavaCheck()
+    ? [
+        {
+          id: 'crm',
+          title: 'Crm',
+          type: 'group',
+          icon: 'heroicons-outline:user-group',
+          children: [
+            {
+              id: 'customers',
+              title: 'Customers',
+              type: 'item',
+              url: 'crm/customers',
+              end: true,
+            },
+            {
+              id: 'quotes',
+              title: 'Quotes',
+              type: 'item',
+              url: 'crm/quotes',
+              end: true,
+            },
+            {
+              id: 'items',
+              title: 'Items',
+              type: 'item',
+              url: 'crm/items',
+              end: true,
+            },
+          ],
+          auth: ['super admin', 'admin', 'manager'],
+        },
+      ]
+    : []),
   {
     id: 'setting',
     title: 'Settings',

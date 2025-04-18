@@ -25,6 +25,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { forgotPassword } from '../../store/userSlice';
 import { getRandomUserAvatars } from 'app/store/userSlice';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
+import { selectCompanyProfile } from 'src/app/main/settings/users/store/settingsSlice'; 
 
 /**
  * Form Validation Schema
@@ -49,6 +50,8 @@ function ForgotPasswordPage() {
     });
 
     const randomUserAvatars = useSelector(({ user }) => user.randomUserAvatars);
+
+    const company = useSelector(selectCompanyProfile);
 
     const [isDisabled, setIsDisabled] = useState(false);
     const [countdown, setCountdown] = useState(60); // Countdown in seconds
@@ -117,15 +120,16 @@ function ForgotPasswordPage() {
 
     return (
       <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-1 min-w-0">
-        <Paper className="h-full sm:h-auto md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-8 px-16 sm:p-48 md:p-64 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none ltr:border-r-1 rtl:border-l-1">
+        <Paper className="h-full sm:h-auto md:flex md:items-center md:justify-end
+         w-full sm:w-auto md:h-full md:w-1/2 py-8 px-16 sm:p-48 md:p-64 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none ltr:border-r-1 rtl:border-l-1">
           <div className="w-full max-w-320 sm:w-320 mx-auto sm:mx-0">
             <img
               className="w-48"
-              src="assets/images/logo/logo.svg"
+              src={addBackendProtocol(company?.logo)}
               alt="logo"
             />
 
-            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight text-[#cd7923]">
+            <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight">
               Forgot Password
             </Typography>
 
@@ -151,29 +155,14 @@ function ForgotPasswordPage() {
                     variant="outlined"
                     required
                     fullWidth
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        '&:hover fieldset': {
-                          borderColor: '#c96632', // Hover color
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#f17e44', // Focused (clicked) color
-                        },
-                      },
-                    }}
+                   
                   />
                 )}
               />
 
                   <Button
                     variant="contained"
-                    sx={{
-                      backgroundColor: '#cd7923',
-                      color: 'white',
-                      '&:hover': {
-                        backgroundColor: '#f17e44',
-                      },
-                    }}
+                   color="secondary"
                     type='submit'
                     className="w-full mt-16"
                     aria-label="Send E-Mail"
@@ -189,7 +178,7 @@ function ForgotPasswordPage() {
 
         <Box
           className="relative hidden md:flex flex-auto items-center justify-center h-full p-64 lg:px-112 overflow-hidden"
-          sx={{ backgroundColor: '#cd7923' }}
+          sx={{ backgroundColor: 'primary.main' }}
         >
           <svg
             className="absolute inset-0 pointer-events-none"
@@ -254,7 +243,7 @@ function ForgotPasswordPage() {
                     max={4} // Display only 4 avatars
                     sx={{
                       '& .MuiAvatar-root': {
-                        borderColor: '#f17e44',
+                        borderColor: 'secondary.main',
                       },
                     }}
                   >

@@ -150,7 +150,7 @@ function MainSidebar(props) {
                   <motion.div variants={item}>
                     <Typography
                       className="font-medium text-20 px-32 py-24"
-                      color="rgb(241, 126, 68)"
+                      color="secondary.main"
                     >
                       Chats
                     </Typography>
@@ -177,7 +177,7 @@ function MainSidebar(props) {
                   <motion.div variants={item}>
                     <Typography
                       className="font-medium text-20 px-32 py-24"
-                      color="rgb(241, 126, 68)"
+                      color="secondary.main"
                     >
                       Contacts
                     </Typography>

@@ -198,20 +198,20 @@ function IdeskPageLayout(props) {
   return (
     <Root
       header={
-        <div className="flex flex-col relative h-[250px] lg:h-[350px] w-full">
+        <div className="flex flex-col relative h-[250px] lg:h-[350px] bg-black/80 w-full">
         {/* Background image */}
         <img
           src={randomImage[0]}
           alt="IHOBCONNECT ADS"
-          className="absolute inset-0 w-full h-full object-cover z-0"
+          className="absolute inset-0 w-full h-full  bg-black/80 object-cover z-0"
         />
       
         {/* Optional dark overlay for readability */}
-        <div className="absolute inset-0 bg-black/40 z-10" />
+        <div className="absolute inset-0 bg-black/60 z-10" />
       
         {/* Bottom-aligned content */}
-        <div className="flex flex-col flex-0 lg:flex-row items-center justify-center  w-full mx-auto pt-[50px]
-         px-32 lg:h-[120px] absolute bottom-0  right-0 z-20 text-white bg-black/40 rounded-lg">
+        <div className="flex flex-col flex-0 lg:flex-row items-center justify-center w-full mx-auto pt-[50px]
+         px-32 lg:h-[120px] absolute bottom-0  right-0 z-20 text-white">
           {/* Avatar */}
           <div className="-mt-[50px] lg:-mt-[70px] rounded-full">
             <motion.div
@@ -246,10 +246,10 @@ function IdeskPageLayout(props) {
               value={selectedTab}
               onChange={handleTabChange}
               indicatorColor="primary"
-              textColor="#cd7923"
+              textColor="secondary"
               variant="scrollable"
               scrollButtons={false}
-              className="-mx-4 min-h-40 text-white"
+              className="-mx-4 min-h-40 text-white font-bold"
               classes={{
                 indicator: "flex justify-center bg-transparent w-full h-full",
               }}
@@ -257,7 +257,7 @@ function IdeskPageLayout(props) {
                 children: (
                   <Box
                     sx={{ bgcolor: "text.disabled" }}
-                    className="w-full h-full rounded-[10%] opacity-40 text-[#cd7923]"
+                    className="w-full h-full rounded-[10%] opacity-40"
                   />
                 ),
               }}
@@ -274,8 +274,8 @@ function IdeskPageLayout(props) {
                     key={index}
                     className={`
                       min-h-40 min-w-64 mx-4 px-12
-                      ${isActive ? "text-[#e9913a]" : "text-white"}
-                      hover:text-[#cd7923] transition-colors duration-200
+                      ${isActive ? "text-[var(--color-secondary.main)]" : "text-white"}
+                      hover:text-[var(--color-secondary.main)] transition-colors duration-200
                     `}
                     disableRipple
                     label={

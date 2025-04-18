@@ -2,41 +2,84 @@ import { fuseDark } from '@fuse/colors';
 import { red } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 import qs from 'qs';
+import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
-const defaultTheme = {
-  palette: {
-    mode: 'light',
-    text: {
-      primary: 'rgb(17, 24, 39)',
-      secondary: 'rgb(107, 114, 128)',
-      disabled: 'rgb(149, 156, 169)',
+
+
+let defaultTheme;
+
+if (AhavaCheck()) {
+  defaultTheme = {
+    palette: {
+      mode: 'light',
+      text: {
+        primary: 'rgb(17, 24, 39)',
+        secondary: 'rgb(107, 114, 128)',
+        disabled: 'rgb(149, 156, 169)',
+      },
+      common: {
+        black: 'rgb(17, 24, 39)',
+        white: 'rgb(255, 255, 255)',
+      },
+      primary: {
+        light: '#bec1c5',
+        main: '#252f3e',
+        dark: '#0d121b',
+        contrastDefaultColor: 'light',
+      },
+      secondary: {
+        light: '#f80323',
+        main: '#f80323',
+        dark: '#f80323',
+      },
+      background: {
+        paper: '#FFFFFF',
+        default: '#f6f7f9',
+      },
+      error: {
+        light: '#ffcdd2',
+        main: '#f44336',
+        dark: '#b71c1c',
+      },
     },
-    common: {
-      black: 'rgb(17, 24, 39)',
-      white: 'rgb(255, 255, 255)',
+  };
+} else {
+  defaultTheme = {
+    palette: {
+      mode: 'light',
+      text: {
+        primary: 'rgb(17, 24, 39)',
+        secondary: 'rgb(107, 114, 128)',
+        disabled: 'rgb(149, 156, 169)',
+      },
+      common: {
+        black: 'rgb(17, 24, 39)',
+        white: 'rgb(255, 255, 255)',
+      },
+      primary: {
+        light: '#bec1c5',
+        main: '#252f3e',
+        dark: '#0d121b',
+        contrastDefaultColor: 'light',
+      },
+      secondary: {
+        light: '#f17e45',
+        main: '#f17e45',
+        dark: '#f17e45',
+      },
+      background: {
+        paper: '#FFFFFF',
+        default: '#f6f7f9',
+      },
+      error: {
+        light: '#ffcdd2',
+        main: '#f44336',
+        dark: '#b71c1c',
+      },
     },
-    primary: {
-      light: '#bec1c5',
-      main: '#252f3e',
-      dark: '#0d121b',
-      contrastDefaultColor: 'light',
-    },
-    secondary: {
-      light: '#f17e45',
-      main: '#f17e45',
-      dark: '#f17e45',
-    },
-    background: {
-      paper: '#FFFFFF',
-      default: '#f6f7f9',
-    },
-    error: {
-      light: '#ffcdd2',
-      main: '#f44336',
-      dark: '#b71c1c',
-    },
-  },
-};
+  };
+}
+
 
 export const defaultSettings = {
   customScrollbars: true,
@@ -96,7 +139,7 @@ export const defaultThemeOptions = {
       defaultProps: {
         variant: 'text',
         color: 'inherit',
-        backgroundColor: '#f17e45',
+        backgroundColor: 'secondary',
       },
       styleOverrides: {
         root: {
@@ -110,11 +153,11 @@ export const defaultThemeOptions = {
         },
         sizeSmall: {
           borderRadius: '4px',
-          backgroundColor: '#f17e45',
+          backgroundColor: 'secondary',
         },
         sizeLarge: {
           borderRadius: '8px',
-          backgroundColor: '#f17e45',
+          backgroundColor: 'secondary',
         },
         contained: {
           boxShadow: 'none',

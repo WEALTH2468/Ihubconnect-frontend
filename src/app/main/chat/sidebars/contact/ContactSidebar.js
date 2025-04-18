@@ -62,12 +62,12 @@ function ContactSidebar(props) {
 
       <div className="flex flex-col justify-center items-center mt-32">
         <ContactAvatar className="w-160 h-160 text-64" data={{...contact, status: getStatus(contact._id)}} />
-        <Typography className="font-semibold mb-4 text-15">
+        <Typography className="font-semibold my-4 text-15">
           {contact.displayName}
         </Typography>
         
 
-        <Typography>{contact.aboutMe}</Typography>
+        <Typography className='px-[30px]'>{contact.aboutMe}</Typography>
 
       </div>
       <Card component={motion.div} variants={item} className="w-[80%] m-auto mb-32 mt-32">
