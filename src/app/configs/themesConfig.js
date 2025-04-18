@@ -1,14 +1,8 @@
-import { fuseDark, skyBlue, customOrange } from '@fuse/colors';
-import { blueGrey } from '@mui/material/colors';
-
-import { deepOrange } from '@mui/material/colors';
+import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
 import ahavaTheme from './ahavaTheme';
 import ihubTheme from './ihubTheme';
 
-
-
-console.log('window.REACT_APP_FRONTEND_DOMAIN', process.env.REACT_APP_BASE_FRONTEND);
 
 
 
@@ -26,7 +20,7 @@ export const darkPaletteText = {
 
 let themesConfig;
 
-if (process.env.REACT_APP_BASE_FRONTEND === "http://localhost:3001") {
+if (AhavaCheck()) {
   themesConfig = ahavaTheme;
 } else {
   themesConfig = ihubTheme;

@@ -2,12 +2,13 @@ import { fuseDark } from '@fuse/colors';
 import { red } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 import qs from 'qs';
+import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
 
 
 let defaultTheme;
 
-if (process.env.REACT_APP_BASE_FRONTEND === 'http://localhost:3001') {
+if (AhavaCheck()) {
   defaultTheme = {
     palette: {
       mode: 'light',
