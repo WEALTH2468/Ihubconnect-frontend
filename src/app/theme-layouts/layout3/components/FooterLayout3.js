@@ -19,6 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { showMessage } from 'app/store/fuse/messageSlice';
 import axios from 'axios';
+import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
 function FooterLayout3(props) {
     const footerTheme = useSelector(selectFooterTheme);
@@ -187,12 +188,26 @@ function FooterLayout3(props) {
                         <FavoriteIcon />
                     </Fab>
                 </Box>
-                <Toolbar
-                    className="container min-h-18 md:min-h-24 px-8 sm:px-12 lg:px-20 py-0 flex items-center overflow-x-auto text-[.8rem] font-medium capitalize"
-                    color="text.secondary"
-                >
-                    iHub Connect 1.0.0.7 - MVP Release : February 21st 25 
-                </Toolbar>
+                 {AhavaCheck() ? (
+                                        <>
+                                          <Toolbar
+                                                className="container min-h-18 md:min-h-24 px-8 sm:px-12 lg:px-20 py-0 flex items-center overflow-x-auto text-[.8rem] font-medium capitalize"
+                                                color="text.secondary"
+                                            >
+                                                Ahava Tribe 1.0.0.7 - MVP Release : April 18st 25 
+                                            </Toolbar>
+                                            </>
+                                      ) : (
+                                        <>
+                                           <Toolbar
+                                            className="container min-h-18 md:min-h-24 px-8 sm:px-12 lg:px-20 py-0 flex items-center overflow-x-auto text-[.8rem] font-medium capitalize"
+                                            color="text.secondary"
+                                        >
+                                            iHub Connect 1.0.0.7 - MVP Release : February 21st 25 
+                                        </Toolbar>
+                                        </>
+                                      )}
+               
             </AppBar>
         </ThemeProvider>
     );

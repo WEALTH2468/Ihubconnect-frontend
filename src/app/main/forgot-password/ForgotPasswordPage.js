@@ -26,6 +26,7 @@ import { forgotPassword } from '../../store/userSlice';
 import { getRandomUserAvatars } from 'app/store/userSlice';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
 import { selectCompanyProfile } from 'src/app/main/settings/users/store/settingsSlice'; 
+import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
 /**
  * Form Validation Schema
@@ -75,10 +76,15 @@ function ForgotPasswordPage() {
   }, [dispatch]);
 
 
-    useEffect(() => {
-        document.title =
-            'Ihub Connect - Team Work and Value Creation - Sign In';
-    }, []);
+       useEffect(() => {
+         if (AhavaCheck()) {
+           document.title =
+               'Ahava Tribe – United in Ministry, Serving with Purpose – Forgot Password';
+       } else {
+           document.title =
+               'Ihub Connect - Team Work and Value Creation - Forgot Password';
+       }
+     }, []);
 
     const { isValid, dirtyFields, errors } = formState;
 
@@ -228,36 +234,61 @@ function ForgotPasswordPage() {
             />
           </Box>
 
-          <div className="z-10 relative w-full max-w-2xl">
-            <div className="text-7xl font-bold leading-none text-white">
-              <div>Welcome to</div>
-              <div>iHubconnect</div>
-            </div>
-            <div className="mt-24 text-lg tracking-tight leading-6 text-white">
-              Helping organizations boost productivity, improve communication, and
-              track performance effortlessly. Whether you manage a small team or
-              a large enterprise, iHub Connect is the smarter way to work.
-            </div>
-            <div className="flex items-center mt-32">
-            <AvatarGroup
-                    max={4} // Display only 4 avatars
-                    sx={{
-                      '& .MuiAvatar-root': {
-                        borderColor: 'secondary.main',
-                      },
-                    }}
-                  >
-                    {randomUserAvatars?.length > 0
-                      ? randomUserAvatars.slice(0, 4).map((avatar, index) => <Avatar key={index} src={addBackendProtocol(avatar)} />)
-                      : // Fallback avatars if API returns empty
-                        [].map((avatar, index) => <Avatar key={index} src={avatar} />)}
-                  </AvatarGroup>
-
-              <div className="ml-16 font-medium tracking-tight text-white">
-              All of your colleague are here, it's your turn
-              </div>
-            </div>
-          </div>
+         <div className="z-10 relative w-full max-w-2xl">
+                     <div className="text-7xl font-bold leading-none text-white">
+                     {AhavaCheck() ? (
+                         <>
+                           <div className="text-7xl font-bold leading-none text-white">
+                             <div>Welcome to</div>
+                             <div>Ahava Tribe</div>
+                           </div>
+                           <div className="mt-24 text-lg tracking-tight leading-6 text-white">
+                           Empowering ministries to stay connected, organized, and impactful. Whether you're leading a small group or a large congregation, We helps you manage communication, streamline operations, and grow your mission with ease.                  </div>
+                         </>
+                       ) : (
+                         <>
+                           <div className="text-7xl font-bold leading-none text-white">
+                           <div>Welcome to</div>
+                           <div>iHubconnect</div>
+                         </div>
+                         <div className="mt-24 text-lg tracking-tight leading-6 text-white">
+                           Helping organizations boost productivity, improve communication, and track performance effortlessly. Whether you manage a small team or a large enterprise, iHub Connect is the smarter way to work.
+                         </div>
+                         </>
+                       )}
+                     </div>
+                     <div className="flex items-center mt-32">
+                     <AvatarGroup
+                             max={4} // Display only 4 avatars
+                             sx={{
+                               '& .MuiAvatar-root': {
+                                 borderColor: 'secondary.main',
+                               },
+                             }}
+                           >
+                             {randomUserAvatars?.length > 0
+                               ? randomUserAvatars.slice(0, 4).map((avatar, index) => <Avatar key={index} src={addBackendProtocol(avatar)} />)
+                               : // Fallback avatars if API returns empty
+                                 [ ].map((avatar, index) => <Avatar key={index} src={avatar} />)}
+                           </AvatarGroup>
+         
+                           {AhavaCheck() ? (
+                         <>
+                           <div className="ml-16 font-medium tracking-tight text-white">
+                           Your ministry team is already here — now it's your turn to make an impact.
+                       </div>
+                         </>
+                       ) : (
+                         <>
+                          <div className="ml-16 font-medium tracking-tight text-white">
+                       All of your colleague are here, it's your turn
+                       </div>
+                         </>
+                       )}
+         
+                      
+                     </div>
+                   </div>
         </Box>
       </div>
     );

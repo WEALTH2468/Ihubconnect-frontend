@@ -104,8 +104,8 @@ function post({ post }) {
 
 
   return (
-    <Card>
-      <CardContent className="px-32">
+    <Card className="w-[450px]">
+      <CardContent className="px-[35px]">
         <Typography
           component="p"
           className="mb-16 max-w-sm break-words overflow-hidden"

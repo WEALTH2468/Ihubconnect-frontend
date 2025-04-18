@@ -30,6 +30,7 @@ function CrmApp(props) {
         return <Contact />;
     }
   };
+  
   useEffect(() => {
     const originalTitle = document.title;
     document.title = 'Ihub Connect - Finance';

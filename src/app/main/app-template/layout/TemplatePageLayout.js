@@ -10,6 +10,7 @@ import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import TemplatePageBreadcrumb from './TemplatePageBreadcrumb';
 import TemplateNavigation from './TemplateNavigation';
+import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
 const Root = styled(FusePageCarded)(({ theme }) => ({
   '& .FusePageCarded-header': {},
@@ -31,10 +32,17 @@ function TemplatePageLayout(props) {
 
 
   //Set the title of the page
-  useEffect(() => {
-    document.title ="Ihub Connect - App Template";
-  }, []);
 
+ 
+
+  useEffect(() => {
+    if (AhavaCheck()) {
+      document.title ="Ahava Tribe - App Template";
+  } else {
+      document.title ="Ihub Connect - App Template"
+  }
+  }, []);
+  
 
   useEffect(() => {
     setLeftSidebarOpen(!isMobile);

@@ -23,6 +23,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { lighten } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
 //Redux
 import withReducer from "app/store/withReducer";
@@ -43,7 +44,11 @@ const IdeskTab = ({setSelectedTab}) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    document.title = "Ihub Connect - Idesk"; //Set the title of the page
+    if (AhavaCheck()) {
+      document.title = "Ahava Tribe - Idesk"; //Set the title of the page
+    } else {
+      document.title = "Ihub Connect - Idesk"; //Set the title of the page
+    }
     !user.avatar && setSelectedTab(1) // CHECKING IF PROFILE IS UPDATED
   }, [user]);
 
@@ -79,7 +84,7 @@ const IdeskTab = ({setSelectedTab}) => {
         className="w-full"
       >
         <Box display="flex" sx={{ width: "100%" }}>
-          <Box sx={{ width: "25%", marginRight: "20px" }}>
+          <Box sx={{  }}>
             <Card
               component={motion.div}
               variants={item}
@@ -146,7 +151,7 @@ const IdeskTab = ({setSelectedTab}) => {
             </Card>
           </Box>
 
-          <Box sx={{ width: "50%", marginRight: "20px" }}>
+          <Box sx={{ }}>
             {/* <IdeskEvent /> */}
             <PostForm />
             {posts.length > 0 &&
@@ -157,7 +162,7 @@ const IdeskTab = ({setSelectedTab}) => {
                 .reverse()}
           </Box>
 
-          <Box sx={{ width: "25%"}}>
+          <Box sx={{}}>
             <Card
               component={motion.div}
               variants={item}
