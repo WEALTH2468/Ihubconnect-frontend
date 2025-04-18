@@ -33,17 +33,15 @@ function TemplatePageLayout(props) {
 
   //Set the title of the page
 
-  if (AhavaCheck()) {
-    useEffect(() => {
+ 
+
+  useEffect(() => {
+    if (AhavaCheck()) {
       document.title ="Ahava Tribe - App Template";
-    }, []);
-  
   } else {
-    useEffect(() => {
-      document.title ="Ihub Connect - App Template";
-    }, []);
-  
+      document.title ="Ihub Connect - App Template"
   }
+  }, []);
   
 
   useEffect(() => {

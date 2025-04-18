@@ -68,17 +68,17 @@ function SignInPage() {
     dispatch(getRandomUserAvatars());
   }, [dispatch]);
 
-  if (AhavaCheck()) {
-    useEffect(() => {
+ 
+
+  useEffect(() => {
+    if (AhavaCheck()) {
       document.title =
           'Ahava Tribe – United in Ministry, Serving with Purpose – Sign In';
-  }, []);
   } else {
-    useEffect(() => {
       document.title =
           'Ihub Connect - Team Work and Value Creation - Sign In';
-  }, []);
   }
+}, []);
   
 
     const { isValid, dirtyFields, errors } = formState;

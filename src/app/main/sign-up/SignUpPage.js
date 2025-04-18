@@ -80,17 +80,15 @@ function SignUpPage() {
   }, [dispatch]);
 
 
-  if (AhavaCheck()) {
-     useEffect(() => {
-       document.title =
-           'Ahava Tribe – United in Ministry, Serving with Purpose – Sign Up';
+    useEffect(() => {
+       if (AhavaCheck()) {
+         document.title =
+             'Ahava Tribe – United in Ministry, Serving with Purpose – Sign Up';
+     } else {
+         document.title =
+             'Ihub Connect - Team Work and Value Creation - Sign Up';
+     }
    }, []);
-   } else {
-     useEffect(() => {
-       document.title =
-           'Ihub Connect - Team Work and Value Creation - Sign Up';
-   }, []);
-   }
 
   const { isValid, dirtyFields, errors, setError } = formState;
 

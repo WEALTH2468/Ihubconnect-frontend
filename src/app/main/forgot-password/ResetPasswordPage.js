@@ -64,17 +64,15 @@ function ResetPasswordPage() {
         resolver: yupResolver(schema),
     });
 
-     if (AhavaCheck()) {
-        useEffect(() => {
-          document.title =
-              'Ahava Tribe – United in Ministry, Serving with Purpose – Reset Password';
-      }, []);
-      } else {
-        useEffect(() => {
-          document.title =
-              'Ihub Connect - Team Work and Value Creation - Reset Password';
-      }, []);
-      }
+       useEffect(() => {
+               if (AhavaCheck()) {
+                 document.title =
+                     'Ahava Tribe – United in Ministry, Serving with Purpose – Reset Password';
+             } else {
+                 document.title =
+                     'Ihub Connect - Team Work and Value Creation - Reset Password';
+             }
+           }, []);
 
     const { isValid, dirtyFields, errors } = formState;
     console.log('isValid: ', isValid, dirtyFields);

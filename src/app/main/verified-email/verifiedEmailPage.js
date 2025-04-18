@@ -104,17 +104,15 @@ export default function VerificationPage() {
       });
   };
 
-   if (AhavaCheck()) {
-      useEffect(() => {
-        document.title =
-            'Ahava Tribe – United in Ministry, Serving with Purpose – Email Verification';
-    }, []);
-    } else {
-      useEffect(() => {
-        document.title =
-            'Ihub Connect - Team Work and Value Creation - Email Verification';
-    }, []);
-    }
+    useEffect(() => {
+             if (AhavaCheck()) {
+               document.title =
+                   'Ahava Tribe – United in Ministry, Serving with Purpose – Email Verification';
+           } else {
+               document.title =
+                   'Ihub Connect - Team Work and Value Creation - Email Verification';
+           }
+         }, []);
 
   const { isValid, dirtyFields, errors, setError } = formState;
 

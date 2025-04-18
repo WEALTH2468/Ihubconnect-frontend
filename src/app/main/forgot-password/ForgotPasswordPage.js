@@ -76,17 +76,15 @@ function ForgotPasswordPage() {
   }, [dispatch]);
 
 
-    if (AhavaCheck()) {
        useEffect(() => {
-         document.title =
-             'Ahava Tribe – United in Ministry, Serving with Purpose – Forgot Password';
+         if (AhavaCheck()) {
+           document.title =
+               'Ahava Tribe – United in Ministry, Serving with Purpose – Forgot Password';
+       } else {
+           document.title =
+               'Ihub Connect - Team Work and Value Creation - Forgot Password';
+       }
      }, []);
-     } else {
-       useEffect(() => {
-         document.title =
-             'Ihub Connect - Team Work and Value Creation - Forgot Password';
-     }, []);
-     }
 
     const { isValid, dirtyFields, errors } = formState;
 
