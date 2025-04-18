@@ -57,6 +57,7 @@ import { getTags } from "../sub-apps/profile/store/tagsSlice";
 import { getContacts } from "../sub-apps/profile/store/contactsSlice";
 import addBackendProtocol from "app/theme-layouts/shared-components/addBackendProtocol";
 import axios from "axios";
+import { AhavaCheck } from "@fuse/utils/ahavaCheck";
 
 
 
@@ -96,16 +97,44 @@ function IdeskPageLayout(props) {
   }
 
   function useDailyRandomImages() {
-    const images = [
-      "assets/images/idesk-images/pexels-cookiecutter-1148820.jpg",
-      "assets/images/idesk-images/pexels-divinetechygirl-1181354.jpg",
-      "assets/images/idesk-images/pexels-divinetechygirl-1181675.jpg",
-      "assets/images/idesk-images/pexels-joshsorenson-1714208.jpg",
-      "assets/images/idesk-images/pexels-luis-gomes-166706-546819.jpg",
-      "assets/images/idesk-images/pexels-pixabay-257699.jpg",
-      "assets/images/idesk-images/pexels-pixabay-356056.jpg",
-      "assets/images/idesk-images/pexels-shottrotter-1309766.jpg",
-    ];
+
+    let images = [];
+
+    if (AhavaCheck()) {
+      images = [
+        "assets/images/idesk-images/pexels-israwmx-28688224.jpg",
+        "assets/images/idesk-images/pexels-israwmx-28486792.jpg",
+        "assets/images/idesk-images/pexels-soulwinnersforchrist-10823756.jpg",
+        "assets/images/idesk-images/pexels-soulwinnersforchrist-10831945.jpg",
+        "assets/images/idesk-images/pexels-soulwinnersforchrist-16726690.jpg",
+        "assets/images/idesk-images/pexels-chris-liu-753004655-22710978.jpg",
+        "assets/images/idesk-images/pexels-tara-winstead-8383493.jpg",
+        "assets/images/idesk-images/pexels-tara-winstead-8383656.jpg",
+      ]
+
+      useEffect(() => {
+        document.title = "Ahava Tribe - Idesk";
+      }, []);
+      
+    } else {
+      images = [
+        "assets/images/idesk-images/pexels-cookiecutter-1148820.jpg",
+        "assets/images/idesk-images/pexels-divinetechygirl-1181354.jpg",
+        "assets/images/idesk-images/pexels-divinetechygirl-1181675.jpg",
+        "assets/images/idesk-images/pexels-joshsorenson-1714208.jpg",
+        "assets/images/idesk-images/pexels-luis-gomes-166706-546819.jpg",
+        "assets/images/idesk-images/pexels-pixabay-257699.jpg",
+        "assets/images/idesk-images/pexels-pixabay-356056.jpg",
+        "assets/images/idesk-images/pexels-shottrotter-1309766.jpg",
+      ];
+
+      useEffect(() => {
+        document.title = "Ihub Connect - Idesk";
+      }, []);
+    }
+   
+
+   
   
     const [randomImages, setRandomImages] = useState([]);
   
@@ -150,9 +179,6 @@ function IdeskPageLayout(props) {
     dispatch(getTags());
   }, [dispatch]);
 
-  useEffect(() => {
-    document.title = "Ihub Connect - Idesk";
-  }, []);
 
   useEffect(() => {
     setLeftSidebarOpen(!isMobile);
@@ -234,7 +260,7 @@ function IdeskPageLayout(props) {
                 {`${user.firstName}`}
               </Typography>
               <Typography className="text-lg font-bold leading-none text-white pt-[3px]">
-                {`${user.jobPosition}`}
+                {`${user.jobPosition? user.jobPosition.title: "No Job Position"}`}
               </Typography>
               <Typography className="text-white pt-[3px]">{`${country}, ${user.city}`}</Typography>
             </div>
@@ -257,7 +283,7 @@ function IdeskPageLayout(props) {
                 children: (
                   <Box
                     sx={{ bgcolor: "text.disabled" }}
-                    className="w-full h-full rounded-[10%] opacity-40"
+                    className="w-full h-full rounded-[10%] opacity-30"
                   />
                 ),
               }}

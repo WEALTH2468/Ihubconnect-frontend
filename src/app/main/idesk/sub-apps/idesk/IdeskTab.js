@@ -55,6 +55,7 @@ import { Can } from 'src/app/AbilityContext';
 import ScoreCardApp from 'src/app/main/profile/sub-apps/score-card/ScoreCardTab';
 import BirthdayCard from 'src/app/main/profile/sub-apps/upcoming-birthdays/birthdaysCard';
 import BirthdayPopup from 'src/app/main/profile/sub-apps/upcoming-birthdays/birthday-popup';
+import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
 //Mui icons
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
@@ -91,7 +92,12 @@ const IdeskTab = ({ setSelectedTab }) => {
 
 
   useEffect(() => {
-    document.title = 'Ihub Connect - Idesk'; //Set the title of the page
+    if (AhavaCheck()) {
+      document.title = 'Ahava Tribe - Idesk'; //Set the title of the page
+    } else {
+      document.title = 'Ihub Connect - Idesk'; //Set the title of the page
+    }
+  
   }, [user]);
 
   useEffect(() => {
@@ -185,7 +191,7 @@ const IdeskTab = ({ setSelectedTab }) => {
         className="w-full"
       >
         <div className="flex gap-[20px]">
-          <div className="sticky top-0 w-[35%]">
+          <div className="sticky top-0 w-[250px]">
             <Card
               component={motion.div}
               variants={item}
@@ -249,7 +255,7 @@ const IdeskTab = ({ setSelectedTab }) => {
             </Card>
           </div>
 
-          <div className="w-[60%]">
+          <div className="min-w-[450px] flex-1">
             <PostForm />
             {posts.length > 0 && (
               <InfiniteScroll
@@ -272,11 +278,11 @@ const IdeskTab = ({ setSelectedTab }) => {
             )}
           </div>
 
-          <div className="sticky top-0 w-[35%]">
+          <div className="sticky top-0 w-[250px]">
                     <Card
             component={motion.div}
             variants={item}
-            className="flex flex-col w-full px-32 pt-24"
+            className="flex flex-col w-full px-[20px] pt-24"
           >
             <BirthdayCard onSeeMoreClick={handleOpenBirthdayDialog} />
           </Card>
