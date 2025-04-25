@@ -61,6 +61,8 @@ import RotateRightRoundedIcon from '@mui/icons-material/RotateRightRounded';
 import DoneAllRoundedIcon from '@mui/icons-material/DoneAllRounded';
 import ErrorIcon from "@mui/icons-material/Error";
 import { selectSocket } from 'app/store/socketSlice';
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 
 const StyledMessageRow = styled('div')(({ theme }) => ({
@@ -168,10 +170,12 @@ function Chat(props) {
     selectPanelContactById(state, contactId)
   );
   const [isSending, setIsSending] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const selectedPanelContactId = useSelector(selectSelectedPanelContactId);
 
   const chatRef = useRef(null);
+  const emojiPickerRef = useRef(null);
   const [messageText, setMessageText] = useState('');
 
 
@@ -203,6 +207,16 @@ function Chat(props) {
   // Handle chat menu
   const openChat = Boolean(chatMenu);
 
+   // Emoji logic
+
+   const handleEmojiClick = () => {
+    setShowEmojiPicker((prev) => !prev);
+  };
+ 
+const handleEmojiSelect = (emoji) => {
+  setMessageText((prev) => prev + emoji.native); // Add emoji to message
+  setShowEmojiPicker(false);
+};
 
   //Add image function
   const handleAddImage = () => {
@@ -831,12 +845,6 @@ useEffect(() => {
               )}
 
               <div className="flex items-center relative">
-                <IconButton type="button" size="large">
-                  <FuseSvgIcon className="text-24" color="action">
-                    heroicons-outline:emoji-happy
-                  </FuseSvgIcon>
-                </IconButton>
-
                 <IconButton type="button" size="large" onClick={handleMenuOpen}>
                   <FuseSvgIcon className="text-24" color="action">
                     heroicons-outline:paper-clip
@@ -864,7 +872,7 @@ useEffect(() => {
                 />
 
                 <TextField
-                  autoFocus={false}
+                  autoFocus={true}
                   id="message-input"
                   className="flex flex-1 grow shrink-0 mx-16 ltr:mr-48 rtl:ml-48 my-8 p-2 w-full "
                   placeholder="Type your message"
@@ -872,16 +880,6 @@ useEffect(() => {
                   value={messageText}
                   multiline // Enables multi-line input
                   minRows={1}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '&:hover fieldset': {
-                        borderColor: '#c96632', // Hover color
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: '#f17e44', // Focused (clicked) color
-                      },
-                    },
-                  }}
                   maxRows={2} // Limit max rows
                   onKeyDown={(ev) => {
                     if (ev.key === 'Enter' && !ev.shiftKey && !isSending) {
@@ -890,6 +888,14 @@ useEffect(() => {
                     }
                   }}
                 />
+                   {/* Emoji Toggle Button */}
+                         <IconButton
+                           size="large"
+                               onClick={handleEmojiClick}
+                                 className="absolute right-[130px]"
+                                    >
+                                 <FuseSvgIcon color="action">heroicons-outline:emoji-happy</FuseSvgIcon>
+                           </IconButton>
 
                 <IconButton type="submit" size="large">
                   <FuseSvgIcon className="rotate-90 text-24" color="action">
@@ -899,6 +905,21 @@ useEffect(() => {
               </div>
             </Paper>
           )}
+          
+                          {/* Emoji Picker (Custom Positioned) */}
+                          {showEmojiPicker && (
+                            <div
+                              className=" absolute z-9999"
+                              style={{
+                                bottom: '50px',
+                                right: '15px',
+                              }}
+                            >
+                              <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="light" />
+                            </div>
+                          )} 
+                          
+
         </div>
       </div>
     </>

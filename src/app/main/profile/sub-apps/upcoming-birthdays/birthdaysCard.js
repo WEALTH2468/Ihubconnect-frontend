@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Avatar, Typography, Button, CardContent, Divider } from '@mui/material';
 import { getBirthdayUsers } from 'app/store/userSlice';
+import CakeIcon from '@mui/icons-material/Cake';
 import { useEffect } from 'react';
+
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
 
 const BirthdayCard = ({ onSeeMoreClick  }) => {
@@ -10,7 +12,7 @@ const BirthdayCard = ({ onSeeMoreClick  }) => {
 
   const { todayBirthdays, upcomingBirthdays } = useSelector((state) => state.user);
   const [showAll, setShowAll] = useState(false);
-  // const [openPopup, setOpenPopup] = useState(false);
+  
 
 
   const groupedBirthdays = [
@@ -26,7 +28,7 @@ const BirthdayCard = ({ onSeeMoreClick  }) => {
     (group.users || []).map((user) => ({ ...user, groupTitle: group.title }))
   );
 
-  const visibleUsers = showAll ? displayedUsers : displayedUsers.slice(0, 5 );
+  const visibleUsers = showAll ? displayedUsers : displayedUsers.slice(0, 2 );
 
   return (
     <CardContent className="p-0">
@@ -39,7 +41,8 @@ const BirthdayCard = ({ onSeeMoreClick  }) => {
           {index === 0 || user.groupTitle !== visibleUsers[index - 1]?.groupTitle ? (
             <>
               <Divider className="my-3" />
-              <Typography variant="subtitle2" className=" mb-1 font-bold" color="secondary.main">
+              <Typography variant="subtitle2" className=" mb-1 font-bold gap-7" color="secondary.main" display="flex">
+                <CakeIcon color="secondary" className='pb-6' />
                 {user.groupTitle}
               </Typography>
             </>
@@ -65,18 +68,29 @@ const BirthdayCard = ({ onSeeMoreClick  }) => {
         </div>
       ))}
 
-      {displayedUsers.length > 2 && (
-        <div className="mt-9 flex justify-center">
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={ onSeeMoreClick }
-          >
-            See More
-          </Button>
-        </div>
-      )}
+{displayedUsers.length > 0 && (
+  <div className="mt-9 flex justify-center">
+    <Button
+      variant="outlined"
+      color="secondary"
+      size="small"
+      className="w-full"
+      onClick={onSeeMoreClick}
+      sx={{
+        borderColor: 'secondary.main',
+        color: 'secondary.main',
+        '&:hover': {
+          backgroundColor: 'secondary.main',
+          color: '#fff',
+          borderColor: 'secondary.main',
+        },
+      }}
+    >
+      See More
+    </Button>
+  </div>
+)}
+
     </CardContent>
   );
 };
