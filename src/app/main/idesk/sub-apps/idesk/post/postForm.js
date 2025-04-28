@@ -116,23 +116,23 @@ const PostForm = () => {
           {/* CardHeader with Avatar */}
           <CardHeader
             sx={{ marginRight: 0, paddingRight: 0 }}
-            avatar={
-              <Avatar
-                className="md:mx-4"
-                alt="user photo"
-                src={
-                  user.avatar
-                    ? addBackendProtocol(user.avatar)
-                    : user.displayName[0]
-                }
-                sx={{
-                  width: 56, // Set width
-                  height: 56, // Set height
-                  marginRight: 5, // Remove right margin
-                  // Add any additional styles here
-                }}
-              />
-            }
+            //avatar={
+              // <Avatar
+              //   className="md:mx-4"
+              //   alt="user photo"
+              //   src={
+              //     user.avatar
+              //       ? addBackendProtocol(user.avatar)
+              //       : user.displayName[0]
+              //   }
+              //   sx={{
+              //     width: 56, // Set width
+              //     height: 56, // Set height
+              //     marginRight: 5, // Remove right margin
+              //     // Add any additional styles here
+              //   }}
+              // />
+            //}
             title=""
             subheader=""
           />
@@ -204,9 +204,9 @@ const PostForm = () => {
                 </div>
               )}
 
-              <div className="card-footer flex items-center flex-row border-t-1 px-24 py-12">
+              <div className="card-footer flex items-center flex-row border-t-1 px-20 py-12">
                 <div className="flex flex-1 items-center">
-                  <IconButton>
+                  <IconButton className='rounded-12'>
                     <label aria-label="Add photo">
                       <input
                         accept="image/*"
@@ -243,14 +243,30 @@ const PostForm = () => {
                           onChange(newImage);
                         }}
                       />
-                      <FuseSvgIcon size={20}>
-                        heroicons-solid:photograph
+                      <FuseSvgIcon size={25} color='secondary'>
+                        heroicons-outline:photograph
                       </FuseSvgIcon>
                     </label>
+                    <Typography className="mx-4 text-14 font-medium">
+                       Photo/Video
+                       </Typography>
                   </IconButton>
-                  <IconButton aria-label="Mention somebody" disabled={true}>
-                    <FuseSvgIcon size={20}>heroicons-solid:user</FuseSvgIcon>
+
+                  <IconButton aria-label="Post" disabled={true} className='rounded-12'>
+                    <FuseSvgIcon size={25} disabled={true}>heroicons-outline:calendar</FuseSvgIcon>
+                    <Typography className="mx-4 text-14 font-medium">
+                       Post
+                       </Typography>
                   </IconButton>
+
+                  <IconButton aria-label="Events" disabled={true} className='rounded-12'>
+                    <FuseSvgIcon size={25} disabled={true} >heroicons-outline:clipboard-list</FuseSvgIcon>
+                    <Typography className="mx-4 text-14 font-medium">
+                       Events
+                       </Typography>
+                  </IconButton>
+
+
                 </div>
 
                 <div className="">

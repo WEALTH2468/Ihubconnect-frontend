@@ -28,7 +28,7 @@ const ihubTheme = {
       },
       primary: {
         light: '#64748b',
-        main: '#751f07',
+        main: '#ba6916',
         dark: '#0f172a',
         contrastText: darkPaletteText.primary,
       },

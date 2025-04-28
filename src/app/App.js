@@ -46,6 +46,8 @@ import { selectSocket } from './store/socketSlice';
 import useEmit from './websocket/emit';
 import { getRolePermissions, selectRolePermissions } from './store/rolePermissionsSlice';
 import AbilityProvider from './AbilityContext';
+import FloatingChatWrapper from './main/chat/chatPopup/FloatingChatWrapper';
+
 
 // Axios HTTP Request defaults
 axios.defaults.baseURL = `${process.env.REACT_APP_BASE_BACKEND}`;
@@ -187,34 +189,40 @@ function App() {
       <CacheProvider value={createCache(emotionCacheOptions[langDirection])}>
         <FuseTheme theme={mainTheme} direction={langDirection}>
           <AuthProvider>
-           <AbilityProvider permissions={user.permissions}>
-           <BrowserRouter>
-              <FuseAuthorization
-                userRole={role ? role.name.toLowerCase() : user.role}
-                loginRedirectUrl={settingsConfig.loginRedirectUrl}
-              >
-                <SnackbarProvider
-                  maxSnack={5}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                  }}
-                  classes={{
-                    containerRoot:
-                      'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99',
-                  }}
+            <AbilityProvider permissions={user.permissions}>
+              <BrowserRouter>
+                <FuseAuthorization
+                  userRole={role ? role.name.toLowerCase() : user.role}
+                  loginRedirectUrl={settingsConfig.loginRedirectUrl}
                 >
-                  <FuseLayout layouts={themeLayouts} />
-                </SnackbarProvider>
-              </FuseAuthorization>
-            </BrowserRouter>
-           </AbilityProvider>
+                  <SnackbarProvider
+                    maxSnack={5}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }}
+                    classes={{
+                      containerRoot:
+                        'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99',
+                    }}
+                  >
+                    {/* MAIN LAYOUT */}
+                    <FuseLayout layouts={themeLayouts} />
+  
+                    {/* 👉 FLOATING CHAT BUTTON — global and floating */}
+                    <FloatingChatWrapper />
+                  </SnackbarProvider>
+                </FuseAuthorization>
+              </BrowserRouter>
+            </AbilityProvider>
           </AuthProvider>
         </FuseTheme>
       </CacheProvider>
+  
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
+  
 }
 
 // Export the App component wrapped with application providers

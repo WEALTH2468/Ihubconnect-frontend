@@ -48,11 +48,8 @@ const BirthdayPopup = () => {
                 }}
                
               >
-                
+                <CakeIcon color="secondary" className='pb-7' fontSize='large' />
                 {user.groupTitle}
-                <CakeIcon color="secondary" />
-                <CakeIcon color="secondary" />
-                <CakeIcon color="secondary" />
               </Typography>
             </>
           ) : null}

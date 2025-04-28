@@ -26,6 +26,8 @@ import {
   addPanelMessage,
   updatePanelMessage,
 } from 'app/theme-layouts/shared-components/chatPanel/store/chatSlice';
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 
 
@@ -111,6 +113,7 @@ function Chat(props) {
   const location = useLocation();
   const contactId = location.pathname.split('/chat/')[1];
   const [isSending, setIsSending] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const chatScroll = useRef(null);
   const [messageText, setMessageText] = useState('');
@@ -124,6 +127,17 @@ function Chat(props) {
   useEffect(() => {
     scrollToBottom();
   }, [chat]);
+
+
+const handleEmojiClick = () => {
+  setShowEmojiPicker((prev) => !prev);
+};
+
+const handleEmojiSelect = (emoji) => {
+  setMessageText((prev) => prev + emoji.native); // Add emoji to message
+  setShowEmojiPicker(false);
+};
+  
 
   function scrollToBottom() {
     if (!chatScroll.current) {
@@ -141,8 +155,8 @@ function Chat(props) {
 
   return (
     <Paper
-      className={clsx('flex flex-col relative pb-64 shadow', props.className)}
-      sx={{ background: (theme) => theme.palette.background.default }}
+      className={clsx('flex flex-col relative z-[1000] pb-64 shadow', props.className)}
+      sx={{ background: (theme) => theme.palette.background.paper, borderRadius: '0px'  }}
     >
       <div
         ref={chatScroll}
@@ -377,50 +391,72 @@ function Chat(props) {
                       onSubmit={onMessageSubmit}
                       className="pb-16 px-8 absolute bottom-0 left-0 right-0"
                     >
-                      <Paper className="rounded-24 flex items-center relative shadow">
+                     <Paper className="rounded-24 flex items-center relative shadow px-8" >
+                          <TextField
+                            autoFocus={true}
+                            id="message-input"
+                            className="flex flex-1 grow shrink-0 mx-8 ltr:mr-48 rtl:ml-48 my-8"
+                            placeholder="Type your message"
+                            onChange={onInputChange}
+                            value={messageText}
+                            multiline
+                            minRows={1}
+                            maxRows={2}
+                            onKeyDown={(ev) => {
+                              if (ev.key === 'Enter' && !ev.shiftKey && !isSending) {
+                                ev.preventDefault();
+                                onMessageSubmit(ev);
+                              }
+                            }}
+                          />
 
-                      <TextField
-                      autoFocus={false}
-                      id="message-input"
-                      className="flex flex-1 grow shrink-0 mx-16 ltr:mr-48 rtl:ml-48 my-8 p-2 "
-                      placeholder="Type your message"
-                      onChange={onInputChange}
-                      value={messageText}
-                      multiline // Enables multi-line input
-                      minRows={1}
-                       sx={{
-                      '& .MuiOutlinedInput-root': {
-                        '&:hover fieldset': {
-                          borderColor: '#c96632', // Hover color
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#f17e44', // Focused (clicked) color
-                        },
-                      },
-                    }}
-                      maxRows={2} // Limit max rows
-                      onKeyDown={(ev) => {
-                        if (ev.key === "Enter" && !ev.shiftKey && !isSending) {
-                          ev.preventDefault(); // Prevent default Enter behavior
-                          onMessageSubmit(ev);
-                        }
-                      }}
-                    />
-                        <IconButton
-                          className="absolute ltr:right-0 rtl:left-0 top-8"
-                          type="submit"
-                          size="large"
-                        >
-                          <FuseSvgIcon className="rotate-90" color="action">
-                            heroicons-outline:paper-airplane
-                          </FuseSvgIcon>
-                        </IconButton>
-                      </Paper>
+                           {/* Emoji Toggle Button */}
+                           <IconButton
+                            size="small"
+                            onClick={handleEmojiClick}
+                            className="absolute right-[60px]"
+                          >
+                            <FuseSvgIcon color="action">heroicons-outline:emoji-happy</FuseSvgIcon>
+                          </IconButton>
+
+                          {/* Send Icon */}
+                          <IconButton
+                            className="absolute ltr:right-0 rtl:left-0 top-9"
+                            type="submit"
+                            size="large"
+                            onClick={onMessageSubmit}
+                          >
+                            <FuseSvgIcon className="rotate-90" color="action">
+                              heroicons-outline:paper-airplane
+                            </FuseSvgIcon>
+                          </IconButton>
+                        </Paper>
+                   
                     </form>
                   )}
                 </>
               );
+               
             }, [chat, dispatch, messageText, selectedContactId, isSending])}
+
+                {/* Emoji Picker (Custom Positioned) */}
+                {showEmojiPicker && (
+                  <div
+                    className=" absolute z-9999 w-[20px]"
+                    style={{
+                      bottom: '80px',
+                      right: '5px',
+                    }}
+                  >
+                    <Picker  
+                    data={data} 
+                    emojiSize={17} 
+                    onEmojiSelect={handleEmojiSelect} 
+                    theme="light"
+                    />
+                    
+                  </div>
+                )}
     </Paper>
   );
 }
