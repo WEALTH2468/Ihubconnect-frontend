@@ -47,7 +47,7 @@ const contactsSlice = createSlice({
 
       ids.forEach((id) => {
         if (!newList.includes(id)) {
-          if (newList.length >= 2) {
+          if (newList.length >= 3) {
             newList.shift(); // remove first (oldest)
           }
           newList.push(id);

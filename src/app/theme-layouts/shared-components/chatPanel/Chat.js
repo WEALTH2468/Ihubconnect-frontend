@@ -442,10 +442,10 @@ const handleEmojiSelect = (emoji) => {
                 {/* Emoji Picker (Custom Positioned) */}
                 {showEmojiPicker && (
                   <div
-                    className=" absolute z-9999 w-[20px]"
+                    className=" absolute z-9999"
                     style={{
                       bottom: '80px',
-                      right: '5px',
+                      right: '0px',
                     }}
                   >
                     <Picker  
