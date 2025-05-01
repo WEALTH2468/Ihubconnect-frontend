@@ -45,7 +45,7 @@ const IdeskTab = ({setSelectedTab}) => {
 
   useEffect(() => {
     if (AhavaCheck()) {
-      document.title = "Ahava Tribe - Idesk"; //Set the title of the page
+      document.title = "Ahava Tribe - Idesk 222"; //Set the title of the page
     } else {
       document.title = "Ihub Connect - Idesk"; //Set the title of the page
     }

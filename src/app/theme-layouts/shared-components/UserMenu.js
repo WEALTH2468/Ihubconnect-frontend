@@ -18,7 +18,6 @@ import Box from '@mui/material/Box';
 function UserMenu(props) {
   const user = useSelector(selectUser);
 
-  console.log("users", user)
   
   const [userMenu, setUserMenu] = useState(null);
   let id = user._id;

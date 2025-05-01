@@ -45,7 +45,10 @@ const floatVariants = {
       <motion.div
         animate={isOpen ? 'open' : 'closed'}
         variants={floatVariants}
-        className="fixed bottom-[25px] right-[5%] z-[100] bg-[#ffffffe8] rounded-t-lg shadow-lg p-3 min-w-[300px] xl:min-w-[350px] min-h-[50px] flex items-center justify-between"
+        className="fixed bottom-[25px] right-[3%] z-[100] bg-[#ffffffe8] rounded-t-lg
+         shadow-lg p-3 min-w-[300px] xl:min-w-[350px] min-h-[50px] flex items-center justify-between"
+        onClick={() => setIsOpen((prev) => !prev)}
+        cursor="pointer"
       >
         {/* User Info (Left side) */}
         {user && (
@@ -86,7 +89,7 @@ const floatVariants = {
           <IconButton
             aria-haspopup="true"
             size="medium"
-            onClick={() => setIsOpen((prev) => !prev)}
+            // onClick={() => setIsOpen((prev) => !prev)}
           >
             <FuseSvgIcon>heroicons-solid:search</FuseSvgIcon>
           </IconButton>
@@ -94,7 +97,7 @@ const floatVariants = {
           <IconButton
             aria-haspopup="true"
             size="medium"
-            onClick={() => setIsOpen((prev) => !prev)}
+            // onClick={() => setIsOpen((prev) => !prev)}
           >
             <FuseSvgIcon>
               {isOpen
@@ -113,7 +116,7 @@ const floatVariants = {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-[25px] right-[5%] z-[100]"
+            className="fixed bottom-[25px] right-[3%] z-[100]"
           >
             <PopupChatList onClose={() => setIsOpen(false)} />
           </motion.div>

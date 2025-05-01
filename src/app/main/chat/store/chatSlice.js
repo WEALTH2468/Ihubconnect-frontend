@@ -93,7 +93,7 @@ const chatSlice = createSlice({
       const tempMessage = action.payload;
 
       // Prevent duplicate temp messages
-      return state.some((msg) => msg._id === tempMessage._id)
+      return state?.some((msg) => msg?._id === tempMessage?._id)
         ? state
         : [...state, tempMessage];
     },

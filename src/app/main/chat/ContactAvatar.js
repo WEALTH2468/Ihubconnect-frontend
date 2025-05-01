@@ -4,6 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import _ from '@lodash';
 import Statuses from './Statuses';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
+import { borderColor, borders } from '@mui/system';
 
 const StyledBadge = styled(Badge)(({ theme, ...props }) => ({
   width: 40,
@@ -13,10 +14,14 @@ const StyledBadge = styled(Badge)(({ theme, ...props }) => ({
     fontSize: 'inherit',
     color: theme.palette.text.secondary,
     fontWeight: 600,
+    border: `3px solid ${props.statuscolor}`,
+    borderRadius: '50%',
   },
   '& .MuiBadge-badge': {
     backgroundColor: props.statuscolor,
-    // boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    width: 12, // ← Increase size
+    height: 12, // ← Increase size
+    borderRadius: '50%',
     '&::after': {
       position: 'absolute',
       top: 0,
@@ -27,7 +32,9 @@ const StyledBadge = styled(Badge)(({ theme, ...props }) => ({
       content: '""',
     },
   },
-}));  
+}));
+
+ 
 
 function ContactAvatar({id, data, className }) {
   const status = _.find(Statuses, { value: data?.status });

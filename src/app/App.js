@@ -219,7 +219,7 @@ function App() {
         </FuseTheme>
       </CacheProvider>
   
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
   

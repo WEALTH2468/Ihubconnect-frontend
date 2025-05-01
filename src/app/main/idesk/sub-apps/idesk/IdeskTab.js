@@ -69,6 +69,8 @@ import {
   DialogActions,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { selectPanelChats } from 'app/theme-layouts/shared-components/chatPanel/store/chatsSlice';
+import { Badge } from '@mui/material';
 
 const IdeskTab = ({ setSelectedTab }) => {
   const navigate = useNavigate();
@@ -78,6 +80,8 @@ const IdeskTab = ({ setSelectedTab }) => {
   const [count, setCount] = useState(0);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const allChat = useSelector(selectPanelChats)
+  
 
   const [openBirthdayDialog, setOpenBirthdayDialog] = useState(false);
   // const [closeEnabled, setCloseEnabled] = useState(false);
@@ -90,10 +94,20 @@ const IdeskTab = ({ setSelectedTab }) => {
       setOpenBirthdayDialog(false); 
   };
 
+  const countUnreadMessages = (messages) => {
+    let total = 0
+    messages.forEach(message => {
+      total = total + message.unreadCount
+    });
+    return total
+  };
+
+  const unreadCount = countUnreadMessages(allChat)
+
 
   useEffect(() => {
     if (AhavaCheck()) {
-      document.title = 'Ahava Tribe - Idesk'; //Set the title of the page
+      document.title = `Ahava Tribe - Idesk`; //Set the title of the page
     } else {
       document.title = 'Ihub Connect - Idesk'; //Set the title of the page
     }

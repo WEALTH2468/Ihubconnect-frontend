@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { styled, useTheme } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
@@ -5,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { Badge } from '@mui/material';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
@@ -13,13 +15,16 @@ import Chat from './Chat';
 import ContactList from './ContactList';
 import {
   getPanelContacts,
+  setSelectedContactId,
   selectPanelContacts,
   selectSelectedPanelContactId,
-  // selectOpenPanelContactIds
+  selectOpenPanelContactIds,
+  selectDisabledPanelContactIds,
+  closeChatPanelById,
+  disableChatPanelById,
+  enableChatPanelById
 } from './store/contactsSlice';
 import {
-  closeChatPanel,
-  openChatPanel,
   selectChatPanelState,
 } from './store/stateSlice';
 import { getPanelUserData } from './store/userSlice';
@@ -36,6 +41,8 @@ import {
   updatePanelChatAndCount,
   updatePanelChat,
   addPanelChat,
+  selectPanelChats,
+  clearCount
 } from './store/chatsSlice';
 import { selectSelectedContactId } from 'src/app/main/chat/store/contactsSlice';
 import { selectSocket } from 'app/store/socketSlice';
@@ -50,13 +57,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ContactAvatar from 'src/app/main/chat/ContactAvatar';
 import useGetUserStatus from 'app/theme-layouts/shared-components/chatPanel/hooks/getUserStatus';
 
-const Root = styled(motion.div)(({ theme }) => ({
+const Root = styled(motion.div, {
+  shouldForwardProp: (prop) => prop !== 'index',
+})(({ theme, index }) => ({
   position: 'fixed',
   bottom: 25,
-  right: 380,
-  zIndex: 1300,
+  right: 350 + index * 303, // 👈 Shift each panel 350px to the right
+  zIndex: 1300 + index,     // 👈 Higher z-index for panels opened later
   width: 300,
-  height: 540,
+  // height: 540,
   borderRadius: 16,
   overflow: 'hidden',
   backgroundColor: theme.palette.background.paper,
@@ -67,17 +76,17 @@ const Root = styled(motion.div)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     width: '75%',
     height: '80%',
-    right: 20,
+    right: 20 + index * 10, // 👈 small shift on mobile
     bottom: 20,
   },
 
-   // Extra-large screens
-   [theme.breakpoints.up('xl')]: {
-    height: 750, 
-    right: 500,
+  [theme.breakpoints.up('xl')]: {
+    // height: 750,
+    right: 470 + index * 400, // 👈 bigger offset on XL screens
     width: 370,
   },
 }));
+
 
 function ChatPanel() {
   const socket = useSelector(selectSocket);
@@ -85,41 +94,69 @@ function ChatPanel() {
   const theme = useTheme();
   const state = useSelector(selectChatPanelState);
   const contacts = useSelector(selectPanelContacts);
-  const chat = useSelector(selectPanelChat);
-  const selectedContactId = useSelector(selectSelectedPanelContactId);
+  const selectedContactIds = useSelector(selectOpenPanelContactIds);
   const selectedContactIdFromMainChat = useSelector(selectSelectedContactId);
   const user = useSelector(selectUser);
   const { emitMarkMessageSeen } = useEmit();
-  const { showNotification } = useDestopNotification();
+  const disabledContactIds = useSelector(selectDisabledPanelContactIds);
+  const chats = useSelector(selectPanelChats);
+
   const ref = useRef();
   const { getStatus } = useGetUserStatus();
 
-  console.log('contactId', selectedContactId)
+  const [collapsedPanels, setCollapsedPanels] = useState({});
+  const selectedContactId = useSelector( selectSelectedPanelContactId);
 
-  const selectedContact = contacts.find(
-    (_contact) => _contact._id === selectedContactId
-  );
+  const collapsedPanelsRef = useRef({});
 
+  const chatListContacts =
+              contacts.length > 0 && chats.length > 0
+                ? chats.map((_chat) => ({
+                    ..._chat,
+                    ...contacts?.find((_contact) =>
+                      _chat.participants.includes(_contact._id)
+                    ),
+                  }))
+                : [];
+
+  const selectedContacts = chatListContacts.filter(contact => selectedContactIds.includes(contact._id));
+
+  const handlePanelActivity = (contactId) => {
+    if (selectedContactId !== contactId) {
+      dispatch(setSelectedContactId(contactId));
+    }
+  };
+  
 
   useEffect(() => {
     dispatch(getPanelUserData());
     dispatch(getPanelContacts());
     dispatch(getPanelChats());
   }, [dispatch]);
+  
+  useEffect(() => {
+    if (selectedContactIds.length > 0) {
+      selectedContactIds.forEach((id) => {
+        dispatch(getPanelChat(id));
+      });
+    }
+  }, [selectedContactIds, dispatch]);
 
   useEffect(() => {
-    if (selectedContactId) {
-      dispatch(getPanelChat(selectedContactId));
-    }
-  }, [selectedContactId]);
+    collapsedPanelsRef.current = collapsedPanels;
+  }, [collapsedPanels]);
+  
 
+  
   useEffect(() => {
     const handleSendPanelChat = async (data) => {
       const message = data.message || data;
-      if (
-        selectedContactId !== message.userId &&
-        selectedContactIdFromMainChat !== message.userId
-      ) {
+  
+      if (!selectedContactIds.includes(message.userId) 
+        || disabledContactIds.includes(message.userId)
+        && selectedContactIdFromMainChat !== message.userId 
+      ) 
+      {
         if (data.chat) {
           dispatch(addPanelChatAndCount(data.chat));
         } else {
@@ -134,97 +171,175 @@ function ChatPanel() {
           }
           emitMarkMessageSeen(message._id, message.userId);
         });
-
-        if (selectedContactId === message.userId) {
-          dispatch(addPanelMessage(message));
+  
+        if (selectedContactIds.includes(message.userId)) {
+          dispatch(addPanelMessage({ contactId: message.userId, tempMessage: message }));
         }
         if (selectedContactIdFromMainChat === message.userId) {
           dispatch(addMessage(message));
         }
       }
     };
-
+  
     socket?.on('sendPanelChat', handleSendPanelChat);
     socket?.on('sendChat', handleSendPanelChat);
-
+  
     return () => {
       socket?.off('sendPanelChat', handleSendPanelChat);
       socket?.off('sendChat', handleSendPanelChat);
     };
-  }, [socket, selectedContactId, selectedContactIdFromMainChat, dispatch]);
+  }, [socket, selectedContactIds, selectedContactIdFromMainChat, collapsedPanels]);
+  
 
+      const toggleCollapse = (contactId) => {
+        setCollapsedPanels((prev) => ({
+          ...prev,
+          [contactId]: !prev[contactId],
+        }));
+      };
+      
+  
   useEffect(() => {
     const handleMessageSeen = ({ messageId }) => {
       dispatch(updateMessage({ tempId: messageId, realMessage: { seen: true } }));
     };
-
+  
     socket?.on('messageSeen', handleMessageSeen);
     return () => {
       socket?.off('messageSeen', handleMessageSeen);
     };
   }, [socket, dispatch]);
+  
+
+  
 
 
   return (
     <AnimatePresence>
-      {selectedContactId && state && (
-        <Root
-          ref={ref}
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 100 }}
-          transition={{ duration: 0.3 }}
-        >
-          <AppBar position="static" className="shadow-lg bg-[#f1f4f9]">
-            <Toolbar 
-            className="px-4"
-            >
-              <div className="flex flex-1 items-center px-12">
-                 <ContactAvatar
-                        id="popup"
-                        data={{ ...selectedContact, status: getStatus(selectedContact._id) }}
-                      />
-                <Typography className="mx-16 text-16 font-bold" color="primary">
-                  {selectedContact.displayName}
-                </Typography>
-              </div>
-              <div className="flex px-4">
-                <IconButton
-                  // onClick={}
-                  color="secondary"
-                  size="medium"
-                >
-                  <FuseSvgIcon>heroicons-outline:video-camera</FuseSvgIcon>
-                </IconButton>
-                <IconButton
-                  // onClick={}
-                  color="secondary"
-                  size="medium"
-                >
-                  <FuseSvgIcon>heroicons-outline:phone</FuseSvgIcon>
-                </IconButton>
-                <IconButton
-                  onClick={() => dispatch(closeChatPanel())}
-                  color="secondary"
-                  size="medium"
-                >
-                  <FuseSvgIcon>heroicons-outline:x</FuseSvgIcon>
-                </IconButton>
-              </div>
-            </Toolbar>
-          </AppBar>
-
-          <Paper className="flex flex-1 flex-row min-h-px shadow-0">
-            <Chat className="flex flex-1 w-full" />
-          </Paper>
-        </Root>
-      )}
-    </AnimatePresence>
+       {selectedContacts.map((contact, index) => (
+          <Root
+            key={contact._id}
+            ref={ref}
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 100 }}
+            transition={{ duration: 0.3 }}
+            index={index}
+          >
+            <AppBar position="static" className="shadow-lg bg-[#f1f4f9]">
+              <Toolbar className="px-4">
+                <div className="flex flex-1 items-center px-12">
+                  <Badge
+                    badgeContent={contact.unreadCount}
+                    color="secondary"
+                    invisible={contact.unreadCount === 0}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                  >
+                    <ContactAvatar
+                      id="popup"
+                      data={{ ...contact, status: getStatus(contact._id) }}
+                    />
+                  </Badge>
+                  <Typography
+                    className="mx-11 truncate max-w-[80%] text-16 font-bold"
+                    color="primary"
+                  >
+                    {contact.firstName}
+                  </Typography>
+                </div>
   
+                <div className="flex px-2 space-x-1 sm:space-x-2">
+                  <IconButton
+                   onClick={() => {
+                    toggleCollapse(contact._id);
+                  
+                    const isCurrentlyCollapsed = collapsedPanels[contact._id];
+                  
+                    if (isCurrentlyCollapsed) {
+                      dispatch(enableChatPanelById(contact._id));
+                  
+                      if (contact.unreadCount && contact.unreadCount > 0) {
+                        dispatch(isRead(contact._id)).then(({ payload }) => {
+                          if (payload?.chatId) {
+                            dispatch(clearCount(payload.chatId));
+                          }
+                        });
+                      }
+                    } else {
+                      dispatch(disableChatPanelById(contact._id));
+                    }
+                  }}
+                    color="secondary"
+                    className="p-1 sm:p-2"
+                    size="small"
+                  >
+                    <FuseSvgIcon className="w-4 h-4 sm:w-6 sm:h-6">
+                      {collapsedPanels[contact._id]
+                        ? 'heroicons-outline:plus'
+                        : 'heroicons-outline:minus'}
+                    </FuseSvgIcon>
+                  </IconButton>
+  
+                  <IconButton className="p-1 sm:p-2" size="small" disabled={true}>
+                    <FuseSvgIcon className="w-4 h-4 sm:w-6 sm:h-6" disabled={true}>
+                      heroicons-outline:video-camera
+                    </FuseSvgIcon>
+                  </IconButton>
+  
+                  <IconButton className="p-1 sm:p-2" size="small" disabled={true}>
+                    <FuseSvgIcon className="w-4 h-4 sm:w-6 sm:h-6" disabled={true}>
+                      heroicons-outline:phone
+                    </FuseSvgIcon>
+                  </IconButton>
+  
+                  <IconButton
+                    onClick={() => dispatch(closeChatPanelById(contact._id))}
+                    color="secondary"
+                    className="p-1 sm:p-2"
+                    size="small"
+                  >
+                    <FuseSvgIcon className="w-4 h-4 sm:w-6 sm:h-6">
+                      heroicons-outline:x
+                    </FuseSvgIcon>
+                  </IconButton>
+                </div>
+              </Toolbar>
+            </AppBar>
+  
+            <AnimatePresence initial={false}>
+              {!collapsedPanels[contact._id] && (
+                <motion.div
+                  key={contact._id + '-chat'}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className="overflow-hidden"
+                >
+                  <Paper className="flex flex-1 flex-row max-h-[460px] xl:max-h-[680px] shadow-0">
+                    <Chat
+                      contactId={contact._id}
+                      onActivity={() => handlePanelActivity(contact._id)}
+                      className="flex flex-1 w-full min-h-[460px] xl:min-h-[680px]"
+                    />
+                  </Paper>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Root>
+        ))}
+    </AnimatePresence>
   );
+  
+  
+  
 }
 
 export default withReducer('chatPanel', reducer)(memo(ChatPanel));
+
 
 
 

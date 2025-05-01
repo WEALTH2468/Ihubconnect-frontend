@@ -243,13 +243,15 @@ const PostForm = () => {
                           onChange(newImage);
                         }}
                       />
+                       <span className = 'flex'>
                       <FuseSvgIcon size={25} color='secondary'>
                         heroicons-outline:photograph
                       </FuseSvgIcon>
-                    </label>
-                    <Typography className="mx-4 text-14 font-medium">
+                      <Typography className="mx-4 text-14 font-medium mt-[2px]">
                        Photo/Video
                        </Typography>
+                       </span>
+                    </label>
                   </IconButton>
 
                   <IconButton aria-label="Post" disabled={true} className='rounded-12'>
