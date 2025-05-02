@@ -55,12 +55,12 @@ const chatsSlice = createSlice({
     updatePanelChat: (state, { payload }) => {
   const chatId = payload.chatId; // Ensure we only use real messages
   
-  if (chatId && state.entities[chatId]) {
+  if (chatId && state?.entities[chatId]) {
     chatsAdapter.updateOne(state, {
       id: chatId,
       changes: {
-        lastMessage: payload.content,
-        lastMessageAt: payload.createdAt,
+        lastMessage: payload?.content,
+        lastMessageAt: payload?.createdAt,
         unreadCount: 0, // Reset unread count
         seen: true, // Mark as seen
       },
@@ -81,6 +81,13 @@ const chatsSlice = createSlice({
         }
       });
     },
+
+    incrementUnreadCount: (state, { payload }) => {
+      const chat = state.entities[payload];
+      if (chat) {
+        chat.unreadCount = (chat.unreadCount || 0) + 1;
+      }
+    },
     
   },
   extraReducers: (builder) => {
@@ -88,7 +95,7 @@ const chatsSlice = createSlice({
   },
 });
 
-export const { updatePanelChat, updatePanelChatAndCount, addPanelChatAndCount, addPanelChat, clearCount } =
+export const { updatePanelChat, updatePanelChatAndCount, incrementUnreadCount, addPanelChatAndCount, addPanelChat, clearCount } =
   chatsSlice.actions;
 
 export default chatsSlice.reducer;

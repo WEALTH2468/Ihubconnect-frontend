@@ -9,8 +9,7 @@ import ContactAvatar from '../ContactAvatar';
 import { useDispatch, useSelector } from 'react-redux';
 import { isRead } from 'app/theme-layouts/shared-components/chatPanel/store/chatSlice';
 import { clearCount } from 'app/theme-layouts/shared-components/chatPanel/store/chatsSlice';
-import { selectSelectedPanelContactId, setSelectedContactId } from 'app/theme-layouts/shared-components/chatPanel/store/contactsSlice';
-// import { selectOpenPanelContactIds, openChatPanelById } from 'app/theme-layouts/shared-components/chatPanel/store/contactsSlice';
+import { selectOpenPanelContactIds, openChatPanelById } from 'app/theme-layouts/shared-components/chatPanel/store/contactsSlice';
 import { openChatPanel } from 'app/theme-layouts/shared-components/chatPanel/store/stateSlice';
 import useGetUserStatus from 'app/theme-layouts/shared-components/chatPanel/hooks/getUserStatus';
 
@@ -19,15 +18,13 @@ const StyledListItem = styled(ListItem)(({ theme, active }) => ({
   transition: 'background-color 0.2s ease-in-out',
 }));
 
-function FloatingContactListItem({ chat, contact }) {
+function FloatingContactListItem({ chat, contact}) {
   const { getStatus } = useGetUserStatus();
   const dispatch = useDispatch();
-  const selectedId = useSelector( selectSelectedPanelContactId);
-//   const selectedId = useSelector( selectOpenPanelContactIds);
+  const selectedId = useSelector( selectOpenPanelContactIds);
 
   const handleClick = () => {
-    dispatch(setSelectedContactId (contact._id));
-    // dispatch(openChatPanelById(contact._id));
+    dispatch(openChatPanelById(contact._id));
     dispatch(openChatPanel());
 
     if (contact.unreadCount && contact.unreadCount > 0) {
@@ -55,7 +52,7 @@ function FloatingContactListItem({ chat, contact }) {
           primary: 'font-medium text-14',
           secondary: 'truncate',
         }}
-        primary={contact.displayName}
+        primary={contact.firstName}
         secondary={chat ? contact.lastMessage : contact.aboutMe}
       />
 

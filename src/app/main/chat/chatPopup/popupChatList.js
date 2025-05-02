@@ -96,7 +96,7 @@ function PopupChatList(props) {
               contacts.length > 0 && chats.length > 0
                 ? chats.map((_chat) => ({
                     ..._chat,
-                    ...contacts.find((_contact) =>
+                    ...contacts?.find((_contact) =>
                       _chat.participants.includes(_contact._id)
                     ),
                   }))
@@ -173,21 +173,28 @@ function PopupChatList(props) {
                   </motion.div>
                 )}
             
-                {filteredContacts.map((contact, index) => (
-                  <motion.div variants={item} key={contact._id}>
-                    <div
-                      className={clsx(
-                        filteredContacts.length !== index + 1 && 'border-b-1'
-                      )}
-                    >
-                      <FloatingContactListItem
-                        key={contact._id}
-                        contact={contact}
-                        chat={chat}
-                      />
-                    </div>
-                  </motion.div>
+            {[...filteredContacts]
+                  .sort((a, b) => {
+                    const isAOnline = a.status === 'online';
+                    const isBOnline = b.status === 'online';
+                    return isBOnline - isAOnline; // online first
+                  })
+                  .map((contact, index) => (
+                    <motion.div variants={item} key={contact._id}>
+                      <div
+                        className={clsx(
+                          filteredContacts.length !== index + 1 && 'border-b-1'
+                        )}
+                      >
+                        <FloatingContactListItem
+                          key={contact._id}
+                          contact={contact}
+                          chat={chat}
+                        />
+                      </div>
+                    </motion.div>
                 ))}
+
               </motion.div>
             );
             

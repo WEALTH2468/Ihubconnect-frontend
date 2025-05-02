@@ -170,7 +170,6 @@ function IdeskPageLayout(props) {
   }
   
   const randomImage = useDailyRandomImages();
-  console.log(randomImage);
 
 
   useDeepCompareEffect(() => {

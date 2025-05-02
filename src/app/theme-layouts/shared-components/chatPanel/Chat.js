@@ -11,7 +11,7 @@ import { useLocation } from 'react-router-dom';
 
 import InputBase from '@mui/material/InputBase';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { selectSelectedPanelContactId } from './store/contactsSlice';
+import { selectSelectedPanelContactId, selectOpenPanelContactIds } from './store/contactsSlice';
 import { getPanelChat, selectPanelChat, sendPanelMessage } from './store/chatSlice';
 import { selectUser } from 'app/store/userSlice';
 import { addPanelChat, getPanelChats, updatePanelChat } from './store/chatsSlice';
@@ -105,13 +105,12 @@ const StyledMessageRow = styled('div')(({ theme }) => ({
   },
 }));
 
-function Chat(props) {
+function Chat({ contactId, className, onActivity }) {
   const dispatch = useDispatch();
   const selectedContactId = useSelector(selectSelectedPanelContactId);
-  const chat = useSelector(selectPanelChat);
+  const chat = useSelector((state) => selectPanelChat(state, contactId));
   const user = useSelector(selectUser);
   const location = useLocation();
-  const contactId = location.pathname.split('/chat/')[1];
   const [isSending, setIsSending] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -121,7 +120,12 @@ function Chat(props) {
     const { emitSendPanelChat } = useEmit();
       const { emitNotification } = useEmit();
     
-  
+
+      useEffect(() => {
+        if (contactId && chat.length === 0) {
+          dispatch(getPanelChat(contactId));
+        }
+      }, [contactId, chat.length, dispatch]);
 
 
   useEffect(() => {
@@ -139,15 +143,22 @@ const handleEmojiSelect = (emoji) => {
 };
   
 
+  // function scrollToBottom() {
+  //   if (!chatScroll.current) {
+  //     return;
+  //   }
+  //   chatScroll.current.scrollTo({
+  //     top: chatScroll.current.scrollHeight,
+  //     behavior: 'smooth',
+  //   });
+  // }
+
   function scrollToBottom() {
-    if (!chatScroll.current) {
-      return;
-    }
-    chatScroll.current.scrollTo({
-      top: chatScroll.current.scrollHeight,
-      behavior: 'smooth',
-    });
+    if (!chatScroll.current) return;
+  
+    chatScroll.current.scrollTop = chatScroll.current.scrollHeight;
   }
+  
 
   const onInputChange = (ev) => {
     setMessageText(ev.target.value);
@@ -155,7 +166,7 @@ const handleEmojiSelect = (emoji) => {
 
   return (
     <Paper
-      className={clsx('flex flex-col relative z-[1000] pb-64 shadow', props.className)}
+      className={clsx('flex flex-col relative z-[1000] pb-64 shadow', className)}
       sx={{ background: (theme) => theme.palette.background.paper, borderRadius: '0px'  }}
     >
       <div
@@ -168,28 +179,28 @@ const handleEmojiSelect = (emoji) => {
             function isFirstMessageOfGroup(item, i) {
               return (
                 i === 0 ||
-                (chat[i - 1] && chat[i - 1].contactId !== item.contactId)
+                (chat[i - 1] && chat[i - 1]?.contactId !== item?.contactId)
               );
             }
 
             function isLastMessageOfGroup(item, i) {
               return (
-                i === chat.length - 1 ||
-                (chat[i + 1] && chat[i + 1].contactId !== item.contactId)
+                i === chat?.length - 1 ||
+                (chat[i + 1] && chat[i + 1].contactId !== item?.contactId)
               );
             }
 
             return chat?.length > 0
-              ? chat.map((item, i) => {
+              ? chat?.map((item, i) => {
 
-                const isSender = item.contactId === user._id;
+                const isSender = item?.contactId === user?._id;
 
                   return (
                     <StyledMessageRow
                       key={i}
                       className={clsx(
                         'flex flex-col grow-0 shrink-0 items-start justify-end relative px-16 pb-4',
-                        item.contactId === user._id ? 'contact' : 'me',
+                        item?.contactId === user?._id ? 'contact' : 'me',
                         { 'first-of-group': isFirstMessageOfGroup(item, i) },
                         { 'last-of-group': isLastMessageOfGroup(item, i) },
                         i + 1 === chat?.length && 'pb-72'
@@ -200,7 +211,7 @@ const handleEmojiSelect = (emoji) => {
                           {parseTextAsLinkIfURLC(item?.content)}
                            {!isSender && (
                                                         <span>
-                                                          {item.status === "pending" && (
+                                                          {item?.status === "pending" && (
                                                             <RotateRightRoundedIcon
                                                               sx={{
                                                                 fontSize: 16,
@@ -211,7 +222,7 @@ const handleEmojiSelect = (emoji) => {
                                                               }}
                                                             />
                                                           )}
-                                                            {item.seen === true  && (
+                                                            {item?.seen === true  && (
                                                             <DoneAllRoundedIcon
                                                               sx={{
                                                                 fontSize: 16,
@@ -222,7 +233,7 @@ const handleEmojiSelect = (emoji) => {
                                                               }}
                                                            />
                                                           )}
-                                                           {item.seen === false  && (
+                                                           {item?.seen === false  && (
                                                             <DoneAllRoundedIcon
                                                               sx={{
                                                                 fontSize: 16,
@@ -234,7 +245,7 @@ const handleEmojiSelect = (emoji) => {
                                                             />
                                                           )}
                                                         
-                                                          {item.status === "failed" && (
+                                                          {item?.status === "failed" && (
                                                             <ErrorIcon
                                                               sx={{
                                                                 fontSize: 16,
@@ -253,12 +264,12 @@ const handleEmojiSelect = (emoji) => {
                           className="time absolute hidden w-full text-11 mt-8 -mb-24 ltr:left-0 rtl:right-0 bottom-0 whitespace-nowrap"
                           color="text.secondary"
                         >
-                          {item.createdAt
-                            ? formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })
+                          {item?.createdAt
+                            ? formatDistanceToNow(new Date(item?.createdAt), { addSuffix: true })
                             : 'Just now'}
                         </Typography>
 
-                        {item.failed && (
+                        {item?.failed && (
                           <ErrorOutlineIcon 
                             color="error" 
                             fontSize="small" 
@@ -275,7 +286,7 @@ const handleEmojiSelect = (emoji) => {
         </div>
 
         {chat?.length === 0 && (
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col flex-1 ">
             <div className="flex flex-col flex-1 items-center justify-center">
               <FuseSvgIcon size={128} color="disabled">
                 heroicons-outline:chat
@@ -291,97 +302,101 @@ const handleEmojiSelect = (emoji) => {
         )}
       </div>
 
-                  {useMemo(() => {
+      {useMemo(() => {
            const onMessageSubmit = async (ev) => {
-            ev.preventDefault();
-            if (!messageText.trim() || isSending) return;
-          
-            setIsSending(true); // Disable input while sending
-          
-            // Create a temporary message
-            const tempId = `temp-${Date.now()}`;
-            const tempMessage = {
-              _id: tempId,
-              senderId: user._id,
-              contactId: selectedContactId,
-              content: messageText,
-              avatar: user.avatar,
-              chatId: chat.id,
-              createdAt: new Date().toISOString(),
-              status: "pending",
-            };
+                  ev.preventDefault();
+                  if (!messageText.trim() || isSending) return;
 
-            dispatch(addPanelMessage(tempMessage));
-            dispatch(addMessage(tempMessage));
-            
-              setMessageText('');
-              setIsSending(false); // Re-enable input
-          
-            try {
-              const { payload } = await dispatch(
-                sendPanelMessage({
-                  subject: "chat",
-                  link: `/chat`,
-                  avatar: user.avatar,
-                  messageText,
-                  chatId: chat.id,
-                  contactId: selectedContactId,
-                })
-              );
-          
-              emitSendPanelChat(payload);
-          
-              if (user._id !== selectedContactId) {
-                emitNotification({
-                  senderId: user._id,
-                  receivers: [{ _id: selectedContactId }],
-                  image: user.avatar,
-                  description: `<p><strong>${user.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
-                  content: messageText,
-                  read: false,
-                  link: `/chat/${user._id}`,
-                  subject: "chat",
-                  useRouter: true,
-                });
-              }
-              console.log('Real Message Payload:', payload);
-          
-              const updatedMessage = payload.message ? {
-                ...payload.message,
-                seen: selectedContactId === payload.message.userId,
-                createdAt: payload.message.createdAt || new Date().toISOString(),
-              } : {
-                ...payload,
-                seen: selectedContactId === payload.userId, // Mark as seen if recipient is viewing the chat
-                createdAt: payload.createdAt || new Date().toISOString(), // Fallback to a valid date
-              };
+                  setIsSending(true); // Disable input while sending
 
+                  try {
+                    // Create a temporary message
+                    const tempId = `temp-${Date.now()}`;
+                    const tempMessage = {
+                      _id: tempId,
+                      senderId: user?._id,
+                      contactId: selectedContactId,
+                      content: messageText,
+                      avatar: user?.avatar,
+                      chatId: chat?.id,
+                      createdAt: new Date().toISOString(),
+                      status: "pending",
+                    };
 
-               // Update sender's temp message
-               dispatch(updateMessage({ tempId, realMessage: updatedMessage }));
-               dispatch(updatePanelMessage({ tempId, realMessage: updatedMessage }));
-          
-              if (payload.chat) {
-                dispatch(addPanelChat(payload.chat));
-                if (selectedContactId === payload.contactId) {
-                  dispatch(addMessage(updatedMessage));
-                }
-              } else {
-                dispatch(updatePanelChat(updatedMessage));
-                if (selectedContactId === payload.contactId) {
-                  dispatch(addMessage(updatedMessage));
-                }
-              }
+                    console.log('tempId', tempMessage)
 
-              setIsSending(false);
-            } catch (error) {
-              console.error("Error submitting message:", error);
-          
-              // Mark temp message as failed
-              dispatch(updateMessage({ tempId, status: "failed" }));
-              dispatch(updatePanelMessage({ tempId, status: "failed" }));
-            } 
-          };
+                    dispatch(addPanelMessage({  
+                      contactId: selectedContactId,
+                      tempMessage,
+                  }));
+                    dispatch(addMessage(tempMessage));
+
+                    setMessageText('');
+                    
+                    const { payload } = await dispatch(
+                      sendPanelMessage({
+                        subject: "chat",
+                        link: '/chat',
+                        avatar: user?.avatar,
+                        messageText,
+                        chatId: chat?.id,
+                        contactId: selectedContactId,
+                      })
+                    );
+
+                    emitSendPanelChat(payload);
+
+                    if (user?._id !== selectedContactId) {
+                      emitNotification({
+                        senderId: user?._id,
+                        receivers: [{ _id: selectedContactId }],
+                        image: user?.avatar,
+                        description: `<p><strong>${user?.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
+                        content: messageText,
+                        read: false,
+                        link: `/chat/${user?._id}`,
+                        subject: "chat",
+                        useRouter: true,
+                      });
+                    }
+
+                    console.log('Real Message Payload:', payload);
+
+                    const updatedMessage = payload.message ? {
+                      ...payload.message,
+                      seen: selectedContactId === payload.message.userId,
+                      createdAt: payload.message.createdAt || new Date().toISOString(),
+                    } : {
+                      ...payload,
+                      seen: selectedContactId === payload.userId,
+                      createdAt: payload.createdAt || new Date().toISOString(),
+                    };
+
+                    // Update sender's temp message
+                    dispatch(updateMessage({ tempId, realMessage: updatedMessage }));
+                    dispatch(updatePanelMessage({ tempId, realMessage: updatedMessage, contactId: selectedContactId}));
+
+                    if (payload.chat) {
+                      dispatch(addPanelChat(payload.chat));
+                      if (selectedContactId === payload.contactId) {
+                        dispatch(addMessage(updatedMessage));
+                      }
+                    } else {
+                      dispatch(updatePanelChat(updatedMessage));
+                      if (selectedContactId === payload.contactId) {
+                        dispatch(addMessage(updatedMessage));
+                      }
+                    }
+                  } catch (error) {
+                    console.error("Error submitting message:", error);
+
+                    // Mark temp message as failed
+                    dispatch(updateMessage({ tempId, status: "failed" }));
+                    dispatch(updatePanelMessage({ tempId, status: "failed" }));
+                  } finally {
+                    setIsSending(false); // Re-enable input
+                  }
+                };
           
 
               return (
@@ -392,22 +407,26 @@ const handleEmojiSelect = (emoji) => {
                       className="pb-16 px-8 absolute bottom-0 left-0 right-0"
                     >
                      <Paper className="rounded-24 flex items-center relative shadow px-8" >
-                          <TextField
-                            autoFocus={true}
-                            id="message-input"
-                            className="flex flex-1 grow shrink-0 mx-8 ltr:mr-48 rtl:ml-48 my-8"
-                            placeholder="Type your message"
-                            onChange={onInputChange}
-                            value={messageText}
-                            multiline
-                            minRows={1}
-                            maxRows={2}
-                            onKeyDown={(ev) => {
-                              if (ev.key === 'Enter' && !ev.shiftKey && !isSending) {
-                                ev.preventDefault();
-                                onMessageSubmit(ev);
-                              }
-                            }}
+                     <TextField
+                          autoFocus={true}
+                          id="message-input"
+                          className="flex flex-1 grow shrink-0 mx-8 ltr:mr-48 rtl:ml-48 my-8"
+                          placeholder="Type your message"
+                          onChange={(e) => {
+                            onInputChange(e);
+                            onActivity?.(); // Notify parent there's activity
+                          }}
+                          value={messageText}
+                          multiline
+                          minRows={1}
+                          maxRows={2}
+                          onFocus={onActivity} // Optional: also track focus
+                          onKeyDown={(ev) => {
+                            if (ev.key === 'Enter' && !ev.shiftKey && !isSending) {
+                              ev.preventDefault();
+                              onMessageSubmit(ev);
+                            }
+                          }}
                           />
 
                            {/* Emoji Toggle Button */}
@@ -439,18 +458,21 @@ const handleEmojiSelect = (emoji) => {
                
             }, [chat, dispatch, messageText, selectedContactId, isSending])}
 
+
+
+
                 {/* Emoji Picker (Custom Positioned) */}
                 {showEmojiPicker && (
                   <div
-                    className=" absolute z-9999 w-[20px]"
+                    className=" relative z-9999"
                     style={{
-                      bottom: '80px',
+                      bottom: '20px',
                       right: '5px',
                     }}
                   >
                     <Picker  
                     data={data} 
-                    emojiSize={17} 
+                    emojiSize={20} 
                     onEmojiSelect={handleEmojiSelect} 
                     theme="light"
                     />
@@ -462,3 +484,8 @@ const handleEmojiSelect = (emoji) => {
 }
 
 export default Chat;
+
+
+
+
+

@@ -4,11 +4,11 @@ import { AhavaCheck } from "@fuse/utils/ahavaCheck";
 const linkColor = AhavaCheck() ? 'red' : '#f17e44';
 
 export const parseTextAsLinkIfURL = (text) => {
-  const textArray = text.split(' ');
+  const textArray = text?.split(' ');
   const urlRegex =
     /^((https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(:\d+)?(\/[^\s]*)?)$/i;
 
-  const parsedText = textArray.map((word, index) => {
+  const parsedText = textArray?.map((word, index) => {
     if (urlRegex.test(word)) {
       const href = word.startsWith('http') ? word : `https://${word}`;
       return (
@@ -37,11 +37,11 @@ export const parseTextAsLinkIfURL = (text) => {
 
 
 export const parseTextAsLinkIfURLC = (text) => {
-  const textArray = text.split(' ');
+  const textArray = text?.split(' ');
   const urlRegex =
     /^((https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(:\d+)?(\/[^\s]*)?)$/i;
 
-  const parsedText = textArray.map((word, index) => {
+  const parsedText = textArray?.map((word, index) => {
     if (urlRegex.test(word)) {
       // Ensure URL has 'http' or 'https' prefix
       const href = word.startsWith('http') ? word : `https://${word}`;
