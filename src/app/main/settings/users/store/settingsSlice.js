@@ -32,7 +32,7 @@ export const updateLogo = createAsyncThunk(
     } catch (error) {
       dispatch(
         showMessage({
-          message: 'Please Upload company banner and logo',
+          message: 'Something went wrong, Try Again',
           variant: 'error',
         })
       );

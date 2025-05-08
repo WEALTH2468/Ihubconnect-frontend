@@ -1,3 +1,4 @@
+
 import {
     createAsyncThunk,
     createEntityAdapter,
@@ -64,7 +65,7 @@ export const addUnit = createAsyncThunk(
 export const updateUnit = createAsyncThunk(
     'settings/updateUnit',
     async (unitData) => {
-        await axios.patch(`/units/${unitData._id}`, unitData);
+        await axios.patch(`/units/${unitData._id}, unitData`);
         return unitData;
     }
 );
@@ -147,7 +148,7 @@ const departmentSelector = departmentAdapter.getSelectors((state) => {
 });
 
 const unitSelector = unitAdapter.getSelectors((state) => {
-    return state.settings.units;
+    return state?.settings?.units;
 });
 
 export const selectDepartments = (state) => {
