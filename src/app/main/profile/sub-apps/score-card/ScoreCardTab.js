@@ -36,17 +36,18 @@ const ScoreCardApp = ({ setSelectedTab }) => {
             inProgress: 20, 
             notStarted: 10 },
 
-            communication:
+        performance: 
+        { total: 100, 
+            punctuality: 80, 
+            tasks: 15 },
+
+             communication:
              { total: '-',
                  posts: '-',
                   chats: '-',
                    commentsLikes: '-'
                  },
 
-        performance: 
-        { total: 100, 
-            punctuality: 80, 
-            tasks: 15 }
     };
 
     const totalPoints = Object.values(scores).reduce((acc, item) => acc + item.total, 0);
