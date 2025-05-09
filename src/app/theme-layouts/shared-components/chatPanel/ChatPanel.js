@@ -151,6 +151,8 @@ function ChatPanel() {
   useEffect(() => {
     const handleSendPanelChat = async (data) => {
       const message = data.message || data;
+
+      console.log("message", message)
   
       if (!selectedContactIds.includes(message.userId) 
         || disabledContactIds.includes(message.userId)
@@ -175,10 +177,18 @@ function ChatPanel() {
         if (selectedContactIds.includes(message.userId)) {
           dispatch(addPanelMessage({ contactId: message.userId, tempMessage: message }));
         }
-        if (selectedContactIdFromMainChat === message.userId) {
-          dispatch(addMessage(message));
-        }
       }
+
+      
+        if (selectedContactIdFromMainChat === message.userId) {
+          dispatch(isRead(message._id))
+          dispatch(clearCount(message.chatId));
+          dispatch(addMessage(message));
+          emitMarkMessageSeen(message._id, message.userId);
+        }
+        
+      
+      
     };
   
     socket?.on('sendPanelChat', handleSendPanelChat);

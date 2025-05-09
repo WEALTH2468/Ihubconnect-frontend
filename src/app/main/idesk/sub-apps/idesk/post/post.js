@@ -44,14 +44,21 @@ import { selectPanelContacts } from 'app/theme-layouts/shared-components/chatPan
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
 import { parseTextAsLinkIfURL } from '../utils';
 import useEmit from 'src/app/websocket/emit';
+import { useTheme } from '@mui/material/styles';
+
+
 
 function post({ post }) {
   const {emitRefreshPost, emitEmailAndNotification} = useEmit()
   const receivers = useSelector(selectPanelContacts);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const theme = useTheme();
+
+  const secondaryColor = theme.palette.secondary.main;
 
   const handleChangeLike = (ids) => {
+    
     // Check if the user has already liked the post
     if (!post.likes[user._id]) {
       dispatch(postLike(JSON.stringify(ids))).then(({ payload }) => {
@@ -124,33 +131,78 @@ function post({ post }) {
         )}
       </CardContent>
 
-      <CardActions disableSpacing className="px-32">
-        <Button
-          aria-label="Add to favorites"
-          onClick={() =>
-            handleChangeLike({ userId: user._id, postId: post._id })
-          }
+     <CardActions disableSpacing className="px-32" style={{ gap: '1rem' }}>
+      {/* Like */}
+      <Button
+        aria-label="Add to favorites"
+        onClick={() =>
+          handleChangeLike({ userId: user._id, postId: post._id })
+        }
+        className="p-2"
+      >
+        <div
+          style={{
+            padding: 8,
+            borderRadius: '50%',
+            backgroundColor: post.likes?.[user._id] ? secondaryColor : 'transparent',
+            color: post.likes?.[user._id] ? '#fff' : 'inherit',
+          }}
         >
-          <FuseSvgIcon size={16} color="action">
-            heroicons-outline:heart
+          <FuseSvgIcon size={16}>
+            heroicons-outline:thumb-up
           </FuseSvgIcon>
-          <Typography className="mx-4">Like</Typography>
-          <Typography>({post.likeCount})</Typography>
-        </Button>
-        <Button
-          aria-label="Share"
-          onClick={() =>
-            handleChangeDislike({ userId: user._id, postId: post._id })
-          }
+        </div>
+        <Typography style={{ marginLeft: 8 }}>{Object.keys(post.likes || {}).length}</Typography>
+      </Button>
+
+      {/* Dislike */}
+      <Button
+        aria-label="Dislike"
+        onClick={() =>
+          handleChangeDislike({ userId: user._id, postId: post._id })
+        }
+        className="p-2"
+      >
+        <div
+          style={{
+            padding: 8,
+            borderRadius: '50%',
+            backgroundColor: post.dislikes?.[user._id] ? secondaryColor : 'transparent',
+            color: post.dislikes?.[user._id] ? '#fff' : 'inherit',
+          }}
         >
-          <FuseSvgIcon size={16} color="action">
+          <FuseSvgIcon size={16}>
             heroicons-outline:thumb-down
           </FuseSvgIcon>
-          <Typography className="mx-4">Dislike</Typography>
-          <Typography>({post.dislikeCount})</Typography>
-        </Button>
-      </CardActions>
+        </div>
+        <Typography style={{ marginLeft: 8 }}>{Object.keys(post.dislikes || {}).length}</Typography>
+      </Button>
 
+      {/* Comment */}
+      <Button
+        aria-label="Comment"
+        onClick={() => handleOpenComments(post._id)}
+        className="p-2"
+      >
+        <div
+          style={{
+            padding: 8,
+            borderRadius: '50%',
+            backgroundColor: post.comments?.some(comment => comment.userId === user._id)
+              ? secondaryColor
+              : 'transparent',
+            color: post.comments?.some(comment => comment.userId === user._id)
+              ? '#fff'
+              : 'inherit',
+          }}
+        >
+          <FuseSvgIcon size={16}>
+            heroicons-outline:chat-alt
+          </FuseSvgIcon>
+        </div>
+        <Typography style={{ marginLeft: 8 }}>{post.comments?.length || 0}</Typography>
+      </Button>
+    </CardActions>
       <Comment post={post} />
     </Card>
   );

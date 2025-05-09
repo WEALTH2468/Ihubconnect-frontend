@@ -7,11 +7,12 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const BirthdayPopup = () => {
   const dispatch = useDispatch();
-  const { todayBirthdays, upcomingBirthdays } = useSelector((state) => state.user);
+  const { todayBirthdays, upcomingBirthdays, pastBirthdays } = useSelector((state) => state.user);
 
   const groupedBirthdays = [
     { title: 'Today Birthdays', users: todayBirthdays || [] },
     { title: 'Upcoming Birthdays', users: upcomingBirthdays || [] },
+    { title: 'Past Birthdays', users: pastBirthdays || [] },
   ];
 
   const displayedUsers = groupedBirthdays.flatMap((group) =>

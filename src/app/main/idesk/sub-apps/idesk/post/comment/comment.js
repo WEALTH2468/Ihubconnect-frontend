@@ -152,14 +152,6 @@ function comment({ post }) {
     >
       {topLevelComments.length > 0 && (
         <div className="">
-          <div className="flex items-center">
-            <Typography>
-              {topLevelComments.length} {topLevelComments.length === 1 ? 'Comment' : 'Comments'}
-            </Typography>
-            <FuseSvgIcon size={16} className="mx-4" color="action">
-              heroicons-outline:chevron-down
-            </FuseSvgIcon>
-          </div>
 
           <List>
             {commentsToDisplay
@@ -190,47 +182,53 @@ function comment({ post }) {
         </div>
       )}
 
-      <div className="flex flex-auto -mx-4">
-        <Avatar className="mx-4" src={addBackendProtocol(user.avatar)} />
-        <div className="flex flex-col flex-1 mx-4 items-end">
-          <Paper className="w-full mb-16 shadow-0 border-1  overflow-hidden">
-            <Controller
-              control={control}
-              name="message"
-              render={({ field }) => (
-                <TextField
-                  className="p-12 w-full"
-                  {...field}
-                  label=""
-                  placeholder="post your comment here"
-                  id="message"
-                  error={!!errors?.message?.message}
-                  helperText={errors?.message?.message}
-                  fullWidth
-                  multiline
-                  minRows={1}
-                  variant="outlined"
-                  inputProps={{
-                    maxLength: 100,
-                  }}
-                />
-              )}
-            />
-          </Paper>
-          <div>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              aria-label="post"
-              disabled={_.isEmpty(dirtyFields) || !isValid}
-              onClick={handleSubmit(onSubmit)}
-            >
-              Post comment
-            </Button>
-          </div>
-        </div>
-      </div>
+      <div className="flex items-center gap-8 mx-4 my-2">
+  {/* Avatar */}
+  <Avatar
+    src={addBackendProtocol(user.avatar)}
+    sx={{ width: 30, height: 30 }}
+  />
+
+  {/* Input and Button */}
+  <div className="flex flex-1 items-center gap-4">
+    <Paper
+      elevation={0}
+      className="flex-1 overflow-hidden w-full rounded-0 ml-2"
+      sx={{ boxShadow: 'none' }}
+    >
+      <Controller
+        control={control}
+        name="message"
+        render={({ field }) => (
+          <TextField
+            {...field}
+            placeholder="Comment here"
+            error={!!errors?.message?.message}
+            helperText={errors?.message?.message}
+            fullWidth
+            multiline
+            maxRows={3}
+            variant="outlined"
+            inputProps={{ maxLength: 100 }}
+            sx={{ p: 0, m: 0 }}
+          />
+        )}
+      />
+    </Paper>
+
+    <Button
+      variant="contained"
+      color="secondary"
+      size="small"
+      aria-label="post"
+      disabled={_.isEmpty(dirtyFields) || !isValid}
+      onClick={handleSubmit(onSubmit)}
+    >
+      Comment
+    </Button>
+  </div>
+</div>
+
     </Box>
   );
 }

@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import TimeAgo from 'app/configs/TimeAgo';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import addBackendProtocol from 'app/theme-layouts/shared-components/addBackendProtocol';
+import { Tooltip } from '@mui/material';
 
 const RecursiveComment = ({
   comment,
@@ -25,10 +26,10 @@ const RecursiveComment = ({
   const childComments = allComments.filter((c) => c.parentId === comment._id);
 
   // Adjust avatar size based on whether the comment is nested
-  const avatarSize = comment.parentId ? 30 : 40; 
+  const avatarSize = comment.parentId ? 20 : 30; 
   
   return (
-    <div className="comment-item">
+    <div className="comment-item  border-solid border-1 rounded-md gap-5 mb-[10px] pl-5" >
       {/* Render the current comment */}
       <ListItem className="px-0 -mx-8">
         <Avatar
@@ -43,37 +44,49 @@ const RecursiveComment = ({
             <div className="flex items-center space-x-8">
               <Typography
                 className="font-normal"
-                color="secondary"
                 paragraph={false}
               >
                 {comment.user.name}
               </Typography>
-              <Typography variant="caption">
-                <TimeAgo date={comment.time} />
+              <Typography variant="caption" className= "text-gray-500 ml-[15px] font-small text-[11px]">
+               • <TimeAgo date={comment.time} />
               </Typography>
             </div>
           }
           secondary={comment.text}
         />
       </ListItem>
-      <div className="flex items-center mx-52 mb-8">
-        <Button
-          className="mr-auto"
-          endIcon={<FuseSvgIcon size={14}>heroicons-outline:reply</FuseSvgIcon>}
-          onClick={() => handleReply(comment._id)}
-        >
-          Reply
-        </Button>
-        {user._id === comment.userId && (
-          <Button
-            className="ml-auto text-red"
-            endIcon={<FuseSvgIcon size={14}>heroicons-outline:trash</FuseSvgIcon>}
-            onClick={() => handleDelete(comment._id)}
-          >
-            Delete
-          </Button>
-        )}
-      </div>
+      <div className="flex items-center justify-between mb-6">
+          {/* Left side buttons */}
+          <div className="flex items-center">
+            <Button
+              endIcon={<FuseSvgIcon size={14}>heroicons-outline:thumb-up</FuseSvgIcon>}
+              disabled
+            />
+            <Button
+              endIcon={<FuseSvgIcon size={14}>heroicons-outline:thumb-down</FuseSvgIcon>}
+              disabled
+            />
+            <Tooltip title="Reply Comment" arrow>
+            <Button
+              endIcon={<FuseSvgIcon size={14}>heroicons-outline:reply</FuseSvgIcon>}
+              onClick={() => handleReply(comment._id)}
+            />
+            </Tooltip>
+          </div>
+
+          {/* Right side delete button */}
+          {user._id === comment.userId && (
+            <Button
+              className="text-red mr-11"
+              endIcon={<FuseSvgIcon size={14}>heroicons-outline:trash</FuseSvgIcon>}
+              onClick={() => handleDelete(comment._id)}
+            >
+              Delete
+            </Button>
+          )}
+        </div>
+
 
       {replyingTo === comment._id && (
         <Box className="mx-56 my-8">
