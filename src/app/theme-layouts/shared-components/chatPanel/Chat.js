@@ -329,10 +329,6 @@ const handleEmojiSelect = (emoji) => {
                       contactId: selectedContactId,
                       tempMessage,
                   }));
-                    dispatch(addMessage({  
-                      contactId: selectedContactId,
-                      tempMessage,
-                  }));
 
                     setMessageText('');
                     
@@ -376,7 +372,6 @@ const handleEmojiSelect = (emoji) => {
                     };
 
                     // Update sender's temp message
-                    dispatch(updateMessage({ tempId, realMessage: updatedMessage, contactId: selectedContactId}));
                     dispatch(updatePanelMessage({ tempId, realMessage: updatedMessage, contactId: selectedContactId}));
 
                     if (payload.chat) {

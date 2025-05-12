@@ -321,10 +321,7 @@ async function onMessageSubmit(ev) {
     status: "pending", // Mark as pending
   };
 
- 
-
   dispatch(addMessage(tempMessage)); // Add temp message to UI immediately
-  dispatch(addPanelMessage(tempMessage)); // Add temp message to UI immediately
 
   setIsSending(false); // Re-enable input
   setMessageText('');
@@ -369,12 +366,6 @@ async function onMessageSubmit(ev) {
         ...payload,
         createdAt: payload.createdAt || new Date().toISOString(),
       };
-
-      // Update messages with consistent structure
-      dispatch(updatePanelMessage({
-        tempId: tempMessage._id,
-        realMessage
-      }));
 
       dispatch(updateMessage({
         tempId: tempMessage._id,
