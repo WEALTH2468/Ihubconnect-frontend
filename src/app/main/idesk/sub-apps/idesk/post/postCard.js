@@ -133,15 +133,18 @@ function postCard({ post }) {
             <span className="flex items-center space-x-8">
               <Typography
                 className="font-bold"
-                color="secondary.main"
                 paragraph={false}
               >
                 {post.user?.name}
               </Typography>
-              <span>shared an article with you</span>
+              <span className="text-gray-700 font-small text-[14px]">shared an article with you</span>
             </span>
           }
-          subheader={<TimeAgo date={post.time} />}
+          subheader={
+            <Typography className="text-sm text-gray-500">
+              <TimeAgo date={post.time} />
+            </Typography>
+          }
         />
         {edit ? (
           <EditPost setEdit={setEdit} post={post} />

@@ -28,7 +28,7 @@ const BirthdayCard = ({ onSeeMoreClick  }) => {
     (group.users || []).map((user) => ({ ...user, groupTitle: group.title }))
   );
 
-  const visibleUsers = showAll ? displayedUsers : displayedUsers.slice(0, 2 );
+  const visibleUsers = showAll ? displayedUsers : displayedUsers.slice(0, 5 );
 
   return (
     <CardContent className="p-0">

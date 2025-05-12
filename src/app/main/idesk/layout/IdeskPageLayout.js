@@ -44,6 +44,7 @@ import { motion } from "framer-motion";
 import IdeskTab from "../sub-apps/idesk/IdeskTab";
 import ProfileTab from "../sub-apps/profile/ProfileTab";
 import ScoreCardTab from "../sub-apps/score-card/ScoreCardTab";
+import TeamsCard from "../../profile/sub-apps/teams/TeamsCard";
 
 //REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -211,11 +212,11 @@ function IdeskPageLayout(props) {
       count: 1000,
       label: 'Performance',
     },
-    {
-      icon: <PostAddIcon fontSize="medium" sx={{ color: '#fff' }} />,
-      count: 1000,
-      label: 'Post',
-    },
+    // {
+    //   icon: <PostAddIcon fontSize="medium" sx={{ color: '#fff' }} />,
+    //   count: 1000,
+    //   label: 'Post',
+    // },
   
   
   ];
@@ -289,7 +290,7 @@ function IdeskPageLayout(props) {
             >
               {[
                 { label: "Idesk", icon: "heroicons-outline:home" },
-                { label: "Profile", icon: "heroicons-outline:user-circle" },
+                { label: "My Profile", icon: "heroicons-outline:user-circle" },
                 { label: "Score", icon: "heroicons-outline:book-open" },
               ].map((tab, index) => {
                 const isActive = selectedTab === index;

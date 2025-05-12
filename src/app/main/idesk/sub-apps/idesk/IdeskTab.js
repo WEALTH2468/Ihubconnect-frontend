@@ -55,6 +55,7 @@ import { Can } from 'src/app/AbilityContext';
 import ScoreCardApp from 'src/app/main/profile/sub-apps/score-card/ScoreCardTab';
 import BirthdayCard from 'src/app/main/profile/sub-apps/upcoming-birthdays/birthdaysCard';
 import BirthdayPopup from 'src/app/main/profile/sub-apps/upcoming-birthdays/birthday-popup';
+import TeamsCard from 'src/app/main/profile/sub-apps/teams/TeamsCard';
 import { AhavaCheck } from '@fuse/utils/ahavaCheck';
 
 //Mui icons
@@ -293,6 +294,14 @@ const IdeskTab = ({ setSelectedTab }) => {
           </div>
 
           <div className="sticky top-0 w-[250px]">
+
+          <Card
+                sx={{ marginTop: '10px', }}
+              >
+                  {/* <TeamsCard /> */}
+                
+              </Card>
+
                     <Card
             component={motion.div}
             variants={item}

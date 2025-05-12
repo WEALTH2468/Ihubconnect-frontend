@@ -26,7 +26,7 @@ export const getBirthdayUsers = createAsyncThunk(
   'user/getBirthdayUsers',
   async () => {
     const response = await axios.get('/ihub/users/birthdays');
-    return response.data; // { todayBirthdays: [...], upcomingBirthdays: [...] }
+    return response.data; // { todayBirthdays: [...], upcomingBirthdays: [...], pastBirthdays: [...] }
   }
 );
 
@@ -178,6 +178,7 @@ const initialState = {
   randomUserAvatars: [],
   todayBirthdays: [],
   upcomingBirthdays: [],
+  pastBirthdays: [],
 };
 
 
@@ -200,6 +201,7 @@ const userSlice = createSlice({
   [getBirthdayUsers.fulfilled]: (state, action) => {
     state.todayBirthdays = action.payload.todayBirthdays;
     state.upcomingBirthdays = action.payload.upcomingBirthdays;
+    state.pastBirthdays = action.payload.pastBirthdays;
   },
   
     [resetPassword.fulfilled]: (state, action) => action.payload,

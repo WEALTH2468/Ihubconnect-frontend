@@ -36,24 +36,26 @@ const ScoreCardApp = ({ setSelectedTab }) => {
             inProgress: 20, 
             notStarted: 10 },
 
-        communication: 
-        { total: 100, 
-            posts: 60, 
-            chats: 25, 
-            commentsLikes: 15 },
-
         performance: 
         { total: 100, 
             punctuality: 80, 
-            tasks: 15 }
+            tasks: 15 },
+
+             communication:
+             { total: '-',
+                 posts: '-',
+                  chats: '-',
+                   commentsLikes: '-'
+                 },
+
     };
 
     const totalPoints = Object.values(scores).reduce((acc, item) => acc + item.total, 0);
     const totalStars = Math.floor(totalPoints / 20);
 
     const getColor = (key) => {
-        if (key === 'done' || key === 'punctuality' || key === 'posts') return 'green';
-        if (key === 'inProgress' || key === 'chats') return '#144caf';
+        if (key === 'done' || key === 'punctuality') return 'green';
+        if (key === 'inProgress' ) return '#144caf';
         return '#bdbec0';
     };
 
@@ -65,42 +67,70 @@ const ScoreCardApp = ({ setSelectedTab }) => {
                 </Typography>
 
                 {Object.entries(scores).map(([category, data]) => {
-                    const userAchieved = Object.values(data).reduce((acc, value) => 
-                        typeof value === 'number' ? acc + value : acc, 0
-                    ) - data.total;
+    const isDisabled = category === 'communication';
 
-                    return (
-                        <Box key={category} sx={{ }}>
-                            {/* Category Title with Achieved Score */}
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 'bold' }}>
-                                <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: 11 }}>{category.charAt(0).toUpperCase() + category.slice(1)}</Typography>
-                                <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: 10}}>{userAchieved} / {data.total}%</Typography>
-                            </Box>
+    const userAchieved = Object.values(data).reduce((acc, value) =>
+        typeof value === 'number' ? acc + value : acc, 0
+    ) - data.total;
 
-                            {/* Progress Bar */}
-                            <Box sx={{ display: 'flex', height: 7, overflow: 'hidden', mb: 0.5 }}>
-                                {Object.entries(data).map(([key, value]) =>
-                                    key !== 'total' ? (
-                                        <Box key={key} sx={{ backgroundColor: getColor(key), width: `${value}%` }} />
-                                    ) : null
-                                )}
-                            </Box>
+    return (
+        <Box
+            key={category}
+            sx={{
+                opacity: isDisabled ? 0.6 : 1,
+                pointerEvents: isDisabled ? 'none' : 'auto',
+                position: 'relative',
+                mb: 2,
+            }}
+        >
 
-                        
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, fontWeight: 200 }}>
-                                    {Object.entries(data).map(([key, value]) =>
-                                        key !== 'total' ? (
-                                            <Box key={key} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: getColor(key), fontSize: 10 }}>
-                                                <Typography variant="caption" sx={{ fontSize: 9, fontWeight: 'semi-bold' }}>{key.charAt(0).toUpperCase() + key.slice(1)}</Typography>
-                                                <Typography variant="caption" sx={{ fontSize: 9, fontWeight: 'bold' }}>{value}%</Typography>
-                                            </Box>
-                                        ) : null
-                                    )}
-                                </Box>
+            {/* Category Title with Achieved Score */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 'bold' }}>
+                <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: 11 }}>
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                </Typography>
+                <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: 10 }}>
+                    {userAchieved || "-"} / {data.total}%
+                </Typography>
+            </Box>
 
+            {/* Progress Bar */}
+            <Box sx={{ display: 'flex', height: 7, overflow: 'hidden', mb: 0.5 }}>
+                {Object.entries(data).map(([key, value]) =>
+                    key !== 'total' ? (
+                        <Box key={key} sx={{ backgroundColor: getColor(key), width: `${value}%` }} />
+                    ) : null
+                )}
+            </Box>
+
+            {/* Labels and Values */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, fontWeight: 200 }}>
+                {Object.entries(data).map(([key, value]) =>
+                    key !== 'total' ? (
+                        <Box
+                            key={key}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                color: getColor(key),
+                                fontSize: 10,
+                            }}
+                        >
+                            <Typography variant="caption" sx={{ fontSize: 9, fontWeight: 'semi-bold' }}>
+                                {key.charAt(0).toUpperCase() + key.slice(1)}
+                            </Typography>
+                            <Typography variant="caption" sx={{ fontSize: 9, fontWeight: 'bold' }}>
+                                {value}%
+                            </Typography>
                         </Box>
-                    );
-                })}
+                    ) : null
+                )}
+            </Box>
+        </Box>
+    );
+})}
+
 
             </CardContent>
         </Card>
