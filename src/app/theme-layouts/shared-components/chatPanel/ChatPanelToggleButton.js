@@ -5,6 +5,7 @@ import { toggleChatPanel } from './store/stateSlice';
 import { useNavigate } from 'react-router-dom';
 import { selectPanelChats } from './store/chatsSlice';
 import { Badge } from '@mui/material';
+import { closeChatPanels } from './store/contactsSlice';
 
 
 
@@ -23,9 +24,17 @@ const ChatPanelToggleButton = (props) => {
 
   const unreadCount = countUnreadMessages(allChat)
 
+  
+    const handleChatClick = () => {
+      dispatch(closeChatPanels());
+      navigate("/chat")
+    };
+
+  
+
 
   return (
-    <IconButton className="w-40 h-40" onClick={() => navigate("/chat")} size="large">
+    <IconButton className="w-40 h-40" onClick={handleChatClick} size="large">
       <Badge 
         badgeContent={unreadCount} 
         color="error" 

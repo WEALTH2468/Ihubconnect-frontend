@@ -175,10 +175,11 @@ const PostForm = () => {
           render={({ field: { onChange, value } }) => (
             <Box
               sx={{
-                backgroundColor: (theme) =>
-                  theme.palette.mode === 'light'
-                    ? lighten(theme.palette.background.default, 0.4)
-                    : lighten(theme.palette.background.default, 0.02),
+                // backgroundColor: (theme) =>
+                //   theme.palette.mode === 'light'
+                //     ? lighten(theme.palette.background.default, 0.4)
+                //     : lighten(theme.palette.background.default, 0.02),
+                backgroundColor: '#fff',
               }}
             >
               {value && (

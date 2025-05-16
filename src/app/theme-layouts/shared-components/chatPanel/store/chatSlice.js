@@ -55,7 +55,7 @@ const chatSlice = createSlice({
       }
 
       // Prevent duplicate temp messages
-      const exists = state[contactId]?.some((msg) => msg._id === tempMessage?._id);
+      const exists = state[contactId]?.some((msg) => msg?._id === tempMessage?._id);
       if (!exists) {
         state[contactId]?.push(tempMessage);
       }

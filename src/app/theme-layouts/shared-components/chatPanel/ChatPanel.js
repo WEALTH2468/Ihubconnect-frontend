@@ -109,17 +109,19 @@ function ChatPanel() {
 
   const collapsedPanelsRef = useRef({});
 
-  const chatListContacts =
-              contacts.length > 0 && chats.length > 0
-                ? chats.map((_chat) => ({
-                    ..._chat,
-                    ...contacts?.find((_contact) =>
-                      _chat.participants.includes(_contact._id)
-                    ),
-                  }))
-                : [];
+  const selectedContacts = selectedContactIds
+  .map((id) => {
+    const chat = chats.find((chat) => chat.participants.includes(id));
+    const contact = contacts.find((c) => c._id === id);
 
-  const selectedContacts = chatListContacts.filter(contact => selectedContactIds.includes(contact._id));
+    if (!contact) return null;
+
+    return {
+      ...chat,
+      ...contact,
+    };
+  })
+  .filter(Boolean);
 
   const handlePanelActivity = (contactId) => {
     if (selectedContactId !== contactId) {

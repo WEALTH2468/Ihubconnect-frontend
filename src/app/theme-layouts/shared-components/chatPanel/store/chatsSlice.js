@@ -77,7 +77,7 @@ const chatsSlice = createSlice({
           ...chat,
           lastMessage: payload.content,
           lastMessageAt: payload.createdAt,
-          unreadCount: chat.unreadCount + 1,
+          unreadCount: chat?.unreadCount + 1,
         }
       });
     },
