@@ -5,7 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import axios from 'axios';
-import { closeChatPanel } from './stateSlice';
+import { closeAllChatPanels, closeChatPanel } from './stateSlice';
 
 export const getPanelContacts = createAsyncThunk(
   'chatPanel/contacts/getContacts',
@@ -74,6 +74,10 @@ const contactsSlice = createSlice({
       );
     },
 
+    closeChatPanels: (state) => {
+      state.openPanelContactIds = []
+    },
+
     // ✅ Temporarily disable without removing
     disableChatPanelById: (state, action) => {
       const id = action.payload;
@@ -115,6 +119,7 @@ export const {
   closeChatPanelById,
   disableChatPanelById,
   enableChatPanelById,
+  closeChatPanels
 } = contactsSlice.actions;
 
 // Selectors

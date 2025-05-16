@@ -27,7 +27,7 @@ function FloatingContactListItem({ chat, contact}) {
     dispatch(openChatPanelById(contact._id));
     dispatch(openChatPanel());
 
-    if (contact.unreadCount && contact.unreadCount > 0) {
+    if (contact?.unreadCount && contact?.unreadCount > 0) {
       dispatch(isRead(contact._id)).then(({ payload }) => {
         dispatch(clearCount(payload.chatId));
       });
@@ -63,7 +63,7 @@ function FloatingContactListItem({ chat, contact}) {
               className="whitespace-nowrap mb-8 font-medium text-12"
               color="text.secondary"
             >
-              {format(new Date(contact.lastMessageAt), 'PP')}
+              {format(new Date(contact?.lastMessageAt), 'PP')}
             </Typography>
           )}
           <div className="items-center flex gap-4">
@@ -72,7 +72,7 @@ function FloatingContactListItem({ chat, contact}) {
                 heroicons-solid:volume-off
               </FuseSvgIcon>
             )}
-            {Boolean(contact.unreadCount) && (
+            {Boolean(contact?.unreadCount) && (
               <Box
                 sx={{
                   backgroundColor: 'secondary.main',
@@ -80,7 +80,7 @@ function FloatingContactListItem({ chat, contact}) {
                 }}
                 className="flex justify-center items-center min-w-20 h-20 rounded-full font-medium text-10"
               >
-                {contact.unreadCount}
+                {contact?.unreadCount}
               </Box>
             )}
           </div>
@@ -88,6 +88,7 @@ function FloatingContactListItem({ chat, contact}) {
       )}
     </StyledListItem>
   );
-}
+}  
+
 
 export default FloatingContactListItem;

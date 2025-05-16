@@ -62,22 +62,24 @@ function post({ post }) {
     // Check if the user has already liked the post
     if (!post.likes[user._id]) {
       dispatch(postLike(JSON.stringify(ids))).then(({ payload }) => {
-        emitEmailAndNotification({
-          senderId: user._id,
-          receivers,
-          image: user.avatar,
-          description: `<p><strong>${
-            user.displayName
-          }</strong> liked a post on idesk. Click on <a href="${
-            process.env.REACT_APP_BASE_FRONTEND
-          }/idesk">${post.text.slice(0, 15)}</a>... to see</p>`,
-          read: true,
-          link: '/idesk',
-          subject: 'idesk',
-          useRouter: true,
-        });
-        emitRefreshPost({ action: 'addLike', payload });
-      });
+  const updatedPost = {
+    ...payload,
+    comments: post.comments, // preserve comments
+  };
+
+  emitEmailAndNotification({
+    senderId: user._id,
+    receivers,
+    image: user.avatar,
+    description: `<p><strong>${user.displayName}</strong> liked a post on idesk. Click on <a href="${process.env.REACT_APP_BASE_FRONTEND}/idesk">${post.text.slice(0, 15)}</a>... to see</p>`,
+    read: true,
+    link: '/idesk',
+    subject: 'idesk',
+    useRouter: true,
+  });
+
+  emitRefreshPost({ action: 'addLike', payload: updatedPost });
+});
     }
   };
 
@@ -85,6 +87,11 @@ function post({ post }) {
     // Check if the user has already disliked the post
     if (!post.dislikes[user._id]) {
       dispatch(postDislike(JSON.stringify(ids))).then(({ payload }) => {
+
+        const updatedPost = {
+    ...payload,
+    comments: post.comments, // preserve comments
+  };
         emitEmailAndNotification({
           senderId: user._id,
           receivers,
@@ -99,7 +106,7 @@ function post({ post }) {
           subject: 'idesk',
           useRouter: true,
         });
-        emitRefreshPost({ action: 'addDislike', payload });
+        emitRefreshPost({ action: 'addDislike', payload: updatedPost});
       });
     }
   };
@@ -181,7 +188,7 @@ function post({ post }) {
       {/* Comment */}
       <Button
         aria-label="Comment"
-        onClick={() => handleOpenComments(post._id)}
+        // onClick={() => handleOpenComments(post._id)}
         className="p-2"
       >
         <div

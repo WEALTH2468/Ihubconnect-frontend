@@ -20,66 +20,76 @@ const RecursiveComment = ({
   replyText,
   setReplyText,
   user,
-  handleDelete
+  handleDelete,
 }) => {
   // Find children comments
   const childComments = allComments.filter((c) => c.parentId === comment._id);
 
   // Adjust avatar size based on whether the comment is nested
-  const avatarSize = comment.parentId ? 20 : 30; 
-  
+  const avatarSize = comment.parentId ? 20 : 30;
+
   return (
-    <div className="comment-item  border-solid border-1 rounded-md gap-5 mb-[10px] pl-5" >
-      {/* Render the current comment */}
-      <ListItem className="px-0 -mx-8">
-        <Avatar
-          alt={comment.user.name}
-          src={addBackendProtocol(comment.user.avatar)}
-          className="mx-8"
-          sx={{ width: avatarSize, height: avatarSize }}
-        />
-        <ListItemText
-          className="px-4"
-          primary={
-            <div className="flex items-center space-x-8">
-              <Typography
-                className="font-normal"
-                paragraph={false}
-              >
-                {comment.user.name}
-              </Typography>
-              <Typography variant="caption" className= "text-gray-500 ml-[15px] font-small text-[11px]">
-               • <TimeAgo date={comment.time} />
-              </Typography>
-            </div>
-          }
-          secondary={comment.text}
-        />
-      </ListItem>
-      <div className="flex items-center justify-between mb-6">
-          {/* Left side buttons */}
+    <>
+      <div className="comment-item border border-gray-200 rounded-md gap-5 mb-[10px] relative pl-5">
+        {/* Main comment block */}
+        <ListItem className="px-0 -mx-8">
+          <Avatar
+            alt={comment.user.name}
+            src={addBackendProtocol(comment.user.avatar)}
+            className="mx-8"
+            sx={{ width: avatarSize, height: avatarSize }}
+          />
+          <ListItemText
+            className="px-4"
+            primary={
+              <div className="flex items-center space-x-8">
+                <Typography className="font-normal">
+                  {comment.user.name}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  className="text-gray-500 ml-[15px] font-small text-[11px]"
+                >
+                  • <TimeAgo date={comment.time} />
+                </Typography>
+              </div>
+            }
+            secondary={comment.text}
+          />
+        </ListItem>
+
+        {/* Buttons */}
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Button
-              endIcon={<FuseSvgIcon size={14}>heroicons-outline:thumb-up</FuseSvgIcon>}
+              endIcon={
+                <FuseSvgIcon size={14}>heroicons-outline:thumb-up</FuseSvgIcon>
+              }
               disabled
             />
             <Button
-              endIcon={<FuseSvgIcon size={14}>heroicons-outline:thumb-down</FuseSvgIcon>}
+              endIcon={
+                <FuseSvgIcon size={14}>
+                  heroicons-outline:thumb-down
+                </FuseSvgIcon>
+              }
               disabled
             />
             <Tooltip title="Reply Comment" arrow>
-            <Button
-              endIcon={<FuseSvgIcon size={14}>heroicons-outline:reply</FuseSvgIcon>}
-              onClick={() => handleReply(comment._id)}
-            />
+              <Button
+                endIcon={
+                  <FuseSvgIcon size={14}>heroicons-outline:reply</FuseSvgIcon>
+                }
+                onClick={() => handleReply(comment._id)}
+              />
             </Tooltip>
           </div>
-
-          {/* Right side delete button */}
           {user._id === comment.userId && (
             <Button
               className="text-red mr-11"
-              endIcon={<FuseSvgIcon size={14}>heroicons-outline:trash</FuseSvgIcon>}
+              endIcon={
+                <FuseSvgIcon size={14}>heroicons-outline:trash</FuseSvgIcon>
+              }
               onClick={() => handleDelete(comment._id)}
             >
               Delete
@@ -87,35 +97,35 @@ const RecursiveComment = ({
           )}
         </div>
 
+        {/* Reply Input stays inside */}
+        {replyingTo === comment._id && (
+          <Box className=" flex my-8">
+            <TextField
+              fullWidth
+              placeholder="Write a reply..."
+              variant="outlined"
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+              className="w-full"
+            />
+            <Button
+              variant="contained"
+              color="secondary"
+              size="large"
+              className="mx-8"
+              onClick={() => onReplySubmit(comment._id, replyText)}
+              disabled={!replyText.trim()}
+            >
+              Reply
+            </Button>
+          </Box>
+        )}
+      </div>
 
-      {replyingTo === comment._id && (
-        <Box className="mx-56 my-8">
-          <TextField
-            fullWidth
-            placeholder="Write a reply..."
-            variant="outlined"
-            value={replyText}
-            onChange={(e) => setReplyText(e.target.value)}
-            className="w-full"
-          />
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            className="mt-8"
-            onClick={() => onReplySubmit(comment._id, replyText)}
-            disabled={!replyText.trim()}
-          >
-            Reply
-          </Button>
-        </Box>
-      )}
-
-      {/* Render child comments recursively */}
-      <div className="nested-comments ml-16">
-        {childComments.map((childComment) => (
+      {/* Replies rendered outside the parent block */}
+      {childComments.map((childComment) => (
+        <div key={childComment._id} className="ml-10">
           <RecursiveComment
-            key={childComment._id}
             comment={childComment}
             allComments={allComments}
             onReplySubmit={onReplySubmit}
@@ -126,9 +136,9 @@ const RecursiveComment = ({
             user={user}
             handleDelete={handleDelete}
           />
-        ))}
-      </div>
-    </div>
+        </div>
+      ))}
+    </>
   );
 };
 

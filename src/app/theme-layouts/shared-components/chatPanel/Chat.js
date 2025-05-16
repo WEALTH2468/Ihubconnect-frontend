@@ -11,25 +11,35 @@ import { useLocation } from 'react-router-dom';
 
 import InputBase from '@mui/material/InputBase';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { selectSelectedPanelContactId, selectOpenPanelContactIds } from './store/contactsSlice';
-import { getPanelChat, selectPanelChat, sendPanelMessage } from './store/chatSlice';
+import {
+  selectSelectedPanelContactId,
+  selectOpenPanelContactIds,
+} from './store/contactsSlice';
+import {
+  getPanelChat,
+  selectPanelChat,
+  sendPanelMessage,
+} from './store/chatSlice';
 import { selectUser } from 'app/store/userSlice';
-import { addPanelChat, getPanelChats, updatePanelChat } from './store/chatsSlice';
+import {
+  addPanelChat,
+  getPanelChats,
+  updatePanelChat,
+} from './store/chatsSlice';
 import { addMessage, updateMessage } from 'src/app/main/chat/store/chatSlice';
 import { parseTextAsLinkIfURLC } from 'src/app/main/idesk/sub-apps/idesk/utils';
 import useEmit from 'src/app/websocket/emit';
-import TextField from "@mui/material/TextField";
+import TextField from '@mui/material/TextField';
 import RotateRightRoundedIcon from '@mui/icons-material/RotateRightRounded';
 import DoneAllRoundedIcon from '@mui/icons-material/DoneAllRounded';
-import ErrorIcon from "@mui/icons-material/Error";
+import ErrorIcon from '@mui/icons-material/Error';
 import {
   addPanelMessage,
   updatePanelMessage,
 } from 'app/theme-layouts/shared-components/chatPanel/store/chatSlice';
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
-
-
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
+import { selectSelectedContactId } from 'src/app/main/chat/store/contactsSlice';
 
 const StyledMessageRow = styled('div')(({ theme }) => ({
   '&.contact': {
@@ -113,35 +123,32 @@ function Chat({ contactId, className, onActivity }) {
   const location = useLocation();
   const [isSending, setIsSending] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const selectedContactIdFromMainChat = useSelector(selectSelectedContactId);
 
   const chatScroll = useRef(null);
   const [messageText, setMessageText] = useState('');
 
-    const { emitSendPanelChat } = useEmit();
-      const { emitNotification } = useEmit();
-    
+  const { emitSendPanelChat } = useEmit();
+  const { emitNotification } = useEmit();
 
-      useEffect(() => {
-        if (contactId && chat.length === 0) {
-          dispatch(getPanelChat(contactId));
-        }
-      }, [contactId, chat.length, dispatch]);
-
+  useEffect(() => {
+    if (contactId && chat.length === 0) {
+      dispatch(getPanelChat(contactId));
+    }
+  }, [contactId, chat.length, dispatch]);
 
   useEffect(() => {
     scrollToBottom();
   }, [chat]);
 
+  const handleEmojiClick = () => {
+    setShowEmojiPicker((prev) => !prev);
+  };
 
-const handleEmojiClick = () => {
-  setShowEmojiPicker((prev) => !prev);
-};
-
-const handleEmojiSelect = (emoji) => {
-  setMessageText((prev) => prev + emoji.native); // Add emoji to message
-  setShowEmojiPicker(false);
-};
-  
+  const handleEmojiSelect = (emoji) => {
+    setMessageText((prev) => prev + emoji.native); // Add emoji to message
+    setShowEmojiPicker(false);
+  };
 
   // function scrollToBottom() {
   //   if (!chatScroll.current) {
@@ -155,10 +162,9 @@ const handleEmojiSelect = (emoji) => {
 
   function scrollToBottom() {
     if (!chatScroll.current) return;
-  
+
     chatScroll.current.scrollTop = chatScroll.current.scrollHeight;
   }
-  
 
   const onInputChange = (ev) => {
     setMessageText(ev.target.value);
@@ -166,8 +172,14 @@ const handleEmojiSelect = (emoji) => {
 
   return (
     <Paper
-      className={clsx('flex flex-col relative z-[1000] pb-64 shadow', className)}
-      sx={{ background: (theme) => theme.palette.background.paper, borderRadius: '0px'  }}
+      className={clsx(
+        'flex flex-col relative z-[1000] pb-64 shadow',
+        className
+      )}
+      sx={{
+        background: (theme) => theme.palette.background.paper,
+        borderRadius: '0px',
+      }}
     >
       <div
         ref={chatScroll}
@@ -192,8 +204,7 @@ const handleEmojiSelect = (emoji) => {
 
             return chat?.length > 0
               ? chat?.map((item, i) => {
-
-                const isSender = item?.contactId === user?._id;
+                  const isSender = item?.contactId === user?._id;
 
                   return (
                     <StyledMessageRow
@@ -209,55 +220,55 @@ const handleEmojiSelect = (emoji) => {
                       <div className="bubble flex relative items-center justify-center p-12 max-w-full">
                         <div className="leading-tight whitespace-pre-wrap break-words overflow-hidden">
                           {parseTextAsLinkIfURLC(item?.content)}
-                           {!isSender && (
-                                                        <span>
-                                                          {item?.status === "pending" && (
-                                                            <RotateRightRoundedIcon
-                                                              sx={{
-                                                                fontSize: 16,
-                                                                color: "gray-200",
-                                                                position: "flex",
-                                                                flexDirection: "flex-bottom",
-                                                                marginLeft: "5px",
-                                                              }}
-                                                            />
-                                                          )}
-                                                            {item?.seen === true  && (
-                                                            <DoneAllRoundedIcon
-                                                              sx={{
-                                                                fontSize: 16,
-                                                                color: "blue",
-                                                                position: "flex",
-                                                                flexDirection: "flex-bottom",
-                                                                marginLeft: "5px",
-                                                              }}
-                                                           />
-                                                          )}
-                                                           {item?.seen === false  && (
-                                                            <DoneAllRoundedIcon
-                                                              sx={{
-                                                                fontSize: 16,
-                                                                color: "gray-200",
-                                                                position: "flex",
-                                                                flexDirection: "flex-bottom",
-                                                                marginLeft: "5px",
-                                                              }}
-                                                            />
-                                                          )}
-                                                        
-                                                          {item?.status === "failed" && (
-                                                            <ErrorIcon
-                                                              sx={{
-                                                                fontSize: 16,
-                                                                color: "red",
-                                                                position: "flex",
-                                                                flexDirection: "flex-bottom",
-                                                                marginLeft: "5px",
-                                                              }}
-                                                            />
-                                                          )}
-                                                        </span>
-                                                      )}
+                          {!isSender && (
+                            <span>
+                              {item?.status === 'pending' && (
+                                <RotateRightRoundedIcon
+                                  sx={{
+                                    fontSize: 16,
+                                    color: 'gray-200',
+                                    position: 'flex',
+                                    flexDirection: 'flex-bottom',
+                                    marginLeft: '5px',
+                                  }}
+                                />
+                              )}
+                              {item?.seen === true && (
+                                <DoneAllRoundedIcon
+                                  sx={{
+                                    fontSize: 16,
+                                    color: 'blue',
+                                    position: 'flex',
+                                    flexDirection: 'flex-bottom',
+                                    marginLeft: '5px',
+                                  }}
+                                />
+                              )}
+                              {item?.seen === false && (
+                                <DoneAllRoundedIcon
+                                  sx={{
+                                    fontSize: 16,
+                                    color: 'gray-200',
+                                    position: 'flex',
+                                    flexDirection: 'flex-bottom',
+                                    marginLeft: '5px',
+                                  }}
+                                />
+                              )}
+
+                              {item?.status === 'failed' && (
+                                <ErrorIcon
+                                  sx={{
+                                    fontSize: 16,
+                                    color: 'red',
+                                    position: 'flex',
+                                    flexDirection: 'flex-bottom',
+                                    marginLeft: '5px',
+                                  }}
+                                />
+                              )}
+                            </span>
+                          )}
                         </div>
 
                         <Typography
@@ -265,14 +276,16 @@ const handleEmojiSelect = (emoji) => {
                           color="text.secondary"
                         >
                           {item?.createdAt
-                            ? formatDistanceToNow(new Date(item?.createdAt), { addSuffix: true })
+                            ? formatDistanceToNow(new Date(item?.createdAt), {
+                                addSuffix: true,
+                              })
                             : 'Just now'}
                         </Typography>
 
                         {item?.failed && (
-                          <ErrorOutlineIcon 
-                            color="error" 
-                            fontSize="small" 
+                          <ErrorOutlineIcon
+                            color="error"
+                            fontSize="small"
                             className="ml-2 cursor-pointer"
                             titleAccess="Failed to send"
                           />
@@ -303,187 +316,201 @@ const handleEmojiSelect = (emoji) => {
       </div>
 
       {useMemo(() => {
-           const onMessageSubmit = async (ev) => {
-                  ev.preventDefault();
-                  if (!messageText.trim() || isSending) return;
+        const onMessageSubmit = async (ev) => {
+          ev.preventDefault();
+          if (!messageText.trim() || isSending) return;
 
-                  setIsSending(true); // Disable input while sending
+          setIsSending(true); // Disable input while sending
 
-                  try {
-                    // Create a temporary message
-                    const tempId = `temp-${Date.now()}`;
-                    const tempMessage = {
-                      _id: tempId,
-                      senderId: user?._id,
-                      contactId: selectedContactId,
-                      content: messageText,
-                      avatar: user?.avatar,
-                      chatId: chat?.id,
-                      createdAt: new Date().toISOString(),
-                      status: "pending",
-                    };
+          try {
+            // Create a temporary message
+            const tempId = `temp-${Date.now()}`;
+            const tempMessage = {
+              _id: tempId,
+              senderId: user?._id,
+              contactId: selectedContactId,
+              content: messageText,
+              avatar: user?.avatar,
+              chatId: chat?.id,
+              createdAt: new Date().toISOString(),
+              status: 'pending',
+            };
 
-                    console.log('tempId', tempMessage)
+            console.log('tempId', tempMessage);
 
-                    dispatch(addPanelMessage({  
-                      contactId: selectedContactId,
-                      tempMessage,
-                  }));
+            dispatch(
+              addPanelMessage({
+                contactId: selectedContactId,
+                tempMessage,
+              })
+            );
 
-                    setMessageText('');
-                    
-                    const { payload } = await dispatch(
-                      sendPanelMessage({
-                        subject: "chat",
-                        link: '/chat',
-                        avatar: user?.avatar,
-                        messageText,
-                        chatId: chat?.id,
-                        contactId: selectedContactId,
-                      })
-                    );
+            setMessageText('');
 
-                    emitSendPanelChat(payload);
+            const { payload } = await dispatch(
+              sendPanelMessage({
+                subject: 'chat',
+                link: '/chat',
+                avatar: user?.avatar,
+                messageText,
+                chatId: chat?.id,
+                contactId: selectedContactId,
+              })
+            );
 
-                    if (user?._id !== selectedContactId) {
-                      emitNotification({
-                        senderId: user?._id,
-                        receivers: [{ _id: selectedContactId }],
-                        image: user?.avatar,
-                        description: `<p><strong>${user?.firstName}</strong> sent you a message: "${messageText.slice(0, 15)}..."</p>`,
-                        content: messageText,
-                        read: false,
-                        link: `/chat/${user?._id}`,
-                        subject: "chat",
-                        useRouter: true,
-                      });
-                    }
+            emitSendPanelChat(payload);
 
-                    console.log('Real Message Payload:', payload);
+            if (user?._id !== selectedContactId) {
+              emitNotification({
+                senderId: user?._id,
+                receivers: [{ _id: selectedContactId }],
+                image: user?.avatar,
+                description: `<p><strong>${
+                  user?.firstName
+                }</strong> sent you a message: "${messageText.slice(
+                  0,
+                  15
+                )}..."</p>`,
+                content: messageText,
+                read: false,
+                link: `/chat/${user?._id}`,
+                subject: 'chat',
+                useRouter: true,
+              });
+            }
 
-                    const updatedMessage = payload.message ? {
-                      ...payload.message,
-                      seen: selectedContactId === payload.message.userId,
-                      createdAt: payload.message.createdAt || new Date().toISOString(),
-                    } : {
-                      ...payload,
-                      seen: selectedContactId === payload.userId,
-                      createdAt: payload.createdAt || new Date().toISOString(),
-                    };
+            let updatedMessage;
 
-                    // Update sender's temp message
-                    dispatch(updatePanelMessage({ tempId, realMessage: updatedMessage, contactId: selectedContactId}));
+            if (payload.message?.message) {
+              updatedMessage = {
+                ...payload.message.message,
+                seen: selectedContactId === payload.userId,
+                createdAt: payload.createdAt || new Date().toISOString(),
+              };
+            } else if (payload.message) {
+              updatedMessage = {
+                ...payload.message,
+                seen: selectedContactId === payload.message.userId,
+                createdAt:
+                  payload.message.createdAt || new Date().toISOString(),
+              };
+            } else {
+              updatedMessage = {
+                ...payload,
+                seen: selectedContactId === payload.userId,
+                createdAt: payload.createdAt || new Date().toISOString(),
+              };
+            }
 
-                    if (payload.chat) {
-                      dispatch(addPanelChat(payload.chat));
-                      if (selectedContactId === payload.contactId) {
-                        dispatch(addMessage(updatedMessage));
-                      }
-                    } else {
-                      dispatch(updatePanelChat(updatedMessage));
-                      if (selectedContactId === payload.contactId) {
-                        dispatch(addMessage(updatedMessage));
-                      }
-                    }
-                  } catch (error) {
-                    console.error("Error submitting message:", error);
+            // Update sender's temp message
+            dispatch(
+              updatePanelMessage({
+                tempId,
+                realMessage: updatedMessage,
+                contactId: selectedContactId,
+              })
+            );
 
-                    // Mark temp message as failed
-                    dispatch(updateMessage({ tempId, status: "failed" }));
-                    dispatch(updatePanelMessage({ tempId, status: "failed" }));
-                  } finally {
-                    setIsSending(false); // Re-enable input
-                  }
-                };
-          
+            if (payload.message?.chat) {
+              dispatch(addPanelChat(payload.message.chat));
+              if (selectedContactIdFromMainChat === payload.contactId) {
+                dispatch(addMessage(updatedMessage));
+              }
+            } else {
+              dispatch(updatePanelChat(updatedMessage));
+              if (selectedContactIdFromMainChat === payload.contactId) {
+                dispatch(addMessage(updatedMessage));
+              }
+            }
+          } catch (error) {
+            console.error('Error submitting message:', error);
 
-              return (
-                <>
-                  {chat && (
-                    <form
-                      onSubmit={onMessageSubmit}
-                      className="pb-16 px-8 absolute bottom-0 left-0 right-0"
-                    >
-                     <Paper className="rounded-24 flex items-center relative shadow px-8" >
-                     <TextField
-                          autoFocus={true}
-                          id="message-input"
-                          className="flex flex-1 grow shrink-0 mx-8 ltr:mr-48 rtl:ml-48 my-8"
-                          placeholder="Type your message"
-                          onChange={(e) => {
-                            onInputChange(e);
-                            onActivity?.(); // Notify parent there's activity
-                          }}
-                          value={messageText}
-                          multiline
-                          minRows={1}
-                          maxRows={2}
-                          onFocus={onActivity} // Optional: also track focus
-                          onKeyDown={(ev) => {
-                            if (ev.key === 'Enter' && !ev.shiftKey && !isSending) {
-                              ev.preventDefault();
-                              onMessageSubmit(ev);
-                            }
-                          }}
-                          />
+            // Mark temp message as failed
+            dispatch(updateMessage({ tempId, status: 'failed' }));
+            dispatch(updatePanelMessage({ tempId, status: 'failed' }));
+          } finally {
+            setIsSending(false); // Re-enable input
+          }
+        };
 
-                           {/* Emoji Toggle Button */}
-                           <IconButton
-                            size="small"
-                            onClick={handleEmojiClick}
-                            className="absolute right-[60px]"
-                          >
-                            <FuseSvgIcon color="action">heroicons-outline:emoji-happy</FuseSvgIcon>
-                          </IconButton>
-
-                          {/* Send Icon */}
-                          <IconButton
-                            className="absolute ltr:right-0 rtl:left-0 top-9"
-                            type="submit"
-                            size="large"
-                            onClick={onMessageSubmit}
-                          >
-                            <FuseSvgIcon className="rotate-90" color="action">
-                              heroicons-outline:paper-airplane
-                            </FuseSvgIcon>
-                          </IconButton>
-                        </Paper>
-                   
-                    </form>
-                  )}
-                </>
-              );
-               
-            }, [chat, dispatch, messageText, selectedContactId, isSending])}
-
-
-
-
-                {/* Emoji Picker (Custom Positioned) */}
-                {showEmojiPicker && (
-                  <div
-                    className=" relative z-9999"
-                    style={{
-                      bottom: '20px',
-                      right: '5px',
+        return (
+          <>
+            {chat && (
+              <form
+                onSubmit={onMessageSubmit}
+                className="pb-16 px-8 absolute bottom-0 left-0 right-0"
+              >
+                <Paper className="rounded-24 flex items-center relative shadow px-8">
+                  <TextField
+                    autoFocus={true}
+                    id="message-input"
+                    className="flex flex-1 grow shrink-0 mx-8 ltr:mr-48 rtl:ml-48 my-8"
+                    placeholder="Type your message"
+                    onChange={(e) => {
+                      onInputChange(e);
+                      onActivity?.(); // Notify parent there's activity
                     }}
+                    value={messageText}
+                    multiline
+                    minRows={1}
+                    maxRows={2}
+                    onFocus={onActivity} // Optional: also track focus
+                    onKeyDown={(ev) => {
+                      if (ev.key === 'Enter' && !ev.shiftKey && !isSending) {
+                        ev.preventDefault();
+                        onMessageSubmit(ev);
+                      }
+                    }}
+                  />
+
+                  {/* Emoji Toggle Button */}
+                  <IconButton
+                    size="small"
+                    onClick={handleEmojiClick}
+                    className="absolute right-[60px]"
                   >
-                    <Picker  
-                    data={data} 
-                    emojiSize={20} 
-                    onEmojiSelect={handleEmojiSelect} 
-                    theme="light"
-                    />
-                    
-                  </div>
-                )}
+                    <FuseSvgIcon color="action">
+                      heroicons-outline:emoji-happy
+                    </FuseSvgIcon>
+                  </IconButton>
+
+                  {/* Send Icon */}
+                  <IconButton
+                    className="absolute ltr:right-0 rtl:left-0 top-9"
+                    type="submit"
+                    size="large"
+                    onClick={onMessageSubmit}
+                  >
+                    <FuseSvgIcon className="rotate-90" color="action">
+                      heroicons-outline:paper-airplane
+                    </FuseSvgIcon>
+                  </IconButton>
+                </Paper>
+              </form>
+            )}
+          </>
+        );
+      }, [chat, dispatch, messageText, selectedContactId, isSending])}
+
+      {/* Emoji Picker (Custom Positioned) */}
+      {showEmojiPicker && (
+        <div
+          className=" relative z-9999"
+          style={{
+            bottom: '20px',
+            right: '5px',
+          }}
+        >
+          <Picker
+            data={data}
+            emojiSize={20}
+            onEmojiSelect={handleEmojiSelect}
+            theme="light"
+          />
+        </div>
+      )}
     </Paper>
   );
 }
 
 export default Chat;
-
-
-
-
-

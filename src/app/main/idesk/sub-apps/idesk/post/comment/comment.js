@@ -74,6 +74,7 @@ function comment({ post }) {
   const { isValid, dirtyFields, errors } = formState;
 
   const onSubmit = (data) => {
+    if(data.message.trim() === '') return
     const comment = {
       userId: user._id,
       postId: post._id,
@@ -142,12 +143,13 @@ function comment({ post }) {
 
   return (
     <Box
-      className="card-footer flex flex-col px-32 py-24 border-t-1"
+      className="card-footer flex flex-col px-32 py-24 border-t-1 border-gray-200"
       sx={{
-        backgroundColor: (theme) =>
-          theme.palette.mode === 'light'
-            ? lighten(theme.palette.background.default, 0.4)
-            : lighten(theme.palette.background.default, 0.02),
+        // backgroundColor: (theme) =>
+        //   theme.palette.mode === 'light'
+        //     ? lighten(theme.palette.background.default, 0.4)
+        //     : lighten(theme.palette.background.default, 0.02),
+        backgroundColor: "#fff",
       }}
     >
       {topLevelComments.length > 0 && (
@@ -186,7 +188,7 @@ function comment({ post }) {
   {/* Avatar */}
   <Avatar
     src={addBackendProtocol(user.avatar)}
-    sx={{ width: 30, height: 30 }}
+    sx={{ width: 40, height: 40 }}
   />
 
   {/* Input and Button */}
@@ -207,7 +209,7 @@ function comment({ post }) {
             helperText={errors?.message?.message}
             fullWidth
             multiline
-            maxRows={3}
+            maxRows={2}
             variant="outlined"
             inputProps={{ maxLength: 100 }}
             sx={{ p: 0, m: 0 }}
@@ -221,8 +223,8 @@ function comment({ post }) {
       color="secondary"
       size="small"
       aria-label="post"
-      disabled={_.isEmpty(dirtyFields) || !isValid}
       onClick={handleSubmit(onSubmit)}
+      sx={{ height: 47 }}
     >
       Comment
     </Button>

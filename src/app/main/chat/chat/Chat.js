@@ -49,6 +49,7 @@ import {
 import {
   selectPanelContactById,
   selectSelectedPanelContactId,
+  selectOpenPanelContactIds
 } from 'app/theme-layouts/shared-components/chatPanel/store/contactsSlice';
 import useGetUserStatus from 'app/theme-layouts/shared-components/chatPanel/hooks/getUserStatus';
 import useEmit from 'src/app/websocket/emit';
@@ -172,7 +173,7 @@ function Chat(props) {
   const [isSending, setIsSending] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-  const selectedPanelContactId = useSelector(selectSelectedPanelContactId);
+  const selectedPanelContactId = useSelector(selectOpenPanelContactIds);
 
   const chatRef = useRef(null);
   const emojiPickerRef = useRef(null);
@@ -371,18 +372,19 @@ async function onMessageSubmit(ev) {
         tempId: tempMessage._id,
         realMessage
       }));
+      
 
 
     
 
     if (payload.chat) {
       dispatch(addPanelChat(payload.chat));
-      if (selectedPanelContactId === payload.contactId) {
+      if (selectedPanelContactId.includes(payload.contactId) ) {
         dispatch(addPanelMessage(payload));
       }
     } else {
       dispatch(updatePanelChat(payload));
-      if (selectedPanelContactId === payload.contactId) {
+      if (selectedPanelContactId.includes(payload.contactId) ) {
         dispatch(addPanelMessage(payload));
       }
     }

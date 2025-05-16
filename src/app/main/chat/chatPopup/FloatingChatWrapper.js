@@ -13,6 +13,7 @@ const FloatingChatWrapper = () => {
     '/auth/reset-password',
     '/auth/verify-email',
     '/guest',
+    '/chat'
   ];
 
   const shouldHide = hiddenPathPrefixes.some((prefix) =>
